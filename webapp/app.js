@@ -51,8 +51,8 @@ app.use(require('./middlewares/flash.js'));
 var routes = require('./routes/index');
 var login = require('./routes/login')(passport);
 var logout = require('./routes/logout');
-var signup = require('./routes/signup')(passport);
 var profile = require('./routes/profile');
+var signup = require('./routes/signup')(passport);
 var facebookAuth = require('./routes/auth/facebook')(passport);
 var googleAuth = require('./routes/auth/google')(passport);
 var twitterAuth = require('./routes/auth/twitter')(passport);
@@ -69,7 +69,7 @@ app.post('/login', login);
 app.get('/login', login);
 app.get('/logout', logout);
 app.get('/profile', profile);
-app.get('/signup', signup)
+app.get('/signup', signup);
 app.post('/signup', signup);
 app.get('/auth/facebook', facebookAuth);
 app.get('/auth/facebook/callback', facebookAuth);
@@ -82,7 +82,7 @@ app.get('/connect/facebook/callback', facebookConnect);
 app.get('/connect/google', googleConnect);
 app.get('/connect/google/callback', googleConnect);
 app.get('/connect/local', localConnect);
-app.get('/connect/local/callback', localConnect);
+app.post('/connect/local', localConnect);
 app.get('/connect/twitter', twitterConnect);
 app.get('/connect/twitter/callback', twitterConnect);
 
