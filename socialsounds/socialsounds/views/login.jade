@@ -1,0 +1,25 @@
+﻿extends layout
+
+block content
+    .container
+        .col-sm-6.com-sm-offset-3
+            h1
+                span.fa.fa-sign-in(style='margin-right: 20px')
+                | Login
+
+            if sessionFlash && sessionFlash.message
+                .alert.alert-danger #{sessionFlash.message}
+
+            form(action='/login', method='post')
+                .form-group
+                    label Email
+                    input.form-control(type='text', name='email')
+                .form-group
+                    label Password
+                    input.form-control(type='password', name='password')
+                button.btn.btn-warning.btn-lg login
+
+            hr
+        
+            p Need an account? #[a(href='/signup') Sign up]
+            p Or go #[a(href='/') home].

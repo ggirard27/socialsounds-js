@@ -1,0 +1,77 @@
+﻿extends layout
+
+block content
+    .container-fluid
+        .page-header.text-center
+            h1
+                span.fa.fa-anchor(style='margin-right: 20px')
+                | Profile page
+            a(href='/logout').btn.btn-default.btn-sm Log out
+
+        .row
+            .col-sm-6
+                .well
+                    h3
+                        span.fa.fa-user(style='margin-right: 20px')
+                        | Local account
+                    if(user.local.email)
+                        p(style='white-space:pre;')
+                            <strong>User:</strong> #{user._id}
+                            <strong>Email:</strong> #{user.local.email}
+                            <strong>Password:</strong> 
+                        textarea.form-control(readonly) #{user.local.password}
+                        if user.facebook.token || user.google.token || user.twitter.token
+                            a(href='/unlink/local').btn.btn-default Unlink
+                        else
+                            a(href='/unlink/local').btn.btn-default(disabled) Unlink
+                    else
+                        a(href='/connect/local').btn.btn-default Connect Local account
+
+            .col-sm-6
+                .well
+                    h3.text-primary
+                        span.fa.fa-facebook(style='margin-right: 20px')
+                        | Facebook account
+                    if(user.facebook.token)
+                        p(style='white-space:pre;')
+                            <strong>Id:</strong> #{user.facebook.id}
+                            <strong>Email:</strong> #{user.facebook.email}
+                            <strong>Name:</strong> #{user.facebook.name}
+                            <strong>Token:</strong>
+                        textarea.form-control(readonly) #{user.facebook.token}
+                        a(href='/unlink/facebook').btn.btn-default Unlink
+                    else
+                        a(href='/connect/facebook').btn.btn-default Connect Facebook account
+
+        .row
+            .col-sm-6
+                .well
+                    h3.text-info
+                        span.fa.fa-twitter(style='margin-right: 20px')
+                        | Twitter account
+                    if(user.twitter.token)
+                        p(style='white-space:pre;')
+                            <strong>Id:</strong> #{user.twitter.id}
+                            <strong>Username:</strong> #{user.twitter.username}
+                            <strong>Display Name:</strong> #{user.twitter.displayName}
+                            <strong>Token:</strong> 
+                        textarea.form-control(readonly) #{user.twitter.token}
+                        a(href='/unlink/twitter').btn.btn-default Unlink
+                    else
+                        a(href='/connect/twitter').btn.btn-default Connect Twitter account
+
+            .col-sm-6
+                .well
+                    h3.text-danger
+                        span.fa.fa-google-plus(style='margin-right: 20px')
+                        | Google account
+                    if(user.google.token)
+                        p(style='white-space:pre;')
+                            <strong>Id:</strong> #{user.google.id}
+                            <strong>Email:</strong> #{user.google.email}
+                            <strong>Name:</strong> #{user.google.name}
+                            <strong>Token:</strong> 
+                        textarea.form-control(readonly) #{user.google.token}
+                        a(href='/unlink/google').btn.btn-default Unlink
+                    else
+                        a(href='/connect/google').btn.btn-default Connect Google account

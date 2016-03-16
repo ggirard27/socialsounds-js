@@ -31,7 +31,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="config\auth.js" />
+    <Compile Include="config\database.js" />
+    <Compile Include="middlewares\flash.js" />
+    <Compile Include="middlewares\passport.js" />
+    <Compile Include="models\user.js" />
+    <Compile Include="routes\auth\facebook.js" />
+    <Compile Include="routes\auth\google.js" />
+    <Compile Include="routes\auth\twitter.js" />
+    <Compile Include="routes\connect\facebook.js" />
+    <Compile Include="routes\connect\google.js" />
+    <Compile Include="routes\connect\local.js" />
+    <Compile Include="routes\connect\twitter.js" />
     <Compile Include="routes\index.js" />
+    <Compile Include="routes\login.js" />
+    <Compile Include="routes\logout.js" />
+    <Compile Include="routes\profile.js" />
+    <Compile Include="routes\signup.js" />
     <Compile Include="routes\users.js" />
     <Compile Include="bin\www" />
     <Content Include="package.json" />
@@ -43,14 +59,22 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
+    <Folder Include="middlewares\" />
+    <Folder Include="config\" />
+    <Folder Include="models\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
+    <Folder Include="routes\auth\" />
+    <Folder Include="routes\connect\" />
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="views\login.jade" />
+    <Content Include="views\profile.jade" />
+    <Content Include="views\signup.jade" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config" />
     <Content Include="bin\ChangeConfig.ps1" />

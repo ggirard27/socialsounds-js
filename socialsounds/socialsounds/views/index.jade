@@ -1,5 +1,29 @@
 ﻿extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    .container
+        .jumbotron.text-center
+            h1
+                span.fa.fa-lock(style='margin-right: 20px')
+                | socialsounds login
+
+            p login or register using:
+
+            a.btn.btn-default(href='/login', style='margin-right: 10px')
+                span.fa.fa-user(style='margin-right: 10px')
+                | Local Login
+
+            a.btn.btn-default(href='/signup', style='margin-right: 10px')
+                span.fa.fa-user(style='margin-right: 10px')
+                | Local Signup 
+
+            a.btn.btn-primary(href='/auth/facebook', style='margin-right: 10px')
+                span.fa.fa-facebook(style='margin-right: 10px')
+                | Facebook
+
+            a.btn.btn-info(href='/auth/twitter', style='margin-right: 10px')
+                span.fa.fa-twitter(style='margin-right: 10px')
+                | Twitter
+            a.btn.btn-danger(href='/auth/google', style='margin-right: 10px')
+                span.fa.fa-google-plus(style='margin-right: 10px')
+                | Google
