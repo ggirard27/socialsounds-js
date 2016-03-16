@@ -13,9 +13,6 @@ var databaseConfig = require('./config/database');
 mongoose.connect(databaseConfig.url);
 require('./middlewares/passport')(passport);
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
 var app = express();
 
 // view engine setup
@@ -48,7 +45,6 @@ app.use(passport.session());
 // flash messages setup
 app.use(flash());
 app.use(require('./middlewares/flash.js'));
-
 
 
 // routes files setup
