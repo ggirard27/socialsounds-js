@@ -16,14 +16,14 @@ block content
                         | Local account
                     if(user.local.email)
                         p(style='white-space:pre;')
-                            <strong>User:</strong> #{user._id}
                             <strong>Email:</strong> #{user.local.email}
+                            <strong>Account created:</strong> #{user.general.created}
                             <strong>Password:</strong> 
                         textarea.form-control(readonly) #{user.local.password}
                         if user.facebook.token || user.google.token || user.twitter.token
                             a(href='/unlink/local').btn.btn-default Unlink
                         else
-                            a(href='/unlink/local').btn.btn-default(disabled) Unlink
+                            a.btn.btn-default(disabled) Unlink
                     else
                         a(href='/connect/local').btn.btn-default Connect Local account
 
@@ -34,7 +34,6 @@ block content
                         | Facebook account
                     if(user.facebook.token)
                         p(style='white-space:pre;')
-                            <strong>Id:</strong> #{user.facebook.id}
                             <strong>Email:</strong> #{user.facebook.email}
                             <strong>Name:</strong> #{user.facebook.name}
                             <strong>Token:</strong>
@@ -51,7 +50,6 @@ block content
                         | Twitter account
                     if(user.twitter.token)
                         p(style='white-space:pre;')
-                            <strong>Id:</strong> #{user.twitter.id}
                             <strong>Username:</strong> #{user.twitter.username}
                             <strong>Display Name:</strong> #{user.twitter.displayName}
                             <strong>Token:</strong> 
@@ -67,7 +65,6 @@ block content
                         | Google account
                     if(user.google.token)
                         p(style='white-space:pre;')
-                            <strong>Id:</strong> #{user.google.id}
                             <strong>Email:</strong> #{user.google.email}
                             <strong>Name:</strong> #{user.google.name}
                             <strong>Token:</strong> 

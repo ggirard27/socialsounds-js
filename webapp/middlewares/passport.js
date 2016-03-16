@@ -60,6 +60,10 @@ module.exports = function (passport) {
                 //  If we're logged in, we're connecting a new local account.
                 if (req.user) {
                     var user = req.user;
+                    
+                    // update the current users general informations
+                    user.general.lastLogin = new Date();
+                    // update the current users local informations
                     user.local.email = email;
                     user.local.password = user.generateHash(password);
                     user.save(function (err) {
@@ -73,6 +77,10 @@ module.exports = function (passport) {
                     // create the user
                     var newUser = new User();
                     
+                    // set all the current user general informations
+                    newUser.general.created = new Date();
+                    newUser.general.lastLogin = new Date();
+                    // set all the current user local informations
                     newUser.local.email = email;
                     newUser.local.password = newUser.generateHash(password);
                     
@@ -163,6 +171,9 @@ module.exports = function (passport) {
                         // if there is no user found with that facebook id, create them
                         var newUser = new User();
                         
+                        // set all the current users general informations
+                        newUser.general.created = new Date();
+                        newUser.general.lastLogin = new Date();
                         // set all of the facebook information in our user model
                         newUser.facebook.id = profile.id; // set the users facebook id                   
                         newUser.facebook.token = token; // we will save the token that facebook provides to the user                    
@@ -187,6 +198,8 @@ module.exports = function (passport) {
                 // user already exists and is logged in, we have to link accounts
                 var user = req.user; // pull the user out of the session
                 
+                // update the current users general informations
+                user.general.lastLogin = new Date();
                 // update the current users facebook credentials
                 user.facebook.id = profile.id;
                 user.facebook.token = token;
@@ -237,6 +250,9 @@ module.exports = function (passport) {
                         // if there is no user, create them
                         var newUser = new User();
                         
+                        // set all the current users general informations
+                        newUser.general.created = new Date();
+                        newUser.general.lastLogin = new Date();
                         // set all of the user data that we need
                         newUser.twitter.id = profile.id;
                         newUser.twitter.token = token;
@@ -255,6 +271,8 @@ module.exports = function (passport) {
                 // user already exists and is logged in, we have to link accounts
                 var user = req.user; // pull the user out of the session
                 
+                // update the current users general informations
+                user.general.lastLogin = new Date();
                 // update the current users twitter credentials
                 user.twitter.id = profile.id;
                 user.twitter.token = token;
@@ -304,6 +322,9 @@ module.exports = function (passport) {
                         // if the user isnt in our database, create a new user
                         var newUser = new User();
                         
+                        // set all the current users general informations
+                        newUser.general.created = new Date();
+                        newUser.general.lastLogin = new Date();
                         // set all of the relevant information
                         newUser.google.id = profile.id;
                         newUser.google.token = token;
@@ -322,6 +343,8 @@ module.exports = function (passport) {
                 // user already exists and is logged in, we have to link accounts
                 var user = req.user; // pull the user out of the session
                 
+                // update the current users general informations
+                user.general.lastLogin = new Date();
                 // update the current users google credentials
                 user.google.id = profile.id;
                 user.google.token = token;
