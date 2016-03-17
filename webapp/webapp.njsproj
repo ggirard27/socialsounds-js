@@ -38,6 +38,8 @@
     <Compile Include="middlewares\flash.js" />
     <Compile Include="middlewares\passport.js" />
     <Compile Include="models\user.js" />
+    <Compile Include="public\javascripts\player.js" />
+    <Compile Include="public\javascripts\youtube-player.js" />
     <Compile Include="routes\auth\facebook.js" />
     <Compile Include="routes\auth\google.js" />
     <Compile Include="routes\auth\twitter.js" />
@@ -48,6 +50,7 @@
     <Compile Include="routes\index.js" />
     <Compile Include="routes\login.js" />
     <Compile Include="routes\logout.js" />
+    <Compile Include="routes\player.js" />
     <Compile Include="routes\profile.js" />
     <Compile Include="routes\signup.js" />
     <Compile Include="bin\www" />
@@ -77,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="views\login.jade" />
+    <Content Include="views\player.jade" />
     <Content Include="views\profile.jade" />
     <Content Include="views\signup.jade" />
     <Content Include="Web.config" />

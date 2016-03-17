@@ -1,0 +1,14 @@
+﻿extends layout
+
+block content
+
+	.container-fluid#playerFluidContainer(style='background-color: black; height: 100%;')
+		.container#playerContainer(style='min-width: 480px!important; pointer-events: none;')
+			.embed-responsive.embed-responsive-16by9
+				.iframe.embed-responsive-item#soundcloudPlayer
+				.iframe.embed-responsive-item#vimeoPlayer
+				.iframe.embed-responsive-item#youtubePlayer
+
+block bodyscripts      
+	script(src='/javascripts/player.js')
+	script(src='/javascripts/youtube-player.js')
