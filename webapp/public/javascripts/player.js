@@ -1,8 +1,10 @@
 ﻿var contentProviderList = ['soundcloud', 'vimeo', 'youtube'];
 
-var contentList = ['https://www.youtube.com/watch?v=gAeWAwdZf9I', 'youtube', 'https://www.youtube.com/watch?v=6CnP8ghhZPQ', 'youtube', 'https://www.youtube.com/watch?v=P_SlAzsXa7E', 'youtube'];
+var contentList = ['https://www.youtube.com/watch?v=gAeWAwdZf9I', 'https://www.youtube.com/watch?v=6CnP8ghhZPQ', 'https://www.youtube.com/watch?v=P_SlAzsXa7E'];
 
-function playContent(contentProvider, contentUrl) {
+function playContent(contentUrl) {
+    
+    var contentProvider = getDomainName(contentUrl);
     
     if (contentProviderList.indexOf(contentProvider) > -1) {
         
@@ -28,7 +30,7 @@ function playContent(contentProvider, contentUrl) {
 };
 
 function getNextContent() {
-    playContent(k.pop(), contentList.pop());
+    playContent(contentList.pop());
 };
 
 
@@ -53,4 +55,10 @@ function hidePlayer(){
     for (var index = 0; index < contentProviderList.length; index++) {
         $(document.getElementById(contentProviderList[index] + 'Player')).hide();
     };
+};
+
+// It extracts the domain name from the url, trust me it works, as long as it IS a valid url. - GG
+function getDomainName(url) {
+    var domainName = url.split('.')[1];
+    return domainName;
 };
