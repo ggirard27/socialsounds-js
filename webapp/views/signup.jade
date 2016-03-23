@@ -4,8 +4,8 @@ block content
   .container
         .col-sm-6.com-sm-offset-3
             h1
-                span.fa.fa-sign-in(style='margin-right: 20px')
-                | Sign up
+                span.fa.fa-sign-in.signUpTitle
+                span Sign up
 
             if sessionFlash && sessionFlash.message
                 .alert.alert-danger #{sessionFlash.message}
@@ -20,6 +20,13 @@ block content
                 button.btn.btn-warning.btn-lg Sign up
 
             hr
-        
-            p Already have an account? #[a(href='/login') Log in]
-            p Or go #[a(href='/') home].
+            p 
+                span Already have an account? 
+                a(href='/login')
+                    span Log in
+                span .
+            p
+                span Or go 
+                a(href='/')
+                    span home
+                span .
