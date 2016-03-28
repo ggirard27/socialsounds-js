@@ -1,0 +1,13 @@
+﻿extends layout
+
+block wrapperContent
+    div#wrapper
+        div#sidebar-wrapper
+            ul.sidebar-nav
+                li.sidebar-brand
+                    block sidebarcontent
+                        a(href='/player') Player
+                        a(href='/profile') Profile
+        div#page-content-wrapper
+            div.container-fluid()
+                block content

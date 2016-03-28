@@ -1,44 +1,46 @@
-﻿extends layout
+﻿extends bodyContent
 
 block content
     .container-fluid
         .page-header.text-center
             h1
-                span.fa.fa-anchor(style='margin-right: 20px')
-                | Profile page
+                span.fa.fa-anchor.profileStyle
+                span Profile page
             a(href='/logout').btn.btn-default.btn-sm Log out
 
         .row
             .col-sm-6
                 .well
                     h3
-                        span.fa.fa-user(style='margin-right: 20px')
-                        | Local account
+                        span.fa.fa-user.profileStyle
+                        span Local account
                     if(user.local.email)
-                        p(style='white-space:pre;')
-                            <strong>Email:</strong> #{user.local.email}
-                            <strong>Account created:</strong> #{user.general.created}
-                            <strong>Password:</strong> 
-                        textarea.form-control(readonly) #{user.local.password}
-                        if user.facebook.token || user.google.token || user.twitter.token
-                            a(href='/unlink/local').btn.btn-default Unlink
+                        p.profileDataSection
+                            span.profileDataName Email: 
+                            span.profileDataValue #{user.local.email}
+                            br
+                            span.profileDataName Account created: 
+                            span.profileDataValue #{user.general.created}
+                        if(user.facebook.token || user.google.token || user.twitter.token)
+                            a(href='/unlink/local').btn.btn-default Unlink Local account
                         else
-                            a.btn.btn-default(disabled) Unlink
+                            a.btn.btn-default(disabled) Unlink Local account
                     else
                         a(href='/connect/local').btn.btn-default Connect Local account
 
             .col-sm-6
-                .well
+                .well(class=profile-facebook)
                     h3.text-primary
-                        span.fa.fa-facebook(style='margin-right: 20px')
-                        | Facebook account
+                        span.fa.fa-facebook.profileStyle
+                        span Facebook account
                     if(user.facebook.token)
-                        p(style='white-space:pre;')
-                            <strong>Email:</strong> #{user.facebook.email}
-                            <strong>Name:</strong> #{user.facebook.name}
-                            <strong>Token:</strong>
-                        textarea.form-control(readonly) #{user.facebook.token}
-                        a(href='/unlink/facebook').btn.btn-default Unlink
+                        p.profileDataSection
+                            span.profileDataName Email: 
+                            span.profileDataValue #{user.facebook.email}
+                            br
+                            span.profileDataName Name: 
+                            span.profileDataValue #{user.facebook.name}
+                        a(href='/unlink/facebook').btn.btn-default Unlink Facebook account
                     else
                         a(href='/connect/facebook').btn.btn-default Connect Facebook account
 
@@ -46,29 +48,50 @@ block content
             .col-sm-6
                 .well
                     h3.text-info
-                        span.fa.fa-twitter(style='margin-right: 20px')
-                        | Twitter account
+                        span.fa.fa-twitter.profileStyle
+                        span Twitter account
                     if(user.twitter.token)
-                        p(style='white-space:pre;')
-                            <strong>Username:</strong> #{user.twitter.username}
-                            <strong>Display Name:</strong> #{user.twitter.displayName}
-                            <strong>Token:</strong> 
-                        textarea.form-control(readonly) #{user.twitter.token}
-                        a(href='/unlink/twitter').btn.btn-default Unlink
+                        p.profileDataSection
+                            span.profileDataName Username: 
+                            span.profileDataValue #{user.twitter.username}
+                            br
+                            span.profileDataName Display Name: 
+                            span.profileDataValue #{user.twitter.displayName}
+                        a(href='/unlink/twitter').btn.btn-default Unlink Twitter account
                     else
                         a(href='/connect/twitter').btn.btn-default Connect Twitter account
 
             .col-sm-6
                 .well
                     h3.text-danger
-                        span.fa.fa-google-plus(style='margin-right: 20px')
-                        | Google account
+                        span.fa.fa-google-plus.profileStyle
+                        span Google account
                     if(user.google.token)
-                        p(style='white-space:pre;')
-                            <strong>Email:</strong> #{user.google.email}
-                            <strong>Name:</strong> #{user.google.name}
-                            <strong>Token:</strong> 
-                        textarea.form-control(readonly) #{user.google.token}
-                        a(href='/unlink/google').btn.btn-default Unlink
+                        p.profileDataSection
+                            span.profileDataName Email: 
+                            span.profileDataValue #{user.google.email}
+                            br
+                            span.profileDataName Name: 
+                            span.profileDataValue #{user.google.name}
+                        a(href='/unlink/google').btn.btn-default Unlink Google account
                     else
                         a(href='/connect/google').btn.btn-default Connect Google account
+
+        .row
+            .col-sm-6
+                .well
+                    h3.text-info
+                        span.fa.profileStyle
+                        span Saved songs
+
+            .col-sm-6
+                .well
+                    h3.text-info
+                        span.fa.profileStyle
+                        span Saved stations
+        .row
+            .col-sm-12
+                .well
+                    h3.text-info
+                        span.fa.profileStyle
+                        span Friends

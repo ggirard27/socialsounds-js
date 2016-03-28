@@ -1,33 +1,29 @@
 ﻿extends layout
 
-block content
-    .container
+block wrapperContent
+    .container.indexContainer
         .jumbotron.text-center
             h1
-                span.fa.fa-lock(style='margin-right: 20px')
-                | socialsounds login
+                span.fa.fa-lock.indexTitle
+                span socialsounds login
 
-            p login or register using:
+            p 
+                span login or register using: 
 
-            a.btn.btn-default(href='/login', style='margin-right: 10px')
-                span.fa.fa-user(style='margin-right: 10px')
-                | Local Login
-
-            a.btn.btn-default(href='/signup', style='margin-right: 10px')
-                span.fa.fa-user(style='margin-right: 10px')
-                | Local Signup 
-
-            a.btn.btn-primary(href='/auth/facebook', style='margin-right: 10px')
-                span.fa.fa-facebook(style='margin-right: 10px')
-                | Facebook
-
-            a.btn.btn-info(href='/auth/twitter', style='margin-right: 10px')
-                span.fa.fa-twitter(style='margin-right: 10px')
-                | Twitter
-            a.btn.btn-danger(href='/auth/google', style='margin-right: 10px')
-                span.fa.fa-google-plus(style='margin-right: 10px')
-                | Google
+            a.btn.btn-default(href='/login').indexStyle
+                span.fa.fa-user.indexStyle
+                span Local Login 
+            a.btn.btn-default(href='/signup').indexStyle
+                span.fa.fa-user.indexStyle
+                span Local Signup 
+            a.btn.btn-primary(href='/auth/facebook').indexStyle
+                span.fa.fa-facebook.indexStyle
+                span Facebook 
+            a.btn.btn-info(href='/auth/twitter').indexStyle
+                span.fa.fa-twitter.indexStyle
+                span Twitter 
+            a.btn.btn-danger(href='/auth/google').indexStyle
+                span.fa.fa-google-plus.indexStyle
+                span Google 
 
 block bodyscripts
-    script(src='https://cdn.socket.io/socket.io-1.4.5.js')
-    script(src='/javascripts/websockets.js')

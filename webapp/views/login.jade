@@ -1,11 +1,11 @@
 ﻿extends layout
 
-block content
+block wrapperContent
     .container
         .col-sm-6.com-sm-offset-3
             h1
-                span.fa.fa-sign-in(style='margin-right: 20px')
-                | Login
+                span.fa.fa-sign-in.loginTitle
+                span Login
 
             if sessionFlash && sessionFlash.message
                 .alert.alert-danger #{sessionFlash.message}
@@ -21,5 +21,13 @@ block content
 
             hr
         
-            p Need an account? #[a(href='/signup') Sign up]
-            p Or go #[a(href='/') home].
+            p 
+                span Need an account? 
+                a(href='/signup') 
+                    span Sign up
+                span .
+            p  
+                span Or go 
+                a(href='/')
+                    span home
+                span .
