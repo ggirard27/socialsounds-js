@@ -62,6 +62,7 @@
     <None Include="socialsounds.pubxml" />
     <Content Include="views\connect\local.jade" />
     <Content Include="views\index.jade" />
+    <Content Include="views\bodyContent.jade" />
     <Content Include="views\layout.jade" />
     <Content Include="views\error.jade" />
   </ItemGroup>
