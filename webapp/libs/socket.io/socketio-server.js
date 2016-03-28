@@ -11,7 +11,8 @@ module.exports.listen = function (server) {
         var defaultRoom = {};
         defaultRoom.roomName = 'default-room';
         var rooms = [];
-        defaultRoom.contentQueue = ['https://www.youtube.com/watch?v=gAeWAwdZf9I', 'https://www.youtube.com/watch?v=6CnP8ghhZPQ', 'https://www.youtube.com/watch?v=P_SlAzsXa7E'];   // preliminary content queue
+        defaultRoom.contentQueue = ['https://www.youtube.com/watch?v=gAeWAwdZf9I', 'https://www.soundcloud.com/selected-stream/ansah-i-know/', 'https://www.youtube.com/watch?v=6CnP8ghhZPQ', 
+            'https://www.soundcloud.com/e-monts/renegades/', 'https://www.youtube.com/watch?v=P_SlAzsXa7E', 'https://www.soundcloud.com/majorlazer/major-lazer-dj-snake-lean-on-feat-mo/'];
         
         rooms[defaultRoom.roomName] = defaultRoom;
         socket.room = defaultRoom.roomName;
