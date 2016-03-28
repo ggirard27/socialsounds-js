@@ -1,18 +1,16 @@
-﻿extends layout
-
+﻿extends bodycontent
 block content
-
-	.container-fluid#playerFluidContainer(style='background-color: black; height: 100%;')
-		.container#playerContainer(style='min-width: 480px!important; pointer-events: none;')
-			.embed-responsive.embed-responsive-16by9
-                iframe.embed-responsive-item#soundcloudPlayer    
-				.iframe.embed-responsive-item#vimeoPlayer
-				.iframe.embed-responsive-item#youtubePlayer
-block bodyscripts      
+    .container-fluid#playerFluidContainer.playerFluidContainerStyle
+        .container#playerContainer.playerContainerStyle
+            .embed-responsive.embed-responsive-16by9
+                iframe.embed-responsive-item#soundcloudPlayer
+                .iframe.embed-responsive-item#vimeoPlayer
+                .iframe.embed-responsive-item#youtubePlayer
+block bodyscripts
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')
-	script(src='/javascripts/player.js')
-	script(src='/javascripts/youtube-player.js')
+    script(src='/javascripts/player.js')
+    script(src='/javascripts/youtube-player.js')
     script(src='http://connect.soundcloud.com/sdk/sdk-3.0.0.js')
     script(src='https://w.soundcloud.com/player/api.js')
     script(src='/javascripts/soundcloud-player.js')

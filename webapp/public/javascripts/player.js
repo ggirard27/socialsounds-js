@@ -14,7 +14,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                 self.showPlayer(contentProvider);
                 switch (contentProvider) {
                     case 'soundcloud':
-                        playSoundCloudContent(contentUrl);
+                        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(contentUrl);
                         break;
                     case 'vimeo':
                         playVimeoContent(contentUrl);
