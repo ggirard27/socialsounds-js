@@ -36,12 +36,15 @@ module.exports.listen = function (server) {
             socket.emit('playNextContent', nextContent);
         });
         
-        socket.on('addContent', function (contentUrl) {
-            if (helpers.validateUrl(contentUrl)) {
-                contentQueue.push(contentUrl)               // using preliminary content queue
-                socket.emit('contentAdded', songUrl)
+        socket.on('addContent', function (contentUrl, room) {
+            console.log('Request to add ' + contentUrl + ' to queue of room '+ room);
+            if (contentUrl) {
+                console.log('Request accepted');
+                rooms[room].contentQueue.push(contentUrl)               // using preliminary content queue
+                socket.emit('contentAdded', contentUrl)
             }
             else {
+                console.log('Request denied');
                 socket.emit('contentRejected', contentUrl)
             }
         });
