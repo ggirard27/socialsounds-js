@@ -31,8 +31,9 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
                 });
             }
             else {
+                
                 $.getJSON('http://api.soundcloud.com/resolve.json?url=' + song + '&client_id=' + self.clientId).done(function (data) {
-                    soundUrl = data.uri;
+                    self.soundUrl = data.uri;
                     self.widget.load(self.soundUrl, 'auto_play=true');
                     self.widget.bind(SC.Widget.Events.READY, function () {
                         //When the widget is ready:
@@ -40,6 +41,12 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
                     });
                 });
             }
+        }
+    },
+
+    stopSoundCloudContent: function () {
+        if (this.widget) {
+            this.widget.pause();
         }
     },
 };

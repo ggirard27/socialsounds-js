@@ -11,7 +11,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
             if (contentProviderList.indexOf(contentProvider) > -1) {
         
-                self.showPlayer(contentProvider);
+            self.showPlayer(contentProvider);
+            SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.stopSoundCloudContent();
+
                 switch (contentProvider) {
                     case 'soundcloud':
                         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(contentUrl);
