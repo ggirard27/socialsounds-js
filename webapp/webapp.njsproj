@@ -35,11 +35,12 @@
     <Compile Include="app.js" />
     <Compile Include="config\auth.js" />
     <Compile Include="config\database.js" />
-    <Compile Include="libs\socketio\base.js" />
+    <Compile Include="libs\socket.io\socketio-server.js" />
+    <Compile Include="libs\socket.io\roomdata-extended.js" />
     <Compile Include="middlewares\flash.js" />
     <Compile Include="middlewares\passport.js" />
     <Compile Include="models\user.js" />
-    <Compile Include="public\javascripts\websockets.js" />
+    <Compile Include="public\javascripts\socketio-client.js" />
     <Compile Include="public\javascripts\player.js" />
     <Compile Include="public\javascripts\youtube-player.js" />
     <Compile Include="routes\auth\facebook.js" />
@@ -67,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
-    <Folder Include="libs\socketio\" />
+    <Folder Include="libs\socket.io\" />
     <Folder Include="middlewares\" />
     <Folder Include="config\" />
     <Folder Include="models\" />
