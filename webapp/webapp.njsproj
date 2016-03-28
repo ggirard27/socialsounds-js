@@ -39,6 +39,7 @@
     <Compile Include="middlewares\flash.js" />
     <Compile Include="middlewares\passport.js" />
     <Compile Include="models\user.js" />
+    <Compile Include="public\javascripts\soundcloud-player.js" />
     <Compile Include="public\javascripts\websockets.js" />
     <Compile Include="public\javascripts\player.js" />
     <Compile Include="public\javascripts\youtube-player.js" />
