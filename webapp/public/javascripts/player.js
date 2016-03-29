@@ -1,8 +1,23 @@
 ﻿var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
-var contentProviderList = ['soundcloud', 'vimeo', 'youtube'];
+var contentProviderList = ['soundcloud', 'vimeo', 'youtube']; // This needs to go server side when we have time. - GG
+
+var addContentButton = document.getElementById('addContentButton');
+var startBroadcastButton = document.getElementById('startBroadcastButton');
+
+addContentButton.addEventListener('click', function () {
+    var contentUrl = document.getElementById('searchBarInput').value;
+    if (contentUrl) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(contentUrl);
+    }
+});
+
+startBroadcastButton.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
+});
 
 
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
+       
     
     playContent: function (content) {
         
@@ -64,7 +79,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         return url.split('//')[1].split('.')[0] != 'www' ?  url.split('//')[1].split('.')[0] : url.split('//')[1].split('.')[1];
     },
     
-    // Call this function via the search bar 'add' button. - GG
+
     requestContentInformation: function (contentUrl) {
         var contentProvider = this.getHostName(contentUrl);
         switch (contentProvider) {
@@ -105,5 +120,12 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     '\n'
         );
     },
+    
+/* Not sure whether we need to keep this function. We might want to do some stuff before 
+ * passing the contentUrl to the next function... just not sure what. - GG
+ */
+    addContentFromSearch: function (contentUrl) {
+        this.requestContentInformation(contentUrl);
+    }
 }
 
