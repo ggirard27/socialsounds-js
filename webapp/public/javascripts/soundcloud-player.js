@@ -3,10 +3,11 @@
 SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     
     SC: SC,
-    clientId: String('3d4d094dc75510a4b5ad612e2d249a41'),
+    clientId: String('3d4d094dc75510a4b5ad612e2d249a41'),   //TODO: To store somewhere else later - TP
     widget: String(''),
     songMedia: { title: String(''), uploader: String(''), url: String(''), apiId: String(''), provider: String('') },
     songList: [],
+    muted: false,
     
 
     //TODO: Add a button Open in soundcloud
@@ -48,7 +49,8 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     
     muteSoundCloudContent: function () {
         if (this.widget) {
-            this.widget.setVolume(0);
+            this.muted ? this.widget.setVolume(0) : this.widget.setVolume(75);
+            this.muted = !this.muted;
         }
     },
 

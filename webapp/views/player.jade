@@ -5,9 +5,9 @@ block content
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
                 .form-inline
-                    button.btn Add
-                    input.form-control(type='text')
-                    button.btn Search
+                    button.btn#addContentButton Add
+                    input.form-control#searchBarInput(type='text')
+                    button.btn#startBroadcastButton Start Broadcast
         .row
             .col-xs-3.col-sm-3.col-md-3.col-lg-3
                 span Channel Title
@@ -31,10 +31,10 @@ block content
                                 .iframe.embed-responsive-item#youtubePlayer
                 .row
                     .form-inline
-                        button.btn Share
+                        button.btn#btnShareSong Share
                         .pull-right
-                            button.btn Open in new window
-                            button.btn Mute
+                            button.btn#btnOpenInBrowser Open in new window
+                            button.btn#btnMuteContent Mute
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
                 textarea.form-control

@@ -3,6 +3,10 @@ var contentProviderList = ['soundcloud', 'vimeo', 'youtube']; // This needs to g
 
 var addContentButton = document.getElementById('addContentButton');
 var startBroadcastButton = document.getElementById('startBroadcastButton');
+var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
+var btnMuteContent = document.getElementById('btnMuteContent');
+var currentSong;
+
 
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
@@ -15,16 +19,37 @@ startBroadcastButton.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
 });
 
+btnOpenInBrowser.addEventListener('click', function () {    
+    var win = window.open(currentSong.url, '_blank');
+    win.focus();
+});
+
+btnMuteContent.addEventListener('click', function () { 
+    switch (currentSong.provider) {
+        case 'soundcloud':
+            SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.muteSoundCloudContent();
+            break;
+        case 'vimeo':
+            muteVimeoContent();
+            break;
+        case 'youtube':
+            SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.muteYoutubePlayer(); //TODO : Implement this function
+            break;
+        default :
+            console.log("Oops, something went wrong while trying to launch: " + content.provider);
+            break;
+    }; 
+});
 
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
        
     
     playContent: function (content) {
-        
+        currentSong = content;
         var self = this;
-        
+        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.stopSoundCloudContent(); //TODO: Something similar with youtube player
         if (contentProviderList.indexOf(content.provider) > -1) {
-            
+
             self.showPlayer(content.provider);
             switch (content.provider) {
                 case 'soundcloud':
@@ -34,7 +59,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     playVimeoContent(content.url);
                     break;
                 case 'youtube':
-                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content.url);
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content.url);  
                     break;
                 default :
                     console.log("Oops, something went wrong while trying to launch: " + content.provider);
