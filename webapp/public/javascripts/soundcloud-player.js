@@ -49,7 +49,7 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     
     muteSoundCloudContent: function () {
         if (this.widget) {
-            this.muted ? this.widget.setVolume(0) : this.widget.setVolume(75);
+            this.muted ? this.widget.setVolume(75) : this.widget.setVolume(0);
             this.muted = !this.muted;
         }
     },
