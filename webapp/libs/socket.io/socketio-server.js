@@ -11,16 +11,13 @@ module.exports.listen = function (server) {
         var defaultRoom = {};
         defaultRoom.roomName = 'default-room';
         var rooms = [];
-        defaultRoom.contentQueue = ['https://www.youtube.com/watch?v=gAeWAwdZf9I', 'https://www.soundcloud.com/selected-stream/ansah-i-know/', 'https://www.youtube.com/watch?v=6CnP8ghhZPQ', 
-            'https://www.soundcloud.com/e-monts/renegades/', 'https://www.youtube.com/watch?v=P_SlAzsXa7E', 'https://www.soundcloud.com/majorlazer/major-lazer-dj-snake-lean-on-feat-mo/'];
+        defaultRoom.contentQueue = [];
         
         rooms[defaultRoom.roomName] = defaultRoom;
         socket.room = defaultRoom.roomName;
         roomdata.joinRoom(socket, socket.room);
         console.log('user connected');
         socket.emit('roomJoined', socket.room);
-
-        socket.emit('test', "web sockets in azure");      
         
         socket.on('disconnect', function () {
             roomdata.leaveRoom(socket);
@@ -36,16 +33,16 @@ module.exports.listen = function (server) {
             socket.emit('playNextContent', nextContent);
         });
         
-        socket.on('addContent', function (contentUrl, room) {
-            console.log('Request to add ' + contentUrl + ' to queue of room '+ room);
-            if (contentUrl) {
+        socket.on('addContent', function (content, room) {
+            console.log('Request to add ' + content.url + ' to queue of room '+ room);
+            if (content) {
                 console.log('Request accepted');
-                rooms[room].contentQueue.push(contentUrl)               // using preliminary content queue
-                socket.emit('contentAdded', contentUrl)
+                rooms[room].contentQueue.push(content)               // using preliminary content queue
+                socket.emit('contentAdded', content)
             }
             else {
                 console.log('Request denied');
-                socket.emit('contentRejected', contentUrl)
+                socket.emit('contentRejected', content)
             }
         });
 
