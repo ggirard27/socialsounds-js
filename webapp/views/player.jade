@@ -1,11 +1,39 @@
 ﻿extends bodycontent
+
 block content
-    .container-fluid#playerFluidContainer.playerFluidContainerStyle
-        .container#playerContainer.playerContainerStyle
-            .embed-responsive.embed-responsive-16by9
-                iframe.embed-responsive-item#soundcloudPlayer
-                .iframe.embed-responsive-item#vimeoPlayer
-                .iframe.embed-responsive-item#youtubePlayer
+    .container-fluid
+        .row
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                .form-inline
+                    button.btn Add
+                    input.form-control(type='text')
+                    button.btn Search
+        .row
+            .col-xs-3.col-sm-3.col-md-3.col-lg-3
+                span Channel Title
+                ul
+                    li
+                        a(href='') Adele - Hello
+                    li
+                        a(href='') Macklemore - THRIFT SHOP
+                .progress
+                    .progess-bar
+                        span 3/15 voted person voted to skip
+                div
+                    button.btn Skip
+            .col-xs-9.col-sm-9.col-md-9.col-lg-9
+                .container-fluid.player-fluid-container-style
+                    .container.player-container-style
+                        .embed-responsive.embed-responsive-16by9
+                            iframe.embed-responsive-item#soundcloudPlayer
+                            .iframe.embed-responsive-item#vimeoPlayer
+                            .iframe.embed-responsive-item#youtubePlayer
+        .row
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                textarea.form-control
+                .form-inline
+                    input.form-control(type='text')
+                    button.btn Send
 block bodyscripts
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')

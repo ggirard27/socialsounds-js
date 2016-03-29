@@ -1,13 +1,23 @@
 ﻿extends layout
 
 block wrapperContent
-    div#wrapper
-        div#sidebar-wrapper
-            ul.sidebar-nav
-                li.sidebar-brand
-                    block sidebarcontent
-                        a(href='/player') Player
-                        a(href='/profile') Profile
-        div#page-content-wrapper
-            div.container-fluid()
-                block content
+    .col-xs-1.col-sm-1.col-md-1.col-lg-1
+        .sidebar-nav
+            .navbar.navbar-default(role="navigation")
+                .navbar-header
+                    button.sr-only(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse")
+                        span.sr-only Toggle navigation
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    a.navbar-brand SS
+                .navbar-collapse.collapse.sidebar-navbar-collapse
+                    ul.nav.navbar-nav
+                        block sidebarcontent
+                            li
+                                a(href='/player') Player
+                            li
+                                a(href='/profile') Profile
+    .col-xs-11.col-sm-11.col-md-11.col-lg-11
+        div.container-fluid()
+            block content

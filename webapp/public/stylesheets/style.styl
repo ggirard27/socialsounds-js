@@ -4,75 +4,30 @@
 body
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
 
-/************************/
-/*         Body         */
-/************************/
-#wrapper
-    width: 100%
-    height: 100%
-    padding-left: 0
-    -webkit-transition: all 0.5s ease
-    -moz-transition: all 0.5s ease
-    -o-transition: all 0.5s ease
-    transition: all 0.5s ease
-    
-/****************************/
-/*       Page Content       */
-/****************************/
-#page-content-wrapper 
-    height: 100%
-    margin-left: 200px
-
-/***************************/
-/*         Sidebar         */
-/***************************/
-#sidebar-wrapper
-    width: 200px
-    height: 100%
-    position: fixed
-    left: 0px
-    top: 0px
-    overflow-y: auto
-    background: #000
-    -webkit-transition: all 0.5s ease
-    -moz-transition: all 0.5s ease
-    -o-transition: all 0.5s ease
-    transition: all 0.5s ease
-
-.sidebar-nav 
-    width: 150px
-    /*margin-top: 50px*/
-    position: absolute
-    left: 0
-    padding: 0
-    list-style: none
-
-.sidebar-nav li 
-    text-indent: 20px
-    line-height: 40px
-.sidebar-nav li a 
-    display: block
-    text-decoration: none
-    color: #999999
-.sidebar-nav li a:hover 
-    text-decoration: none
-    color: #fff
-    background: rgba(255,255,255,0.2)
-.sidebar-nav li a:active,
-.sidebar-nav li a:focus 
-    text-decoration: none
-    color: #fff
-    background: rgba(255,255,255,0.2)
-.sidebar-nav > .sidebar-brand 
-    height: 65px
-    font-size: 18px
-    line-height: 60px
-.sidebar-nav > .sidebar-brand a 
-    color: #999999
-.sidebar-nav > .sidebar-brand a:hover 
-    color: #fff
-    background: none
-  
+/**************************/
+/*         Navbar         */
+/**************************/
+@css {
+    /* make sidebar nav vertical */ 
+    @media (min-width: 768px) {
+      .sidebar-nav .navbar .navbar-collapse {
+        padding: 0;
+        max-height: none;
+      }
+      .sidebar-nav .navbar ul {
+        float: none;
+        display: block;
+      }
+      .sidebar-nav .navbar li {
+        float: none;
+        display: block;
+      }
+      .sidebar-nav .navbar li a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+      }
+    }
+}
 /***************************/
 /*          Views          */
 /***************************/
@@ -103,9 +58,44 @@ body
     margin-right: 20px
     
 /* Player */
-.playerFluidContainerStyle
+.player-fluid-container-style
     background-color: black
-    height: 100%
-.playerContainerStyle
-    min-width: 480px /*!important*/
+.player-container-style
+    width: 100% !important
     /*pointer-events: none*/
+#soundcloudPlayer
+    height: 125px
+    margin: auto
+#youtubePlayer
+    min-width: 480px !important
+    min-height: 270px !important
+/*
+.search-section
+    position: relative
+    background-color: red
+.search-section-textBox
+    width: 1000px
+
+.channel-section
+    position: relative
+    float: left
+    height: 500px
+    width: 240px
+    background-color: cyan
+.channel-section-title
+    color: red
+.channel-section-skip-text
+    position: absolute
+    bottom:30px
+.channel-section-skip
+    position: absolute
+    bottom: 0
+
+.chat-section
+    background-color: yellow
+.chat-section-discusion
+    height: 200px
+    background-color: green
+.chat-section-text-input
+    width: 1000px
+*/
