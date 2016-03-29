@@ -13,7 +13,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             self.showPlayer(content.provider);
             switch (content.provider) {
                 case 'soundcloud':
-                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(content.url);
+                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(content);
                     break;
                 case 'vimeo':
                     playVimeoContent(content.url);
@@ -37,9 +37,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     
     showPlayer: function (content) {
-        if (contentProviderList.indexOf(content.provider) > -1) {
+        if (contentProviderList.indexOf(content) > -1) {
             for (var index = 0; index < contentProviderList.length; index++) {
-                if (contentProviderList[index] == content.provider) {
+                if (contentProviderList[index] == content) {
                     $(document.getElementById(contentProviderList[index] + 'Player')).show();
                 } 
                 else {
@@ -48,7 +48,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             };
         }
         else {
-            console.log("Invalid content provider passed to showPlayer: " + content.provider);
+            console.log("Invalid content provider passed to showPlayer: " + content);
         }
     },
     
