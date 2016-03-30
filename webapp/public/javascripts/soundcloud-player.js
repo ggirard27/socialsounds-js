@@ -7,7 +7,6 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     widget: String(''),
     songMedia: { title: String(''), uploader: String(''), url: String(''), apiId: String(''), provider: String('') },
     songList: [],
-    muted: false,
     
 
     //TODO: Add a button Open in soundcloud
@@ -47,10 +46,9 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
         }
     },
     
-    muteSoundCloudContent: function () {
+    muteSoundCloudContent: function (isMuted) {
         if (this.widget) {
-            this.muted ? this.widget.setVolume(75) : this.widget.setVolume(0);
-            this.muted = !this.muted;
+            isMuted ? this.widget.setVolume(0) : this.widget.setVolume(75);
         }
     },
 

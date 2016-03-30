@@ -2,7 +2,7 @@
 
 SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
     
-    youtubePlayer: youtubePlayer,
+    youtubePlayer: null,
     youtubeDataApiKey: 'AIzaSyCg16FmXMtMPUm86w6FT5prAJEqd8obOgU',
     youtubeApiUrl: 'https://www.googleapis.com/youtube/v3/videos?id=',
     videoInfo: null,
@@ -30,7 +30,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
             
             window.onYouTubePlayerAPIReady = function () {
-                youtubePlayer = new YT.Player('youtubePlayer', {
+                self.youtubePlayer = new YT.Player('youtubePlayer', {
                     videoId: self.getYoutubeId(contentUrl),
                     playerVars: { 'autoplay': 1, 'controls': 1 },
                     events: {
@@ -41,7 +41,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
             };
         } 
         else {
-            youtubePlayer.loadVideoById({
+            self.youtubePlayer.loadVideoById({
                 'videoId': self.getYoutubeId(contentUrl),
                 'suggestedQuality': 'large'
             });
@@ -83,6 +83,20 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         .always(function () { 
             SOCIALSOUNDSCLIENT.BASEPLAYER.receiveContentInformation(self.videoInfo);
         });
-    },       
+    },  
+    
+    muteYoutubePlayer: function (isMuted){
+        if (this.youtubePlayer) {
+            isMuted ? this.youtubePlayer.mute() : this.youtubePlayer.unMute();
+        }
+    },  
+     
+    isMutedYoutubePlayer: function () {
+        return this.youtubePlayer.isMuted();
+    },
+
+    pauseYoutubeContent: function () {
+        this.youtubePlayer.pauseVideo();
+    },
 };
 

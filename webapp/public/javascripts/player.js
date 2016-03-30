@@ -5,7 +5,8 @@ var addContentButton = document.getElementById('addContentButton');
 var startBroadcastButton = document.getElementById('startBroadcastButton');
 var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
 var btnMuteContent = document.getElementById('btnMuteContent');
-var currentSong;
+var fbShareButton = document.getElementById('fbShareButton');
+var currentContent = null;
 
 
 addContentButton.addEventListener('click', function () {
@@ -20,51 +21,73 @@ startBroadcastButton.addEventListener('click', function () {
 });
 
 btnOpenInBrowser.addEventListener('click', function () {    
-    var win = window.open(currentSong.url, '_blank');
+    var win = window.open(currentContent.url, '_blank');
     win.focus();
 });
 
-btnMuteContent.addEventListener('click', function () { 
-    switch (currentSong.provider) {
-        case 'soundcloud':
-            SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.muteSoundCloudContent();
-            break;
-        case 'vimeo':
-            muteVimeoContent();
-            break;
-        case 'youtube':
-            SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.muteYoutubePlayer(); //TODO : Implement this function
-            break;
-        default :
-            console.log("Oops, something went wrong while trying to launch: " + content.provider);
-            break;
-    }; 
+btnMuteContent.addEventListener('click', function () {
+    
+    if (currentContent !== null) {
+        
+        SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted = !SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted;
+
+        switch (currentContent.provider) {
+            case 'soundcloud':
+                SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.muteSoundCloudContent(SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted);
+                break;
+            case 'vimeo':
+                muteVimeoContent(SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted);
+                break;
+            case 'youtube':
+                SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.muteYoutubePlayer(SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted);
+                break;
+            default :
+                console.log("Oops, something went wrong while trying to mute: " + content.provider);
+                break;
+        }
+    }
 });
 
+
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
+    
+    isMuted: Boolean(false),
        
     
     playContent: function (content) {
-        currentSong = content;
+
+        currentContent = content;
         var self = this;
-        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.stopSoundCloudContent(); //TODO: Something similar with youtube player
+
+        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.stopSoundCloudContent();
+
+        if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
+            // nothing to do
+        } 
+        else if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer.getPlayerState() == 1) {
+            SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
+        }
+        
         if (contentProviderList.indexOf(content.provider) > -1) {
 
             self.showPlayer(content.provider);
             switch (content.provider) {
                 case 'soundcloud':
                     SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(content);
+                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.muteSoundCloudContent(self.isMuted);
                     break;
                 case 'vimeo':
                     playVimeoContent(content.url);
                     break;
                 case 'youtube':
-                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content.url);  
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content.url);
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.muteYoutubePlayer(self.isMuted);
                     break;
                 default :
                     console.log("Oops, something went wrong while trying to launch: " + content.provider);
                     break;
             };
+            self.updateFacebookShareButtonUrl();
         } 
         else {
             console.log("Invalid content provider passed to player: " + content.provider);
@@ -151,6 +174,12 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
  */
     addContentFromSearch: function (contentUrl) {
         this.requestContentInformation(contentUrl);
-    }
+    },
+
+    updateFacebookShareButtonUrl: function () {
+        $('#fbShareButton').html('<fb:share-button href=' + currentContent.url + ' type="button"> </fb:share-button>')
+        if (typeof (FB) !== 'undefined')
+            FB.XFBML.parse(document.getElementById('fbShareButton'));
+    },
 }
 
