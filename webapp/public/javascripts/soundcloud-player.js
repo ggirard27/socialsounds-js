@@ -10,19 +10,20 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     
 
     //TODO: Add a button Open in soundcloud
-    playSoundCloudContent: function (song) {
+    playSoundCloudContent: function (content) {
         var self = this;
         var iFrame = document.getElementById('soundcloudPlayer');
         //This is for debugging, should never be used in final product
-        if (!song) {
+        if (!content) {
             SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
         }
         else {
             //First time using the widget
             if (!self.widget) {
-                    iFrame.src = 'https://w.soundcloud.com/player/?url=' + song.apiId;
+                    iFrame.src = 'https://w.soundcloud.com/player/?url=' + content.apiId;
                     self.widget = SC.Widget(iFrame);
                     self.widget.bind(SC.Widget.Events.READY, function () {
+                    SOCIALSOUNDSCLIENT.BASEPLAYER.applyPlayerMuteState();
                         //When the widget is ready:
                         self.widget.play();
                     });
@@ -31,24 +32,25 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
                     });
             }
             else {
-                self.widget.load(song.apiId);
+                self.widget.load(content.apiId);
                 self.widget.bind(SC.Widget.Events.READY, function () {
                     //When the widget is ready:
+                    SOCIALSOUNDSCLIENT.BASEPLAYER.applyPlayerMuteState();
                     self.widget.play();
                 });
             }
         }
     },
     
-    stopSoundCloudContent: function () {
+    pauseSoundCloudPlayer: function () {
         if (this.widget) {
             this.widget.pause();
         }
     },
     
-    muteSoundCloudContent: function (isMuted) {
+    muteSoundCloudPlayer: function (isMuted) {
         if (this.widget) {
-            isMuted ? this.widget.setVolume(0) : this.widget.setVolume(75);
+            isMuted === true ? this.widget.setVolume(0) : this.widget.setVolume(75);
         }
     },
 

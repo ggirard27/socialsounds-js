@@ -40,26 +40,10 @@ btnOpenInBrowser.addEventListener('click', function () {
 });
 
 btnMuteContent.addEventListener('click', function () {
-    
-    if (currentContent !== null) {
-        
-        SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted = !SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted;
-
-        switch (currentContent.provider) {
-            case 'soundcloud':
-                SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.muteSoundCloudContent(SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted);
-                break;
-            case 'vimeo':
-                muteVimeoContent(SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted);
-                break;
-            case 'youtube':
-                SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.muteYoutubePlayer(SOCIALSOUNDSCLIENT.BASEPLAYER.isMuted);
-                break;
-            default :
-                console.log("Oops, something went wrong while trying to mute: " + content.provider);
-                break;
-        }
-    }
+    var currentMuteState = SOCIALSOUNDSCLIENT.BASEPLAYER.getPlayerMuteState();
+    currentMuteState = !currentMuteState;
+    SOCIALSOUNDSCLIENT.BASEPLAYER.setPlayerMuteState(currentMuteState);
+    SOCIALSOUNDSCLIENT.BASEPLAYER.applyPlayerMuteState();
 });
 
 
@@ -73,7 +57,10 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         currentContent = content;
         var self = this;
 
-        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.stopSoundCloudContent();
+        // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
+        // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
+        // which should take care of stopping the currently playing media before calling the playContent function. - GG
+        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
 
         if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
             // nothing to do
@@ -81,6 +68,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         else if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer.getPlayerState() == 1) {
             SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
         }
+        // until here
         
         if (contentProviderList.indexOf(content.provider) > -1) {
 
@@ -88,14 +76,12 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             switch (content.provider) {
                 case 'soundcloud':
                     SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(content);
-                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.muteSoundCloudContent(self.isMuted);
                     break;
                 case 'vimeo':
-                    playVimeoContent(content.url);
+                    playVimeoContent(content);
                     break;
                 case 'youtube':
-                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content.url);
-                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.muteYoutubePlayer(self.isMuted);
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content);
                     break;
                 default :
                     console.log("Oops, something went wrong while trying to launch: " + content.provider);
@@ -194,6 +180,35 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         $('#fbShareButton').html('<fb:share-button href=' + currentContent.url + ' type="button"> </fb:share-button>')
         if (typeof (FB) !== 'undefined')
             FB.XFBML.parse(document.getElementById('fbShareButton'));
+    },
+
+    getPlayerMuteState: function () {
+        return this.isMuted;
+    },
+
+    setPlayerMuteState: function (muteState) {
+        if (muteState != null) {
+            this.isMuted = muteState;
+        } 
+    },
+
+    applyPlayerMuteState: function () {
+        var self = this;
+        if (currentContent) {
+            switch (currentContent.provider) {
+                case 'soundcloud':
+                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.muteSoundCloudPlayer(self.getPlayerMuteState());
+                    break;
+                case 'vimeo':
+                    break;
+                case 'youtube':
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.muteYoutubePlayer(self.getPlayerMuteState());
+                    break;
+                default :
+                    console.log('Oops, something went wrong while trying to mute : ' + currentContent.provider);
+                    break;
+            };
+        }
     },
     
     //Get selected song from the select menu
