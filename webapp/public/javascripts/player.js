@@ -6,8 +6,16 @@ var startBroadcastButton = document.getElementById('startBroadcastButton');
 var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
 var btnMuteContent = document.getElementById('btnMuteContent');
 var fbShareButton = document.getElementById('fbShareButton');
+var btnSkip = document.getElementById('btnSkip');
 var currentContent = null;
 
+//For now the skip button is actually a search button, we will be adding an actual search button soon. It's 2am plz
+btnSkip.addEventListener('click', function () {
+    var contentUrl = document.getElementById('searchBarInput').value;
+    if (contentUrl) {
+        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
+    }
+});
 
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
@@ -42,7 +50,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
 
         currentContent = content;
         var self = this;
-        
+
         // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
         // which should take care of stopping the currently playing media before calling the playContent function. - GG
@@ -55,7 +63,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
         }
         // until here
-
+        
         if (contentProviderList.indexOf(content.provider) > -1) {
 
             self.showPlayer(content.provider);
@@ -195,6 +203,13 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     break;
             };
         }
+    },
+    
+    //Get selected song from the select menu
+    getSelectedSong: function () 
+    {
+        var drop = document.getElementById('resultDrop');
+        this.requestContentInformation(drop[drop.selectedIndex].value);
     },
 }
 
