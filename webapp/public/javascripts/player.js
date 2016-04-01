@@ -7,10 +7,10 @@ var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
 var btnMuteContent = document.getElementById('btnMuteContent');
 var fbShareButton = document.getElementById('fbShareButton');
 var btnSkip = document.getElementById('btnSkip');
+var btnSearchSoundCloud = document.getElementById('btnSearchSoundCloud');
 var currentContent = null;
 
-//For now the skip button is actually a search button, we will be adding an actual search button soon. It's 2am plz
-btnSkip.addEventListener('click', function () {
+btnSearchSoundCloud.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
     if (contentUrl) {
         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
@@ -19,7 +19,13 @@ btnSkip.addEventListener('click', function () {
 
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
-    if (contentUrl) {
+    var resultDrop = document.getElementById('resultDrop');
+    //If the resultDrop exists and the searchbar is not a URL go get the song info in the selected one.
+    //Eventually the searchBar will never be a URL so we can remove the if.
+    if (resultDrop && (contentUrl.indexOf('.com') == -1)) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.getSelectedSong();
+    }
+    else if (contentUrl) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(contentUrl);
     }
 });
