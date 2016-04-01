@@ -10,6 +10,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
     // The API will call this function when the video player is ready.
     onPlayerReady: function onPlayerReady(event) {
         event.target.playVideo();
+        SOCIALSOUNDSCLIENT.BASEPLAYER.applyPlayerMuteState();
     },
     
     // The API calls this function when the player's state changes.
@@ -21,7 +22,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         };
     },
     
-    playYoutubeContent: function (contentUrl) {
+    playYoutubeContent: function (content) {
         var self = this;
         if (typeof (YT) == 'undefined' || typeof (YT.Player) == 'undefined') {
             var tag = document.createElement('script');
@@ -31,7 +32,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
             
             window.onYouTubePlayerAPIReady = function () {
                 self.youtubePlayer = new YT.Player('youtubePlayer', {
-                    videoId: self.getYoutubeId(contentUrl),
+                    videoId: self.getYoutubeId(content.url),
                     playerVars: { 'autoplay': 1, 'controls': 1 },
                     events: {
                         'onReady': self.onPlayerReady,
@@ -42,15 +43,15 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         } 
         else {
             self.youtubePlayer.loadVideoById({
-                'videoId': self.getYoutubeId(contentUrl),
+                'videoId': self.getYoutubeId(content.url),
                 'suggestedQuality': 'large'
             });
         };
     },
     
     // It extracts the videoId from the url, trust me it works, as long as it IS a valid youtube url. - GG
-    getYoutubeId: function (youtubeUrl) {
-        var videoId = youtubeUrl.split('v=')[1];
+    getYoutubeId: function (contentUrl) {
+        var videoId = contentUrl.split('v=')[1];
         return videoId.indexOf('&') != -1 ? videoId.substring(0, videoId.indexOf('&')) : videoId;
     },
         
@@ -87,16 +88,20 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
     
     muteYoutubePlayer: function (isMuted){
         if (this.youtubePlayer) {
-            isMuted ? this.youtubePlayer.mute() : this.youtubePlayer.unMute();
+            isMuted === true ? this.youtubePlayer.mute() : this.youtubePlayer.unMute();
         }
     },  
      
     isMutedYoutubePlayer: function () {
-        return this.youtubePlayer.isMuted();
+        if (this.youtubePlayer) {
+            return this.youtubePlayer.isMuted();
+        }
     },
 
     pauseYoutubeContent: function () {
-        this.youtubePlayer.pauseVideo();
+        if (this.youtubePlayer) {
+            this.youtubePlayer.pauseVideo();
+        }
     },
 };
 
