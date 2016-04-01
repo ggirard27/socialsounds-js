@@ -8,25 +8,32 @@ var btnMuteContent = document.getElementById('btnMuteContent');
 var fbShareButton = document.getElementById('fbShareButton');
 var btnSkip = document.getElementById('btnSkip');
 var btnSearchSoundCloud = document.getElementById('btnSearchSoundCloud');
+var searchResultsDropdown = document.getElementById('searchResultsDropdown');
 var currentContent = null;
 
-btnSearchSoundCloud.addEventListener('click', function () {
+searchSoundCloudButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
     if (contentUrl) {
         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
     }
+    searchResultsDropdown = document.getElementById('searchResultsDropdown');
+    searchResultsDropdown.style.display = 'inline';
 });
+
+searchYoutubeButton.addEventListener('click', function () {
+    var contentUrl = document.getElementById('searchBarInput').value;
+    if (contentUrl) {
+        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube();
+    }
+    searchResultsDropdown = document.getElementById('searchResultsDropdown');
+    searchResultsDropdown.style.display = 'inline';
+})
 
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
-    var resultDrop = document.getElementById('resultDrop');
-    //If the resultDrop exists and the searchbar is not a URL go get the song info in the selected one.
-    //Eventually the searchBar will never be a URL so we can remove the if.
-    if (resultDrop && (contentUrl.indexOf('.com') == -1)) {
-        SOCIALSOUNDSCLIENT.BASEPLAYER.getSelectedSong();
-    }
-    else if (contentUrl) {
+     if (contentUrl) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(contentUrl);
+        document.getElementById('searchBarInput').value = '';
     }
 });
 
@@ -45,6 +52,19 @@ btnMuteContent.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.BASEPLAYER.setPlayerMuteState(currentMuteState);
     SOCIALSOUNDSCLIENT.BASEPLAYER.applyPlayerMuteState();
 });
+
+function googleApiClientReady() {
+    gapi.client.setApiKey('AIzaSyCg16FmXMtMPUm86w6FT5prAJEqd8obOgU');
+    gapi.client.load('youtube', 'v3', function () {
+        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.handleAPILoaded();
+    });
+};
+
+searchResultsDropdown.addEventListener('change', function () {
+    var selectedContentUrl = searchResultsDropdown[searchResultsDropdown.selectedIndex].value;
+    document.getElementById('searchBarInput').value = selectedContentUrl;
+    SOCIALSOUNDSCLIENT.BASEPLAYER.requestContentInformation(selectedContentUrl);
+})
 
 
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
@@ -209,13 +229,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     break;
             };
         }
-    },
-    
-    //Get selected song from the select menu
-    getSelectedSong: function () 
-    {
-        var drop = document.getElementById('resultDrop');
-        this.requestContentInformation(drop[drop.selectedIndex].value);
     },
 }
 

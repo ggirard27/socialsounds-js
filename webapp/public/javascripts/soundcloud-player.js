@@ -79,20 +79,20 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
         SC.get('/tracks', {
             q: query
         }).then(function (tracks) {
-            //Populates the search results
-            // onchange="SOCIALSOUNDSCLIENT.BASEPLAYER.getSelectedSong()"
             if (tracks.length >= 6) {
-            $('#SearchResults').html('<select id="resultDrop" style="height: 30px;margin-left: 5px;margin-right: 5px;width: 300px">' +
-            '<option value="' + tracks[0].permalink_url + '">' + tracks[0].title + '</option>' +
-            '<option value="' + tracks[1].permalink_url + '">' + tracks[1].title + '</option>' +
-            '<option value="' + tracks[2].permalink_url + '">' + tracks[2].title + '</option>' +
-            '<option value="' + tracks[3].permalink_url + '">' + tracks[3].title + '</option>' +
-            '<option value="' + tracks[4].permalink_url + '">' + tracks[4].title + '</option>' +
-            '<option value="' + tracks[5].permalink_url + '">' + tracks[5].title + '</option> </select>');
+                // this shit needs to change to be dynamic.
+                $('#searchResultsDropdown').html(
+                    '<option value="' + tracks[0].permalink_url + '">' + tracks[0].title + '</option>' +
+                    '<option value="' + tracks[1].permalink_url + '">' + tracks[1].title + '</option>' +
+                    '<option value="' + tracks[2].permalink_url + '">' + tracks[2].title + '</option>' +
+                    '<option value="' + tracks[3].permalink_url + '">' + tracks[3].title + '</option>' +
+                    '<option value="' + tracks[4].permalink_url + '">' + tracks[4].title + '</option>' +
+                    '<option value="' + tracks[5].permalink_url + '">' + tracks[5].title + '</option> </select>'
+                );
+                document.getElementById('searchBarInput').value  = tracks[0].permalink_url;
             }
             else if (tracks.length == 0) {
-                $('#SearchResults').html('<select id="resultDrop" style="height: 30px;margin-left: 5px;margin-right: 5px;width: 300px">' +
-            '<option value=""> No Result </option> </select>');
+                $('#searchResultsDropdown ').html('<option value=""> No Result </option> </select>');
             }
         }); 
     },        
