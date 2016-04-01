@@ -6,8 +6,16 @@ var startBroadcastButton = document.getElementById('startBroadcastButton');
 var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
 var btnMuteContent = document.getElementById('btnMuteContent');
 var fbShareButton = document.getElementById('fbShareButton');
+var btnSkip = document.getElementById('btnSkip');
 var currentContent = null;
 
+//For now the skip button is actually a search button, we will be adding an actual search button soon. It's 2am plz
+btnSkip.addEventListener('click', function () {
+    var contentUrl = document.getElementById('searchBarInput').value;
+    if (contentUrl) {
+        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
+    }
+});
 
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
@@ -180,6 +188,13 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         $('#fbShareButton').html('<fb:share-button href=' + currentContent.url + ' type="button"> </fb:share-button>')
         if (typeof (FB) !== 'undefined')
             FB.XFBML.parse(document.getElementById('fbShareButton'));
+    },
+    
+    //Get selected song from the select menu
+    getSelectedSong: function () 
+    {
+        var drop = document.getElementById('resultDrop');
+        this.requestContentInformation(drop[drop.selectedIndex].value);
     },
 }
 

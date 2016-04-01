@@ -68,5 +68,27 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
         });
     },
 
+    searchSoundCloud: function (query) {
+        
+        SC.initialize({
+            client_id: '3d4d094dc75510a4b5ad612e2d249a41'
+        });
+        // find all sounds of buskers licensed under 'creative commons share alike'
+        SC.get('/tracks', {
+            q: query, license: 'cc-by-sa'
+        }).then(function (tracks) {
+            //Populates the search results
+            if (tracks.length >= 6) {
+                console.log(document.getElementById('SearchResults'));
+                $('#SearchResults').html('<select id="resultDrop" onchange="SOCIALSOUNDSCLIENT.BASEPLAYER.getSelectedSong()" src="/javascripts/soundcloud-player.js">' +
+            '<option value="' + tracks[0].permalink_url + '">' + tracks[0].title + '</option>' +
+            '<option value="' + tracks[1].permalink_url + '">' + tracks[1].title + '</option>' +
+            '<option value="' + tracks[2].permalink_url + '">' + tracks[2].title + '</option>' +
+            '<option value="' + tracks[3].permalink_url + '">' + tracks[3].title + '</option>' +
+            '<option value="' + tracks[4].permalink_url + '">' + tracks[4].title + '</option>' +
+            '<option value="' + tracks[5].permalink_url + '">' + tracks[5].title + '</option> </select>');
+            }
+        }); 
+    },        
 };
 
