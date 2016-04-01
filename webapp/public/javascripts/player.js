@@ -63,7 +63,6 @@ function googleApiClientReady() {
 searchResultsDropdown.addEventListener('change', function () {
     var selectedContentUrl = searchResultsDropdown[searchResultsDropdown.selectedIndex].value;
     document.getElementById('searchBarInput').value = selectedContentUrl;
-    SOCIALSOUNDSCLIENT.BASEPLAYER.requestContentInformation(selectedContentUrl);
 })
 
 
