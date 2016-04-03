@@ -75,24 +75,21 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
         SC.initialize({
             client_id: '3d4d094dc75510a4b5ad612e2d249a41'
         });
-        // find all sounds of buskers licensed under 'creative commons share alike'
         SC.get('/tracks', {
             q: query
         }).then(function (tracks) {
-            if (tracks.length >= 6) {
-                // this shit needs to change to be dynamic.
-                $('#searchResultsDropdown').html(
-                    '<option value="' + tracks[0].permalink_url + '">' + tracks[0].title + '</option>' +
-                    '<option value="' + tracks[1].permalink_url + '">' + tracks[1].title + '</option>' +
-                    '<option value="' + tracks[2].permalink_url + '">' + tracks[2].title + '</option>' +
-                    '<option value="' + tracks[3].permalink_url + '">' + tracks[3].title + '</option>' +
-                    '<option value="' + tracks[4].permalink_url + '">' + tracks[4].title + '</option>' +
-                    '<option value="' + tracks[5].permalink_url + '">' + tracks[5].title + '</option> </select>'
-                );
-                document.getElementById('searchBarInput').value  = tracks[0].permalink_url;
+            var responseLength = tracks.length < 10 ? tracks.length : 10;
+            var htmlContent = '';
+            
+            if (responseLength > 0) {
+                for (var i = 0; i < responseLength; i++) {
+                    htmlContent += '<option value="' + tracks[i].permalink_url + '">' + tracks[i].title + '</option>';
+                }
+                htmlContent += '</select>';
+                $('#searchResultsDropdown').html(htmlContent);
             }
             else if (tracks.length == 0) {
-                $('#searchResultsDropdown ').html('<option value=""> No Result </option> </select>');
+                $('#searchResultsDropdown').html('<option value=""> No Result </option> </select>');
             }
         }); 
     },        

@@ -110,7 +110,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
     
     searchYoutube: function search() {
         var q = $('#searchBarInput').val();
-        var numberOfResults = 6;
+        var numberOfResults = 10;
         var request = gapi.client.youtube.search.list({
             q: q,
             part: 'snippet',
@@ -120,20 +120,18 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         request.execute(function (response) {
             var searchResults = response.result.items;
             var youtubeVideoUrl = 'https://www.youtube.com/watch?v=';
-            if (searchResults.length >= numberOfResults) {
-                // this shit needs to change to be dynamic.
-                $('#searchResultsDropdown').html(
-                    '<option value="' + youtubeVideoUrl + searchResults[0].id.videoId + '">' + searchResults[0].snippet.title + '</option>' +
-                    '<option value="' + youtubeVideoUrl + searchResults[1].id.videoId + '">' + searchResults[1].snippet.title + '</option>' +
-                    '<option value="' + youtubeVideoUrl + searchResults[2].id.videoId + '">' + searchResults[2].snippet.title + '</option>' +
-                    '<option value="' + youtubeVideoUrl + searchResults[3].id.videoId + '">' + searchResults[3].snippet.title + '</option>' +
-                    '<option value="' + youtubeVideoUrl + searchResults[4].id.videoId + '">' + searchResults[4].snippet.title + '</option>' +
-                    '<option value="' + youtubeVideoUrl + searchResults[5].id.videoId + '">' + searchResults[5].snippet.title + '</option> </select>'
-                );
-                document.getElementById('searchBarInput').value = youtubeVideoUrl + searchResults[0].id.videoId;
+            var responseLength = searchResults.length < 10 ? searchResults.length : 10;
+            var htmlContent = '';
+            
+            if (responseLength > 0) {
+                for (var i = 0; i < responseLength; i++) {
+                    htmlContent += '<option value="' + youtubeVideoUrl + searchResults[i].id.videoId + '">' + searchResults[i].snippet.title + '</option>';
+                }
+                htmlContent += '</select>';
+                $('#searchResultsDropdown').html(htmlContent);
             }
             else if (searchResults.length == 0) {
-                $('#searchResults').html('<option value=""> No Result </option> </select>');
+                $('#searchResultsDropdown').html('<option value=""> No Result </option> </select>');
             }
         });
     },

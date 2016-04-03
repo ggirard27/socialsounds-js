@@ -29,6 +29,7 @@ searchYoutubeButton.addEventListener('click', function () {
     searchResultsDropdown.style.display = 'inline';
 })
 
+//TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
      if (contentUrl) {
