@@ -87,6 +87,7 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
                 }
                 htmlContent += '</select>';
                 $('#searchResultsDropdown').html(htmlContent);
+                document.getElementById('searchBarInput').value  = tracks[0].permalink_url;
             }
             else if (tracks.length == 0) {
                 $('#searchResultsDropdown').html('<option value=""> No Result </option> </select>');

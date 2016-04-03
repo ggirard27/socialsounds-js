@@ -129,6 +129,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
                 }
                 htmlContent += '</select>';
                 $('#searchResultsDropdown').html(htmlContent);
+                document.getElementById('searchBarInput').value = youtubeVideoUrl + searchResults[0].id.videoId;
             }
             else if (searchResults.length == 0) {
                 $('#searchResultsDropdown').html('<option value=""> No Result </option> </select>');
