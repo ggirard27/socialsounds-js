@@ -36,10 +36,12 @@ block content
                                 .iframe.embed-responsive-item#youtubePlayer
                 .row
                     .form-inline
-                        div#fb-root
+                        #fb-root
                         a.fb-share-button#fbShareButton(data-href='http://socialsounds.azurewebsites.net', data-layout='button')
-                        a.g-plus.google-plus-share-button#gpShareButton(data-action='share', data-annotation='none', data-height='24', data-href='http://socialsounds.azurewebsites.net')
-                        a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
+                        #gpShareButton
+                            a.g-plus(data-action='share', data-annotation='none', data-height='24', data-href='http://socialsounds.azurewebsites.net')
+                        #twitterShareButton
+                            a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
                         .pull-right
                             button.btn#btnOpenInBrowser Open in new window
                             button.btn#btnMuteContent Mute

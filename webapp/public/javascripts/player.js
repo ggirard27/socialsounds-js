@@ -7,6 +7,7 @@ var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
 var btnMuteContent = document.getElementById('btnMuteContent');
 var fbShareButton = document.getElementById('fbShareButton');
 var gpShareButton = document.getElementById('gpShareButton');
+var twitterShareButton = document.getElementById('twitterShareButton');
 var btnSkip = document.getElementById('btnSkip');
 var btnSearchSoundCloud = document.getElementById('btnSearchSoundCloud');
 var searchResultsDropdown = document.getElementById('searchResultsDropdown');
@@ -108,8 +109,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     console.log("Oops, something went wrong while trying to launch: " + content.provider);
                     break;
             };
-            self.updateFacebookShareButtonUrl();
-            self.updateGoogleShareButtonUrl();
+            self.updateSocialMediaShareButtonsUrl();
         } 
         else {
             console.log("Invalid content provider passed to player: " + content.provider);
@@ -197,20 +197,28 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     addContentFromSearch: function (contentUrl) {
         this.requestContentInformation(contentUrl);
     },
+    
+    updateSocialMediaShareButtonsUrl: function (){
+        this.updateFacebookShareButtonUrl();
+        this.updateGoogleShareButtonUrl();
+        this.updateTwitterShareButtonUrl();
+    },
 
     updateFacebookShareButtonUrl: function () {
-        $('#fbShareButton').html('<fb:share-button href=' + currentContent.url + ' type="button"> </fb:share-button>')
+        fbShareButton.innerHTML = '<fb:share-button href="' + currentContent.url + '" type="button"> </fb:share-button>';
         if (typeof (FB) !== 'undefined')
             FB.XFBML.parse(document.getElementById('fbShareButton'));
     },
     
     updateGoogleShareButtonUrl: function () {
         gpShareButton.setAttribute('data-href', currentContent.url);
+        gpShareButton.innerHTML = '<a class="g-plus" data-action="share" data-annotation="none" data-height="24" data-href="' + currentContent.url + '"</a>';
         gapi.plus.go();
     },
     
     updateTwitterShareButtonUrl: function () {
-        twitterShareButton.setAttribute('data-url', currentContent.url);
+        twitterShareButton.innerHTML = '<a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-text=" " data-url="' + currentContent.url + '" data-hashtags="socialsounds">Tweet</a>';
+        twttr.widgets.load();
     },
 
     getPlayerMuteState: function () {
