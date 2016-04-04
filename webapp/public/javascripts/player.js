@@ -6,6 +6,7 @@ var startBroadcastButton = document.getElementById('startBroadcastButton');
 var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
 var btnMuteContent = document.getElementById('btnMuteContent');
 var fbShareButton = document.getElementById('fbShareButton');
+var gpShareButton = document.getElementById('gpShareButton');
 var btnSkip = document.getElementById('btnSkip');
 var btnSearchSoundCloud = document.getElementById('btnSearchSoundCloud');
 var searchResultsDropdown = document.getElementById('searchResultsDropdown');
@@ -108,6 +109,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     break;
             };
             self.updateFacebookShareButtonUrl();
+            self.updateGoogleShareButtonUrl();
         } 
         else {
             console.log("Invalid content provider passed to player: " + content.provider);
@@ -200,6 +202,15 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         $('#fbShareButton').html('<fb:share-button href=' + currentContent.url + ' type="button"> </fb:share-button>')
         if (typeof (FB) !== 'undefined')
             FB.XFBML.parse(document.getElementById('fbShareButton'));
+    },
+    
+    updateGoogleShareButtonUrl: function () {
+        gpShareButton.setAttribute('data-href', currentContent.url);
+        gapi.plus.go();
+    },
+    
+    updateTwitterShareButtonUrl: function () {
+        twitterShareButton.setAttribute('data-url', currentContent.url);
     },
 
     getPlayerMuteState: function () {

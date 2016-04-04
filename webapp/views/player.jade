@@ -37,7 +37,9 @@ block content
                 .row
                     .form-inline
                         div#fb-root
-                        .fb-share-button#fbShareButton(data-href='', data-layout='button')
+                        a.fb-share-button#fbShareButton(data-href='http://socialsounds.azurewebsites.net', data-layout='button')
+                        a.g-plus.google-plus-share-button#gpShareButton(data-action='share', data-annotation='none', data-height='24', data-href='http://socialsounds.azurewebsites.net')
+                        a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
                         .pull-right
                             button.btn#btnOpenInBrowser Open in new window
                             button.btn#btnMuteContent Mute
@@ -57,3 +59,5 @@ block bodyscripts
     script(src='/javascripts/soundcloud-player.js')
     script(src='/javascripts/facebook-social-plugin.js')
     script(src='https://apis.google.com/js/client.js?onload=googleApiClientReady')
+    script(src='https://apis.google.com/js/platform.js' async defer)
+    script(src='/javascripts/twitter-social-plugin.js')
