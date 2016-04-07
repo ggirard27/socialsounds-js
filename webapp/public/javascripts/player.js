@@ -14,13 +14,12 @@ var currentContent = null;
 
 searchButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
-    searchResultsDropdown = document.getElementById('searchResultsDropdown');
     searchResultsDropdown.innerHTML = '';
+    
     if (contentUrl) {
-        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube();
         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
-    }
-    searchResultsDropdown.style.display = 'inline';
+        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube(contentUrl);
+    }   
 });
 
 //TODO: If the URL can't be parsed correctly display a error for the user.
@@ -240,6 +239,25 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     break;
             };
         }
+    },
+
+    renderSearchResults: function (results, provider) {
+
+        searchResultsDropdown = document.getElementById('searchResultsDropdown');
+        var htmlContent = '';
+
+        if (results.length > 0) {
+            for (var i = 0; i < results.length; i++) {
+                htmlContent += '<option value="' + results[i].url + '">' + provider + " - " + results[i].title + '</option>';
+            }
+            htmlContent += '</select>';
+            $('#searchResultsDropdown').append(htmlContent);
+        }
+        else {
+            $('#searchResultsDropdown').append('<option value=""> No Result </option> </select>');
+        }
+        document.getElementById('searchBarInput').value = searchResultsDropdown.options[searchResultsDropdown.selectedIndex].value;
+        searchResultsDropdown.style.display = 'inline';
     },
 }
 

@@ -71,6 +71,7 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     },
 
     searchSoundCloud: function (query) {
+        var results = [];
         
         SC.initialize({
             client_id: '3d4d094dc75510a4b5ad612e2d249a41'
@@ -79,18 +80,18 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
             q: query
         }).then(function (tracks) {
             var responseLength = tracks.length < 10 ? tracks.length : 10;
-            var htmlContent = '';
-            
+
             if (responseLength > 0) {
                 for (var i = 0; i < responseLength; i++) {
-                    htmlContent += '<option value="' + tracks[i].permalink_url + '">' + "SoundCloud - " + tracks[i].title + '</option>';
+                    var res = { title: null, url: null };
+                    res.title = tracks[i].title;
+                    res.url = tracks[i].permalink_url;
+                    results[i] = res;
                 }
-                htmlContent += '</select>';
-                $('#searchResultsDropdown').append(htmlContent);
-                document.getElementById('searchBarInput').value  = tracks[0].permalink_url;
+                SOCIALSOUNDSCLIENT.BASEPLAYER.renderSearchResults(results, "SoundCloud");
             }
             else if (tracks.length == 0) {0
-                $('#searchResultsDropdown').append('<option value=""> No Result </option> </select>');
+                console.log("No SoundCloud results for current search.");
             }
         }); 
     },        

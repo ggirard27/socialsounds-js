@@ -108,11 +108,11 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         $('#searchYoutubeButton').attr('disabled', false);
     },  
     
-    searchYoutube: function search() {
-        var q = $('#searchBarInput').val();
+    searchYoutube: function search(query) {
+
         var numberOfResults = 5;
         var request = gapi.client.youtube.search.list({
-            q: q,
+            q: query,
             part: 'snippet',
             maxResults: numberOfResults,
         });
@@ -121,18 +121,20 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
             var searchResults = response.result.items;
             var youtubeVideoUrl = 'https://www.youtube.com/watch?v=';
             var responseLength = searchResults.length < numberOfResults ? searchResults.length : numberOfResults;
-            var htmlContent = '';
-            
+            var results = [];
+
             if (responseLength > 0) {
+                
                 for (var i = 0; i < responseLength; i++) {
-                    htmlContent += '<option value="' + youtubeVideoUrl + searchResults[i].id.videoId + '">' + "YouTube - " + searchResults[i].snippet.title + '</option>';
+                    var res = { title: null, url: null };
+                    res.title = searchResults[i].snippet.title;
+                    res.url = youtubeVideoUrl + searchResults[i].id.videoId;
+                    results[i] = res;
                 }
-                htmlContent += '</select>';
-                $('#searchResultsDropdown').append(htmlContent);
-                document.getElementById('searchBarInput').value = youtubeVideoUrl + searchResults[0].id.videoId;
+                SOCIALSOUNDSCLIENT.BASEPLAYER.renderSearchResults(results, "YouTube");
             }
             else if (searchResults.length == 0) {
-                $('#searchResultsDropdown').append('<option value=""> No Result </option> </select>');
+                console.log("No Youtube results for current search.");
             }
         });
     },
