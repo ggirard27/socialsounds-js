@@ -110,7 +110,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
     
     searchYoutube: function search() {
         var q = $('#searchBarInput').val();
-        var numberOfResults = 10;
+        var numberOfResults = 5;
         var request = gapi.client.youtube.search.list({
             q: q,
             part: 'snippet',
@@ -120,19 +120,19 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         request.execute(function (response) {
             var searchResults = response.result.items;
             var youtubeVideoUrl = 'https://www.youtube.com/watch?v=';
-            var responseLength = searchResults.length < 10 ? searchResults.length : 10;
+            var responseLength = searchResults.length < numberOfResults ? searchResults.length : numberOfResults;
             var htmlContent = '';
             
             if (responseLength > 0) {
                 for (var i = 0; i < responseLength; i++) {
-                    htmlContent += '<option value="' + youtubeVideoUrl + searchResults[i].id.videoId + '">' + searchResults[i].snippet.title + '</option>';
+                    htmlContent += '<option value="' + youtubeVideoUrl + searchResults[i].id.videoId + '">' + "YouTube - " + searchResults[i].snippet.title + '</option>';
                 }
                 htmlContent += '</select>';
-                $('#searchResultsDropdown').html(htmlContent);
+                $('#searchResultsDropdown').append(htmlContent);
                 document.getElementById('searchBarInput').value = youtubeVideoUrl + searchResults[0].id.videoId;
             }
             else if (searchResults.length == 0) {
-                $('#searchResultsDropdown').html('<option value=""> No Result </option> </select>');
+                $('#searchResultsDropdown').append('<option value=""> No Result </option> </select>');
             }
         });
     },

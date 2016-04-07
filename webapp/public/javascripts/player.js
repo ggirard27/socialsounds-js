@@ -9,27 +9,19 @@ var fbShareButton = document.getElementById('fbShareButton');
 var gpShareButton = document.getElementById('gpShareButton');
 var twitterShareButton = document.getElementById('twitterShareButton');
 var btnSkip = document.getElementById('btnSkip');
-var btnSearchSoundCloud = document.getElementById('btnSearchSoundCloud');
 var searchResultsDropdown = document.getElementById('searchResultsDropdown');
 var currentContent = null;
 
-searchSoundCloudButton.addEventListener('click', function () {
+searchButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
-    if (contentUrl) {
-        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
-    }
     searchResultsDropdown = document.getElementById('searchResultsDropdown');
-    searchResultsDropdown.style.display = 'inline';
-});
-
-searchYoutubeButton.addEventListener('click', function () {
-    var contentUrl = document.getElementById('searchBarInput').value;
+    searchResultsDropdown.innerHTML = '';
     if (contentUrl) {
         SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube();
+        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
     }
-    searchResultsDropdown = document.getElementById('searchResultsDropdown');
     searchResultsDropdown.style.display = 'inline';
-})
+});
 
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {

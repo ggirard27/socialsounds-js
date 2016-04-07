@@ -83,14 +83,14 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
             
             if (responseLength > 0) {
                 for (var i = 0; i < responseLength; i++) {
-                    htmlContent += '<option value="' + tracks[i].permalink_url + '">' + tracks[i].title + '</option>';
+                    htmlContent += '<option value="' + tracks[i].permalink_url + '">' + "SoundCloud - " + tracks[i].title + '</option>';
                 }
                 htmlContent += '</select>';
-                $('#searchResultsDropdown').html(htmlContent);
+                $('#searchResultsDropdown').append(htmlContent);
                 document.getElementById('searchBarInput').value  = tracks[0].permalink_url;
             }
-            else if (tracks.length == 0) {
-                $('#searchResultsDropdown').html('<option value=""> No Result </option> </select>');
+            else if (tracks.length == 0) {0
+                $('#searchResultsDropdown').append('<option value=""> No Result </option> </select>');
             }
         }); 
     },        
