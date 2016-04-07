@@ -20,7 +20,7 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
         else {
             //First time using the widget
             if (!self.widget) {
-                    iFrame.src = 'https://w.soundcloud.com/player/?url=' + content.apiId;
+                    iFrame.src = 'https://w.soundcloud.com/player/?url=' + content.apiId+'&visual=true';
                     self.widget = SC.Widget(iFrame);
                     self.widget.bind(SC.Widget.Events.READY, function () {
                     SOCIALSOUNDSCLIENT.BASEPLAYER.applyPlayerMuteState();
@@ -32,7 +32,7 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
                     });
             }
             else {
-                self.widget.load(content.apiId);
+                self.widget.load(content.apiId + '&visual=true');
                 self.widget.bind(SC.Widget.Events.READY, function () {
                     //When the widget is ready:
                     SOCIALSOUNDSCLIENT.BASEPLAYER.applyPlayerMuteState();
