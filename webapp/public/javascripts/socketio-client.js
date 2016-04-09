@@ -40,6 +40,11 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
         console.log('Telling server to add ' + content.title + ' to the content queue');
         socket.emit('addContent', content, socket.room);
     },
+
+    switchRoom: function (room){
+        console.log("requesting room switch");
+        socket.emit('switchRoom', room);
+    },
 }
 
 
