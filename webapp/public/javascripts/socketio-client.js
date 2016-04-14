@@ -26,7 +26,10 @@ socket.on('noContent', function () {
     console.log('No more content in queue, please add more and press start boradcast.');
 });
 
+socket.on('chatMessage', function (msg) {
+    $('#chatBox').append('<li>' + msg + '</li>');
 
+});
 
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 
@@ -44,6 +47,11 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
     switchRoom: function (room){
         console.log("requesting room switch");
         socket.emit('switchRoom', room);
+    },
+
+    sendMessage: function (msg) {
+        console.log(msg)
+        socket.emit('chatMessage', msg, socket.room);
     },
 }
 

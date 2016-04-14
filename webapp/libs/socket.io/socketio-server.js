@@ -57,7 +57,14 @@ module.exports.listen = function (server) {
                 io.to(socket.room).emit('contentRejected', content);
             }
         });
-
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Chat functions
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        socket.on('chatMessage', function (msg, room) {
+            console.log('chat message: ' + msg)
+            io.to(socket.room).emit('chatMessage', msg);
+        });
     }); 
     
     return io
