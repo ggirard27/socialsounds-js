@@ -10,6 +10,8 @@ var gpShareButton = document.getElementById('gpShareButton');
 var twitterShareButton = document.getElementById('twitterShareButton');
 var btnSkip = document.getElementById('btnSkip');
 var searchResultsDropdown = document.getElementById('searchResultsDropdown');
+var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
+var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
 
 searchButton.addEventListener('click', function () {
@@ -26,6 +28,22 @@ searchBarInput.addEventListener('keyup', function (e) {
     if (e.keyCode == 13) {
         searchButton.click();
     }
+});
+
+smallDisplayChatButton.addEventListener('click', function () {
+    document.getElementById('smallPlaylistSection').style.display = "none";
+    smallDisplayChatButton.style.display = "none";
+
+    document.getElementById('chatSection').style.display = "block";
+    smallDisplayPlaylistButton.style.display = "inline-block";
+});
+
+smallDisplayPlaylistButton.addEventListener('click', function () {
+    document.getElementById('chatSection').style.display = "none";
+    smallDisplayPlaylistButton.style.display = "none";
+
+    document.getElementById('smallPlaylistSection').style.display = "block";
+    smallDisplayChatButton.style.display = "inline-block";
 });
 
 //TODO: If the URL can't be parsed correctly display a error for the user.

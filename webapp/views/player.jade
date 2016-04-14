@@ -1,19 +1,9 @@
 ﻿extends bodycontent
 
 block content
-
     .container-fluid
         .row
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                .form-inline
-                    button.btn#addContentButton Add
-                    input.form-control#searchBarInput(type='text', placeholder='Search or enter url')
-                    dropdown#searchResults
-                        select.search-results-dropdown#searchResultsDropdown
-                    button.btn.search-content-button#searchButton Search
-                    button.btn.search-content-button#startBroadcastButton Start Broadcast
-        .row
-            .col-xs-3.col-sm-3.col-md-3.col-lg-3
+            .hidden-xs.hidden-sm.col-md-3.col-lg-3
                 span Channel Title
                 ul
                     li
@@ -25,7 +15,17 @@ block content
                         span 3/15 voted person voted to skip
                 div
                     button.btn#btnSkip Skip
-            .col-xs-9.col-sm-9.col-md-9.col-lg-9
+            .col-xs-12.col-sm-12.col-md-9.col-lg-9
+                .row
+                    .form-inline
+                        button.btn#addContentButton
+                            i.fa.fa-plus
+                        input.form-control#searchBarInput(type='text', placeholder='Search or enter url')
+                        dropdown#searchResults
+                            select.search-results-dropdown#searchResultsDropdown
+                        button.btn.search-content-button#searchButton
+                            i.fa.fa-search
+                        button.btn.search-content-button#startBroadcastButton Start Broadcast
                 .row
                     .container-fluid.player-fluid-container-style
                         .container.player-container-style
@@ -34,22 +34,41 @@ block content
                                 .iframe.embed-responsive-item#vimeoPlayer
                                 .iframe.embed-responsive-item#youtubePlayer
                 .row
-                    .form-inline
-                        #fb-root
-                        a.fb-share-button#fbShareButton(data-href='http://socialsounds.azurewebsites.net', data-layout='button')
-                        #gpShareButton
-                            a.g-plus(data-action='share', data-annotation='none', data-height='24', data-href='http://socialsounds.azurewebsites.net')
-                        #twitterShareButton
-                            a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
+                    .col-xs-4.col-sm-4.col-md-6.col-lg-6
+                        .pull-left
+                            #fb-root
+                                a.fb-share-button#fbShareButton(data-href='http://socialsounds.azurewebsites.net', data-layout='button')
+                            #gpShareButton
+                                a.g-plus(data-action='share', data-annotation='none', data-height='24', data-href='http://socialsounds.azurewebsites.net')
+                            #twitterShareButton
+                                a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
+                    .col-xs-4.col-sm-4.hidden-md.hidden-lg
+                        .text-center
+                            button.btn#smallDisplayChatBtn Chat
+                            button.btn#smallDisplayPlaylistBtn Playlist
+                    .col-xs-4.col-sm-4.col-md-6.col-lg-6
                         .pull-right
                             button.btn#btnOpenInBrowser Open in new window
                             button.btn#btnMuteContent Mute
-        .row
+        .row#chatSection
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
                 textarea.form-control
                 .form-inline
                     input.form-control(type='text')
                     button.btn Send
+        .row#smallPlaylistSection
+            .col-xs-12.col-sm-12.hidden-md.hidden-lg
+                span Channel Title
+                ul
+                    li
+                        a(href='') Adele - Hello
+                    li
+                        a(href='') Macklemore - THRIFT SHOP
+                .progress
+                    .progess-bar
+                        span 3/15 voted person voted to skip
+                div
+                    button.btn#btnSkip Skip
 block bodyscripts
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')
