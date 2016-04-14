@@ -43,10 +43,10 @@ block content
                             button.btn#btnMuteContent Mute
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                textarea.form-control
+                ul.chatbox-section#chatBox
                 .form-inline
-                    input.form-control(type='text')
-                    button.btn Send
+                    input.form-control#inputChat(type='text')
+                    button.btn#btnSend Send
 block bodyscripts
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')

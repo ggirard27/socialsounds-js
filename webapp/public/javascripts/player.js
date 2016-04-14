@@ -22,6 +22,25 @@ searchButton.addEventListener('click', function () {
     }   
 });
 
+searchBarInput.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        searchButton.click();
+    }
+});
+
+btnSend.addEventListener('click', function () {
+    var mess = document.getElementById('inputChat').value;
+    console.log('sending Chat' + mess);
+    SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat(mess);
+    document.getElementById('inputChat').value = '';
+});
+
+inputChat.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnSend.click();
+    }
+});
+
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
@@ -180,6 +199,10 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     '\napiId : ' + content.apiId + 
                     '\n'
         );
+    },
+    
+    sendChat: function (msg) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.sendMessage(msg);
     },
     
 /* Not sure whether we need to keep this function. We might want to do some stuff before 
