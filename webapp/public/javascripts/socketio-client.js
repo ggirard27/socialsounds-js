@@ -11,6 +11,7 @@ socket.on('playNextContent', function (content) {
 
 socket.on('contentAdded', function (content) {
     console.log('Added ' + content.title + ' to the content queue');
+    SOCIALSOUNDSCLIENT.BASEPLAYER.appendToContentQueue(content);
 });
 
 socket.on('contentRejected', function (content) {
@@ -26,6 +27,9 @@ socket.on('noContent', function () {
     console.log('No more content in queue, please add more and press start boradcast.');
 });
 
+socket.on('updateContentQueue', function (contentQueue) {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.updateContentQueue(contentQueue);
+});
 
 
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};

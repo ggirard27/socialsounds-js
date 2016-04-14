@@ -14,16 +14,13 @@ block content
                     button.btn.search-content-button#startBroadcastButton Start Broadcast
         .row
             .col-xs-3.col-sm-3.col-md-3.col-lg-3
-                span Channel Title
-                ul
-                    li
-                        a(href='') Adele - Hello
-                    li
-                        a(href='') Macklemore - THRIFT SHOP
-                .progress
-                    .progess-bar
-                        span 3/15 voted person voted to skip
-                div
+                #contentQueueDiv
+                    span Channel Title
+                    ul#contentQueueList
+                    .progress
+                        .progess-bar
+                            span 3/15 voted person voted to skip
+                    div
                     button.btn#btnSkip Skip
             .col-xs-9.col-sm-9.col-md-9.col-lg-9
                 .row

@@ -259,5 +259,11 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         document.getElementById('searchBarInput').value = searchResultsDropdown.options[searchResultsDropdown.selectedIndex].value;
         searchResultsDropdown.style.display = 'inline';
     },
+
+    appendToContentQueue: function (content) {
+        var htmlContent = '';
+        htmlContent += '<li> <img src="images/' + content.provider + '-playlist.png"> <a href="' + content.url + '" target="_blank"> ' + content.title + '</a></img></li>';
+        $('#contentQueueList').append(htmlContent);
+    },
 }
 
