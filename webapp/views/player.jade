@@ -4,16 +4,13 @@ block content
     .container-fluid
         .row
             .hidden-xs.hidden-sm.col-md-3.col-lg-3
-                span Channel Title
-                ul
-                    li
-                        a(href='') Adele - Hello
-                    li
-                        a(href='') Macklemore - THRIFT SHOP
-                .progress
-                    .progess-bar
-                        span 3/15 voted person voted to skip
-                div
+                #contentQueueDiv
+                    span Channel Title
+                    ul#contentQueueList
+                    .progress
+                        .progess-bar
+                            span 3/15 voted person voted to skip
+                    div
                     button.btn#btnSkip Skip
             .col-xs-12.col-sm-12.col-md-9.col-lg-9
                 .row
@@ -52,22 +49,19 @@ block content
                             button.btn#btnMuteContent Mute
         .row#chatSection
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                textarea.form-control
+                ul.chatbox-section#chatBox
                 .form-inline
-                    input.form-control(type='text')
-                    button.btn Send
+                    input.form-control#inputChat(type='text')
+                    button.btn#btnSend Send
         .row#smallPlaylistSection
             .col-xs-12.col-sm-12.hidden-md.hidden-lg
-                span Channel Title
-                ul
-                    li
-                        a(href='') Adele - Hello
-                    li
-                        a(href='') Macklemore - THRIFT SHOP
-                .progress
-                    .progess-bar
-                        span 3/15 voted person voted to skip
-                div
+                #smalContentQueueDiv
+                    span Channel Title
+                    ul#smallContentQueueList
+                    .progress
+                        .progess-bar
+                            span 3/15 voted person voted to skip
+                    div
                     button.btn#btnSkip Skip
 block bodyscripts
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')

@@ -30,10 +30,23 @@ searchBarInput.addEventListener('keyup', function (e) {
     }
 });
 
+btnSend.addEventListener('click', function () {
+    var mess = document.getElementById('inputChat').value;
+    console.log('sending Chat' + mess);
+    SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat(mess);
+    document.getElementById('inputChat').value = '';
+});
+
+inputChat.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnSend.click();
+    }
+});
+
 smallDisplayChatButton.addEventListener('click', function () {
     document.getElementById('smallPlaylistSection').style.display = "none";
     smallDisplayChatButton.style.display = "none";
-
+    
     document.getElementById('chatSection').style.display = "block";
     smallDisplayPlaylistButton.style.display = "inline-block";
 });
@@ -41,7 +54,7 @@ smallDisplayChatButton.addEventListener('click', function () {
 smallDisplayPlaylistButton.addEventListener('click', function () {
     document.getElementById('chatSection').style.display = "none";
     smallDisplayPlaylistButton.style.display = "none";
-
+    
     document.getElementById('smallPlaylistSection').style.display = "block";
     smallDisplayChatButton.style.display = "inline-block";
 });
@@ -206,6 +219,10 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         );
     },
     
+    sendChat: function (msg) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.sendMessage(msg);
+    },
+    
 /* Not sure whether we need to keep this function. We might want to do some stuff before 
  * passing the contentUrl to the next function... just not sure what. - GG
  */
@@ -282,6 +299,25 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
         document.getElementById('searchBarInput').value = searchResultsDropdown.options[searchResultsDropdown.selectedIndex].value;
         searchResultsDropdown.style.display = 'inline';
+    },
+
+    appendToContentQueue: function (content) {
+        var htmlContent = '';
+        htmlContent += '<li> <img src="images/' + content.provider + '-playlist.png"> <a href="' + content.url + '" target="_blank"> ' + content.title + '</a></img></li>';
+        $('#contentQueueList').append(htmlContent);
+
+        var node = document.createElement("LI");                 // Create a <li> node
+        var img = document.createElement("IMG");                 // Create a <img> 
+        var aText = document.createElement("A");                  // Create a <a>
+        img.src = "images/" + content.provider + "-playlist.png";
+        aText.href = content.url;
+        aText.target = "_blank";
+        aText.text = " " + content.title;
+
+        node.appendChild(img);
+        node.appendChild(aText);
+ 
+        document.getElementById('smallContentQueueList').appendChild(node);
     },
 }
 

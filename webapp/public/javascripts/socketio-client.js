@@ -11,6 +11,7 @@ socket.on('playNextContent', function (content) {
 
 socket.on('contentAdded', function (content) {
     console.log('Added ' + content.title + ' to the content queue');
+    SOCIALSOUNDSCLIENT.BASEPLAYER.appendToContentQueue(content);
 });
 
 socket.on('contentRejected', function (content) {
@@ -26,7 +27,14 @@ socket.on('noContent', function () {
     console.log('No more content in queue, please add more and press start boradcast.');
 });
 
+socket.on('chatMessage', function (msg) {
+    $('#chatBox').append('<li>' + msg + '</li>');
 
+});
+
+socket.on('updateContentQueue', function (contentQueue) {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.updateContentQueue(contentQueue);
+});
 
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 
@@ -44,6 +52,11 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
     switchRoom: function (room){
         console.log("requesting room switch");
         socket.emit('switchRoom', room);
+    },
+
+    sendMessage: function (msg) {
+        console.log(msg)
+        socket.emit('chatMessage', msg, socket.room);
     },
 }
 
