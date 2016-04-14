@@ -22,6 +22,12 @@ searchButton.addEventListener('click', function () {
     }   
 });
 
+searchBarInput.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        searchButton.click();
+    }
+});
+
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
