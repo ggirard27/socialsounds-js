@@ -22,7 +22,7 @@ searchButton.addEventListener('click', function () {
     if (contentUrl) {
         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
         SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube(contentUrl);
-    }   
+    }
 });
 
 searchBarInput.addEventListener('keyup', function (e) {
@@ -62,7 +62,7 @@ smallDisplayPlaylistButton.addEventListener('click', function () {
 
 function showHideBroadcastButton() {
     var style = searchButton.className;
-
+    
     if (startBroadcastButton.style.display === "none") {
         startBroadcastButton.style.display = "inline-block";
         searchButton.className = searchButton.className.replace(/(?:^|\s)edgy-right-element(?!\S)/g , '')
@@ -76,7 +76,7 @@ function showHideBroadcastButton() {
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
-     if (contentUrl) {
+    if (contentUrl) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(contentUrl);
         document.getElementById('searchBarInput').value = '';
     }
@@ -88,7 +88,7 @@ startBroadcastButton.addEventListener('click', function () {
     //showHideBroadcastButton();
 });
 
-btnOpenInBrowser.addEventListener('click', function () {    
+btnOpenInBrowser.addEventListener('click', function () {
     var win = window.open(currentContent.url, '_blank');
     win.focus();
 });

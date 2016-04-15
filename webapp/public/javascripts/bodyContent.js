@@ -1,13 +1,7 @@
-﻿var menu = document.getElementById('navigationMenu');
-var anchors = menu.getElementsByTagName('a');
-
-for(var i = 0; i < anchors.length; i += 1) {
-    anchors[i].addEventListener('click', function () { clickHandler(anchors[i]) }, false);
+﻿// To set the correct active link in the navigation bar
+if (document.location.pathname === '/player') {
+    document.getElementById('playerLink').className += " active";
 }
-
-function clickHandler(anchor) {
-    var hasClass = anchor.getAttribute('class');
-    if (hasClass !== 'active') {
-        anchor.setAttribute('class', 'active');
-    }
+else if (document.location.pathname === '/profile') {
+    document.getElementById('profileLink').className += " active";
 }
