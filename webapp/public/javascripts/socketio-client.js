@@ -18,10 +18,10 @@ socket.on('contentRejected', function (content) {
     console.log('Rejected ' + content.title + ' from the content queue');
 });
 
-socket.on('getChannelList', function (rooms) {
+socket.on('getChannelList', function (channels) {
     $("#channelList").html(""); //Empties it before filling it all.
-    for (var i = 0; i < rooms.length; i++) {
-        $('#channelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel("'+ rooms[i] + '")>'+ rooms[i] + '</a></li>');
+    for (var i = 0; i < channels.length; i++) {
+        $('#channelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel("'+ channels[i] + '")>'+ channels[i] + '</a></li>');
     }
 });
 

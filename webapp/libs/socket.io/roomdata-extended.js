@@ -2,6 +2,7 @@
 exports.Debug = true;
 
 exports.rooms = {};
+exports.channels = ['default-room'];
 
 exports.roomExists = function (socket, room) {
     if (!this.rooms[room]) return false;
@@ -20,8 +21,8 @@ exports.dataExists = function (socket, variable) {
 
 exports.createRoom = function (socket, room) {
     if (exports.Debug) console.log(socket.id + ": Creating Room: " + room);
-    if (room != 'default-room') {
-        channelList.push(room);
+    if (this.channels.indexOf(room) < 0) {
+        this.channels.push(room);
     }
     this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [],};
 }
@@ -71,18 +72,20 @@ exports.clearRoom = function (room) {
     delete this.rooms[room];
     //We don't want to remove the default-channel shortcut.
     if (room != 'default-channel') {
-        channelList.splice(channelList.indexOf(room));
+        this.channels.splice(this.channels.indexOf(room));
     }
 };
 
 exports.leaveRoom = function (socket) {
     var room = socket.roomdata_room;
     if (socket.roomdata_room == undefined) throw new Error("socket id:" + socket.id + " is not in a room!");
-    if (exports.Debug) console.log(socket.id + ": Leaving room: " + socket.roomdata_room);
-    var i = this.rooms[socket.roomdata_room].users.indexOf(socket.id);
-    if (i != -1) this.rooms[socket.roomdata_room].users.splice(i, 1);
-    socket.leave(socket.roomdata_room);
-    if (this.rooms[room].users.length == 0) {
-        this.clearRoom(room);
+    if (room != 'default-channel') {
+        if (exports.Debug) console.log(socket.id + ": Leaving room: " + socket.roomdata_room);
+        var i = this.rooms[socket.roomdata_room].users.indexOf(socket.id);
+        if (i != -1) this.rooms[socket.roomdata_room].users.splice(i, 1);
+        socket.leave(socket.roomdata_room);
+        if (this.rooms[room].users.length == 0) {
+            this.clearRoom(room);
+        }
     }
 }

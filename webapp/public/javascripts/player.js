@@ -356,6 +356,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
 
     displayContentList: function (contentList) {
         var self = this;
+        $('#contentQueueList').html('');
         console.log('Content list length: ' + contentList.length);
         if (contentList.length > 0) {
             for (var i = 0; i < contentList.length; i++) {
@@ -366,8 +367,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             console.log('No content to display');
         }
     },
-
-}
 
     switchChannel: function (channel) {
         SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel);
