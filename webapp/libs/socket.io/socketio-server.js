@@ -62,7 +62,6 @@ module.exports.listen = function (server) {
         // Chat functions
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         socket.on('chatMessage', function (msg, room) {
-            console.log('chat message: ' + msg)
             io.to(socket.room).emit('chatMessage', msg);
         });
     }); 

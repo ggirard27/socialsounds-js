@@ -16,8 +16,8 @@ block content
                 .row
                     .input-group
                         .input-group-btn
-                            button.btn#addContentButton
-                                i.fa.fa-plus
+                        button.btn#addContentButton
+                            i.fa.fa-plus
                         input.form-control#searchBarInput(type='text', placeholder='Search or enter url')
                         .input-group-btn
                             button.btn#searchButton
@@ -50,13 +50,15 @@ block content
                         .pull-right
                             button.btn#btnOpenInBrowser Open in new window
                             button.btn#btnMuteContent Mute
-        .row#chatSection
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                ul.chatbox-section#chatBox
-                .input-group
-                    input.form-control#inputChat(type='text')
-                    .input-group-btn
-                        button.btn#btnSend Send
+          .ul.pages
+            .li#chatPage
+              .div#chatArea
+                .ul#chatBox
+              input#inputChat(PlaceHolder="Type here...")
+            .li.loginPage#loginPage
+              .form
+                .h3.title What's your nickname? 
+                    input.usernameInput#usernameInput(type="text" maxlength="14")
         .row#smallPlaylistSection
             .col-xs-12.col-sm-12.hidden-md.hidden-lg
                 #smallContentQueueDiv
