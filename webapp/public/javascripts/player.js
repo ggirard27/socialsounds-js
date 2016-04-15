@@ -13,6 +13,20 @@ var searchResultsDropdown = document.getElementById('searchResultsDropdown');
 var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
 var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
+var usernameChat;
+
+
+//TODO Eventually get rid of this and simply go fetch the user's ID in Profile.
+usernameInput.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        var username = document.getElementById('usernameInput').value;
+        if (username.length > 2) {
+            document.getElementById('chatPage').style.display = 'block';
+            document.getElementById('loginPage').style.visibility = 'hidden';
+            usernameChat = username;
+        }        
+    }
+});
 
 searchButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
@@ -30,16 +44,12 @@ searchBarInput.addEventListener('keyup', function (e) {
     }
 });
 
-btnSend.addEventListener('click', function () {
-    var mess = document.getElementById('inputChat').value;
-    console.log('sending Chat' + mess);
-    SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat(mess);
-    document.getElementById('inputChat').value = '';
-});
 
 inputChat.addEventListener('keyup', function (e) {
-    if (e.keyCode == 13) {
-        btnSend.click();
+    var mess = document.getElementById('inputChat').value;
+    if (e.keyCode == 13 && mess) {       
+            SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat('<b>' + usernameChat + '</b>: ' + mess);
+            document.getElementById('inputChat').value = '';
     }
 });
 

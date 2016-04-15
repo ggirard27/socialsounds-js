@@ -29,7 +29,8 @@ socket.on('noContent', function () {
 
 socket.on('chatMessage', function (msg) {
     $('#chatBox').append('<li>' + msg + '</li>');
-
+    var chat = document.getElementById('chatBox');
+    chat.scrollTop = chat.scrollHeight;
 });
 
 socket.on('updateContentQueue', function (contentQueue) {

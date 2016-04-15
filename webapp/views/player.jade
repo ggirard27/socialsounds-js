@@ -47,12 +47,15 @@ block content
                         .pull-right
                             button.btn#btnOpenInBrowser Open in new window
                             button.btn#btnMuteContent Mute
-        .row#chatSection
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                ul.chatbox-section#chatBox
-                .form-inline
-                    input.form-control#inputChat(type='text')
-                    button.btn#btnSend Send
+          .ul.pages
+            .li#chatPage
+              .div#chatArea
+                .ul#chatBox
+              input#inputChat(PlaceHolder="Type here...")
+            .li.loginPage#loginPage
+              .form
+                .h3.title What's your nickname? 
+                    input.usernameInput#usernameInput(type="text" maxlength="14")
         .row#smallPlaylistSection
             .col-xs-12.col-sm-12.hidden-md.hidden-lg
                 #smalContentQueueDiv
