@@ -31,7 +31,7 @@ body
       #navigation-section {
         padding: 0px;
         width: 70px;
-        background-color: #264c6f;
+        background-color: #002d56;
         top: 0;
         left: 0;
         bottom: 0;
@@ -39,6 +39,8 @@ body
       }
       #content-section {
         margin-left: 70px;
+        padding-top: 12px;
+        padding-bottom: 12px;
       }
     }
 
@@ -60,16 +62,17 @@ body
     http://work.smarchal.com/twbscolor/css/e74c3cc0392becf0f1ffbbbc0
     */
     #navbar-socialsounds.navbar-default {
-      background-color: #264c6f;
+      background-color: #002d56;
       border-color: #0079c1;
       border-radius: 0;
+      border: 0;
     }
     #navbar-socialsounds.navbar-default .navbar-brand {
       color: #ffffff;
     }
     #navbar-socialsounds.navbar-default .navbar-brand:hover,
     #navbar-socialsounds.navbar-default .navbar-brand:focus {
-      color: #264c6f;
+      color: #ffffff;
     }
     #navbar-socialsounds.navbar-default .navbar-text {
       color: #ffffff;
@@ -79,26 +82,27 @@ body
     }
     #navbar-socialsounds.navbar-default .navbar-nav > li > a:hover,
     #navbar-socialsounds.navbar-default .navbar-nav > li > a:focus {
-      color: #264c6f;
+      background-color: #264c6f;
+      color: #ffffff;
     }
     #navbar-socialsounds.navbar-default .navbar-nav > .active > a,
     #navbar-socialsounds.navbar-default .navbar-nav > .active > a:hover,
     #navbar-socialsounds.navbar-default .navbar-nav > .active > a:focus {
-      color: #264c6f;
       background-color: #0079c1;
+      color: #ffffff;
     }
     #navbar-socialsounds.navbar-default .navbar-nav > .open > a,
     #navbar-socialsounds.navbar-default .navbar-nav > .open > a:hover,
     #navbar-socialsounds.navbar-default .navbar-nav > .open > a:focus {
-      color: #264c6f;
       background-color: #0079c1;
+      color: #ffffff;
     }
     #navbar-socialsounds.navbar-default .navbar-toggle {
-      border-color: #0079c1;
+      border-color: #ffffff;
     }
     #navbar-socialsounds.navbar-default .navbar-toggle:hover,
     #navbar-socialsounds.navbar-default .navbar-toggle:focus {
-      background-color: #0079c1;
+      background-color: #264c6f;
     }
     #navbar-socialsounds.navbar-default .navbar-toggle .icon-bar {
       background-color: #ffffff;
@@ -111,7 +115,7 @@ body
       color: #ffffff;
     }
     #navbar-socialsounds.navbar-default .navbar-link:hover {
-      color: #264c6f;
+      color: #002d56;
     }
 
     @media (max-width: 992px) {
@@ -120,12 +124,12 @@ body
       }
       #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
       #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-        color: #264c6f;
+        color: #002d56;
       }
       #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
       #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
       #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-        color: #264c6f;
+        color: #002d56;
         background-color: #0079c1;
       }
     }
@@ -201,23 +205,17 @@ body
       }
     }
 }
-/*
-.search-section
-    position: relative
-    background-color: red
 
-.search-section-textBox
-    width: 1000px
-*/
+.edgy-right-element
+    border-top-right-radius: 4px !important
+    border-bottom-right-radius: 4px !important
+
 .search-results-dropdown
     display: none
     height: 30px
     margin-left: 5px
     margin-right: 5px
     width: 300px
-
-.search-content-button
-    margin: 5px
 /*
 .channel-section
     position: relative

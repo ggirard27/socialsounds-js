@@ -14,15 +14,18 @@ block content
                     button.btn#btnSkip Skip
             .col-xs-12.col-sm-12.col-md-9.col-lg-9
                 .row
-                    .form-inline
-                        button.btn#addContentButton
-                            i.fa.fa-plus
+                    .input-group
+                        .input-group-btn
+                            button.btn#addContentButton
+                                i.fa.fa-plus
                         input.form-control#searchBarInput(type='text', placeholder='Search or enter url')
+                        .input-group-btn
+                            button.btn#searchButton
+                                i.fa.fa-search
+                            button.btn#startBroadcastButton Start Broadcast
+                    div
                         dropdown#searchResults
                             select.search-results-dropdown#searchResultsDropdown
-                        button.btn.search-content-button#searchButton
-                            i.fa.fa-search
-                        button.btn.search-content-button#startBroadcastButton Start Broadcast
                 .row
                     .container-fluid.player-fluid-container-style
                         .container.player-container-style
@@ -50,12 +53,13 @@ block content
         .row#chatSection
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
                 ul.chatbox-section#chatBox
-                .form-inline
+                .input-group
                     input.form-control#inputChat(type='text')
-                    button.btn#btnSend Send
+                    .input-group-btn
+                        button.btn#btnSend Send
         .row#smallPlaylistSection
             .col-xs-12.col-sm-12.hidden-md.hidden-lg
-                #smalContentQueueDiv
+                #smallContentQueueDiv
                     span Channel Title
                     ul#smallContentQueueList
                     .progress
@@ -63,7 +67,7 @@ block content
                             span 3/15 voted person voted to skip
                     div
                     button.btn#btnSkip Skip
-block bodyscripts
+append bodyscripts
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')
     script(src='/javascripts/player.js')
