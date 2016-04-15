@@ -15,8 +15,11 @@ module.exports.listen = function (server) {
         var contentList = roomdata.get(socket, 'contentList');
         io.to(socket.id).emit('roomJoined', socket.room);
         io.to(socket.id).emit('displayContentList', contentList);
-
         
+        var channelList = roomdata.get(socket, 'rooms');
+        io.to(socket.room).emit('getChannelList', channelList);
+        io.to(socket.room).emit()
+
         socket.on('disconnect', function () {
             roomdata.leaveRoom(socket);
             console.log('user disconnected');
@@ -24,10 +27,14 @@ module.exports.listen = function (server) {
         });
         
         socket.on('switchRoom', function (room) {
+            if (room != socket.room) {
             roomdata.leaveRoom(socket);
             socket.room = room;
             roomdata.joinRoom(socket, socket.room);
             io.to(socket.room).emit('logging', 'user connected, new user count: ' + roomdata.get(socket, 'users').length);
+                channelList = roomdata.get(socket, 'rooms');
+                io.emit('getChannelList', channelList);
+            }
             io.to(socket.id).emit('roomJoined', socket.room);
             io.to(socket.id).emit('displayContentList', contentList);
         });
@@ -67,7 +74,6 @@ module.exports.listen = function (server) {
         // Chat functions
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         socket.on('chatMessage', function (msg, room) {
-            console.log('chat message: ' + msg)
             io.to(socket.room).emit('chatMessage', msg);
         });
     }); 

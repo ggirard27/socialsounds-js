@@ -9,10 +9,33 @@ var fbShareButton = document.getElementById('fbShareButton');
 var gpShareButton = document.getElementById('gpShareButton');
 var twitterShareButton = document.getElementById('twitterShareButton');
 var btnSkip = document.getElementById('btnSkip');
+var searchButton = document.getElementById('searchButton');
 var searchResultsDropdown = document.getElementById('searchResultsDropdown');
 var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
 var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
+var usernameChat;
+
+btnCreateChannel.addEventListener('click', function () {
+    if (usernameChat) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(usernameChat);
+        $('#chatBox').append('<li> --- You have joined the channel ' + usernameChat + '</li>');
+        var chat = document.getElementById('chatBox');
+        chat.scrollTop = chat.scrollHeight;
+    }
+});
+
+//TODO Eventually get rid of this and simply go fetch the user's ID in Profile.
+usernameInput.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        var username = document.getElementById('usernameInput').value;
+        if (username.length > 2) {
+            document.getElementById('chatPage').style.display = 'block';
+            document.getElementById('loginPage').style.visibility = 'hidden';
+            usernameChat = username;
+        }        
+    }
+});
 
 searchButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
@@ -30,16 +53,12 @@ searchBarInput.addEventListener('keyup', function (e) {
     }
 });
 
-btnSend.addEventListener('click', function () {
-    var mess = document.getElementById('inputChat').value;
-    console.log('sending Chat' + mess);
-    SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat(mess);
-    document.getElementById('inputChat').value = '';
-});
 
 inputChat.addEventListener('keyup', function (e) {
-    if (e.keyCode == 13) {
-        btnSend.click();
+    var mess = document.getElementById('inputChat').value;
+    if (e.keyCode == 13 && mess) {       
+            SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat('<b>' + usernameChat + '</b>: ' + mess);
+    document.getElementById('inputChat').value = '';
     }
 });
 
@@ -59,6 +78,19 @@ smallDisplayPlaylistButton.addEventListener('click', function () {
     smallDisplayChatButton.style.display = "inline-block";
 });
 
+function showHideBroadcastButton() {
+    var style = searchButton.className;
+    
+    if (startBroadcastButton.style.display === "none") {
+        startBroadcastButton.style.display = "inline-block";
+        searchButton.className = searchButton.className.replace(/(?:^|\s)edgy-right-element(?!\S)/g , '')
+    }
+    else {
+        startBroadcastButton.style.display = "none";
+        searchButton.className += " edgy-right-element";
+    }
+};
+
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
@@ -70,6 +102,8 @@ addContentButton.addEventListener('click', function () {
 
 startBroadcastButton.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
+    //TODO(emile): uncomment this line when we know that the queue is empty
+    //showHideBroadcastButton();
 });
 
 btnOpenInBrowser.addEventListener('click', function () {    
@@ -94,7 +128,7 @@ function googleApiClientReady() {
 searchResultsDropdown.addEventListener('change', function () {
     var selectedContentUrl = searchResultsDropdown[searchResultsDropdown.selectedIndex].value;
     document.getElementById('searchBarInput').value = selectedContentUrl;
-})
+});
 
 
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
@@ -230,7 +264,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         this.requestContentInformation(contentUrl);
     },
     
-    updateSocialMediaShareButtonsUrl: function (){
+    updateSocialMediaShareButtonsUrl: function () {
         this.updateFacebookShareButtonUrl();
         this.updateGoogleShareButtonUrl();
         this.updateTwitterShareButtonUrl();
@@ -335,3 +369,10 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
 
 }
 
+    switchChannel: function (channel) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel);
+        $('#chatBox').append('<li> --- You have joined the channel ' + channel + '</li>');
+        var chat = document.getElementById('chatBox');
+        chat.scrollTop = chat.scrollHeight;
+    },
+};

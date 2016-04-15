@@ -12,11 +12,13 @@ block wrapperContent
                         span.icon-bar
                     a.visible-xs.navbar-brand socialsounds
                 .navbar-collapse.collapse.sidebar-navbar-collapse
-                    ul.nav.navbar-nav
+                    ul.nav.navbar-nav#navigationMenu
                         block sidebarcontent
-                            li
+                            li#playerLink
                                 a(href='/player') Player
-                            li
+                            li#profileLink
                                 a(href='/profile') Profile
     #content-section.container-fluid()
         block content
+block bodyscripts
+    script(src='/javascripts/bodyContent.js')

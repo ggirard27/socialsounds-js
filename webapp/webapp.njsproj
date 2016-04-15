@@ -42,6 +42,7 @@
     <Compile Include="middlewares\passport.js" />
     <Compile Include="models\user.js" />
     <Compile Include="public\javascripts\facebook-social-plugin.js" />
+    <Compile Include="public\javascripts\bodyContent.js" />
     <Compile Include="public\javascripts\socketio-client.js" />
     <Compile Include="public\javascripts\soundcloud-player.js" />
     <Compile Include="public\javascripts\player.js" />

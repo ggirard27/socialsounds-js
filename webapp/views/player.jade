@@ -5,24 +5,32 @@ block content
         .row
             .hidden-xs.hidden-sm.col-md-3.col-lg-3
                 #contentQueueDiv
-                    span Channel Title
+                    span Playlist
                     ul#contentQueueList
                     .progress
                         .progess-bar
                             span 3/15 voted person voted to skip
                     div
                     button.btn#btnSkip Skip
+                #channelListDiv
+                    span Channel Title
+                    ul#channelList
+                    div
+                        button.btn#btnCreateChannel Create channel                    
             .col-xs-12.col-sm-12.col-md-9.col-lg-9
                 .row
-                    .form-inline
+                    .input-group
+                        .input-group-btn
                         button.btn#addContentButton
                             i.fa.fa-plus
                         input.form-control#searchBarInput(type='text', placeholder='Search or enter url')
+                        .input-group-btn
+                            button.btn#searchButton
+                                i.fa.fa-search
+                            button.btn#startBroadcastButton Start Broadcast
+                    div
                         dropdown#searchResults
                             select.search-results-dropdown#searchResultsDropdown
-                        button.btn.search-content-button#searchButton
-                            i.fa.fa-search
-                        button.btn.search-content-button#startBroadcastButton Start Broadcast
                 .row
                     .container-fluid.player-fluid-container-style
                         .container.player-container-style
@@ -47,15 +55,18 @@ block content
                         .pull-right
                             button.btn#btnOpenInBrowser Open in new window
                             button.btn#btnMuteContent Mute
-        .row#chatSection
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                ul.chatbox-section#chatBox
-                .form-inline
-                    input.form-control#inputChat(type='text')
-                    button.btn#btnSend Send
+          .ul.pages
+            .li#chatPage
+              .div#chatArea
+                .ul#chatBox
+              input#inputChat(PlaceHolder="Type here...")
+            .li.loginPage#loginPage
+              .form
+                .h3.title What's your nickname? 
+                    input.usernameInput#usernameInput(type="text" maxlength="14")
         .row#smallPlaylistSection
             .col-xs-12.col-sm-12.hidden-md.hidden-lg
-                #smalContentQueueDiv
+                #smallContentQueueDiv
                     span Channel Title
                     ul#smallContentQueueList
                     .progress
@@ -63,7 +74,7 @@ block content
                             span 3/15 voted person voted to skip
                     div
                     button.btn#btnSkip Skip
-block bodyscripts
+append bodyscripts
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')
     script(src='/javascripts/player.js')

@@ -20,6 +20,9 @@ exports.dataExists = function (socket, variable) {
 
 exports.createRoom = function (socket, room) {
     if (exports.Debug) console.log(socket.id + ": Creating Room: " + room);
+    if (room != 'default-room') {
+        channelList.push(room);
+    }
     this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [],};
 }
 
@@ -42,6 +45,7 @@ exports.get = function (socket, variable, content) {
         console.error("You have tried getting a room variable but this socket is not in any room!");
         return undefined;
     }
+    if (variable == "rooms") return channelList;
     if (variable == "owner") return this.rooms[socket.roomdata_room].owner
     if (variable == "users") return this.rooms[socket.roomdata_room].users
     if (variable == "contentList") {
@@ -65,6 +69,10 @@ exports.joinRoom = function (socket, room) {
 
 exports.clearRoom = function (room) {
     delete this.rooms[room];
+    //We don't want to remove the default-channel shortcut.
+    if (room != 'default-channel') {
+        channelList.splice(channelList.indexOf(room));
+    }
 };
 
 exports.leaveRoom = function (socket) {
