@@ -14,20 +14,9 @@ var searchResultsDropdown = document.getElementById('searchResultsDropdown');
 var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
 var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
-var usernameChat;
 
-
-//TODO Eventually get rid of this and simply go fetch the user's ID in Profile.
-usernameInput.addEventListener('keyup', function (e) {
-    if (e.keyCode == 13) {
-        var username = document.getElementById('usernameInput').value;
-        if (username.length > 2) {
-            document.getElementById('chatPage').style.display = 'block';
-            document.getElementById('loginPage').style.visibility = 'hidden';
-            usernameChat = username;
-        }        
-    }
-});
+//TODO(emile): Eventually get rid of this and simply go fetch the user's ID in Profile.
+var usernameChat = "Test_Dev_" + new Date().getSeconds();
 
 searchButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
@@ -45,11 +34,10 @@ searchBarInput.addEventListener('keyup', function (e) {
     }
 });
 
-
 inputChat.addEventListener('keyup', function (e) {
     var mess = document.getElementById('inputChat').value;
     if (e.keyCode == 13 && mess) {       
-            SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat('<b>' + usernameChat + '</b>: ' + mess);
+            SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat('<span><b>' + usernameChat + '</b>: ' + mess + '</span>');
             document.getElementById('inputChat').value = '';
     }
 });
