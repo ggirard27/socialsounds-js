@@ -203,7 +203,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             console.log('Oops, ' + content.provider + ' does not have any information for the requested content. Are you sure ' + content.url + ' is valid?');
         }
         else {
-            this.displayContentInformation(content);
+            //this.displayContentInformation(content);
             SOCIALSOUNDSCLIENT.SOCKETIO.addContentToServer(content);
         }
     },
@@ -301,9 +301,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         searchResultsDropdown.style.display = 'inline';
     },
 
-    appendToContentQueue: function (content) {
+    appendToContentList: function (content) {
         var htmlContent = '';
-        htmlContent += '<li> <img src="images/' + content.provider + '-playlist.png"> <a href="' + content.url + '" target="_blank"> ' + content.title + '</a></img></li>';
+        htmlContent += '<li> <img src="images/' + content.provider + '-playlist.png"/> <a href="' + content.url + '" target="_blank"> ' + content.title + '</a></li>';
         $('#contentQueueList').append(htmlContent);
 
         var node = document.createElement("LI");                 // Create a <li> node
@@ -319,5 +319,19 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
  
         document.getElementById('smallContentQueueList').appendChild(node);
     },
+
+    displayContentList: function (contentList) {
+        var self = this;
+        console.log('Content list length: ' + contentList.length);
+        if (contentList.length > 0) {
+            for (var i = 0; i < contentList.length; i++) {
+                self.appendToContentList(contentList[i]);
+            }
+        }
+        else {
+            console.log('No content to display');
+        }
+    },
+
 }
 

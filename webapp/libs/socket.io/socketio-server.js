@@ -12,8 +12,10 @@ module.exports.listen = function (server) {
         
         socket.room = defaultRoom;
         roomdata.joinRoom(socket, socket.room);  
-        io.to(socket.room).emit('logging', 'user connected');
-        io.to(socket.room).emit('roomJoined', socket.room);
+        var contentList = roomdata.get(socket, 'contentList');
+        io.to(socket.id).emit('roomJoined', socket.room);
+        io.to(socket.id).emit('displayContentList', contentList);
+
         
         socket.on('disconnect', function () {
             roomdata.leaveRoom(socket);
@@ -26,7 +28,8 @@ module.exports.listen = function (server) {
             socket.room = room;
             roomdata.joinRoom(socket, socket.room);
             io.to(socket.room).emit('logging', 'user connected, new user count: ' + roomdata.get(socket, 'users').length);
-            io.to(socket.room).emit('roomJoined', socket.room);
+            io.to(socket.id).emit('roomJoined', socket.room);
+            io.to(socket.id).emit('displayContentList', contentList);
         });
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,8 +38,8 @@ module.exports.listen = function (server) {
         
         socket.on('getNextContent', function (room) {
             var contentQueue = roomdata.get(socket, 'contentQueue');
-            if (contentQueue.length > 0) {
-                var nextContent = contentQueue.shift();         // using preliminary content queue
+            if (contentQueue.getLength() > 0) {
+                var nextContent = contentQueue.dequeue();
                 io.to(socket.room).emit('playNextContent', nextContent);
             }
             else {
@@ -46,10 +49,12 @@ module.exports.listen = function (server) {
         
         socket.on('addContent', function (content, room) {
             var contentQueue = roomdata.get(socket, 'contentQueue');
+            var contentList = roomdata.get(socket, 'contentList');
             console.log('Request to add ' + content.url + ' to queue of room ' + room);
             if (content) {
                 console.log('Request accepted');
-                contentQueue.push(content);              // using preliminary content queue
+                contentQueue.enqueue(content);
+                contentList.push(content);
                 io.to(socket.room).emit('contentAdded', content);
             }
             else {

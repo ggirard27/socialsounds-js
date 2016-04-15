@@ -1,7 +1,7 @@
 ﻿var socket = io();
 
 socket.on('roomJoined', function (room) {
-    console.log(room);
+    console.log('Joined room: ' + room);
     socket.room = room;
 });
 
@@ -11,7 +11,7 @@ socket.on('playNextContent', function (content) {
 
 socket.on('contentAdded', function (content) {
     console.log('Added ' + content.title + ' to the content queue');
-    SOCIALSOUNDSCLIENT.BASEPLAYER.appendToContentQueue(content);
+    SOCIALSOUNDSCLIENT.BASEPLAYER.appendToContentList(content);
 });
 
 socket.on('contentRejected', function (content) {
@@ -32,8 +32,8 @@ socket.on('chatMessage', function (msg) {
 
 });
 
-socket.on('updateContentQueue', function (contentQueue) {
-    SOCIALSOUNDSCLIENT.BASEPLAYER.updateContentQueue(contentQueue);
+socket.on('displayContentList', function (contentList) {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.displayContentList(contentList);
 });
 
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
@@ -59,5 +59,7 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
         socket.emit('chatMessage', msg, socket.room);
     },
 }
+
+
 
 

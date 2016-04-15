@@ -1,30 +1,7 @@
-﻿exports.Debug = true;
+﻿var q = require('../Queue.js');
+exports.Debug = true;
 
 exports.rooms = {};
-
-var Queue = function () {
-    var functionSet = (function () {
-        var _elements = []; // creating a private array
-        return [
-		        // push function
-            function () { return _elements.push.apply(_elements, arguments); },
-		        // shift function
-            function () { return _elements.shift.apply(_elements, arguments); },
-            function () { return _elements.length; },
-            function (n) { return _elements.length = n; }];
-    })();
-    this.push = functionSet[0];
-    this.shift = functionSet[1];
-    Object.defineProperty(this, 'length', {
-        'get': functionSet[2],
-        'set': functionSet[3],
-        'writeable': true,
-        'enumerable': false,
-        'configurable': false
-    });
-    // initializing the queue with given arguments
-    this.push.apply(this, arguments);
-};
 
 exports.roomExists = function (socket, room) {
     if (!this.rooms[room]) return false;
@@ -43,7 +20,7 @@ exports.dataExists = function (socket, variable) {
 
 exports.createRoom = function (socket, room) {
     if (exports.Debug) console.log(socket.id + ": Creating Room: " + room);
-    this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new Queue(),};
+    this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [],};
 }
 
 exports.set = function (socket, variable, content) {
@@ -67,8 +44,12 @@ exports.get = function (socket, variable, content) {
     }
     if (variable == "owner") return this.rooms[socket.roomdata_room].owner
     if (variable == "users") return this.rooms[socket.roomdata_room].users
+    if (variable == "contentList") {
+        console.log("Should be returning contentQueue, and the length is: " + this.rooms[socket.roomdata_room].contentList.length);
+        return this.rooms[socket.roomdata_room].contentList;
+    }
     if (variable == "contentQueue") {
-        console.log("should be returning contentQueue");
+        console.log("Should be returning contentQueue, and the length is: " + this.rooms[socket.roomdata_room].contentQueue.getLength());
         return this.rooms[socket.roomdata_room].contentQueue;
     }
     return this.rooms[socket.roomdata_room].variables[variable];
