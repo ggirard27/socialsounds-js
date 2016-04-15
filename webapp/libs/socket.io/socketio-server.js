@@ -11,10 +11,14 @@ module.exports.listen = function (server) {
     io.sockets.on('connection', function (socket) {
         
         socket.room = defaultRoom;
-        roomdata.joinRoom(socket, socket.room);  
+        roomdata.joinRoom(socket, socket.room);
         io.to(socket.room).emit('logging', 'user connected');
         io.to(socket.room).emit('roomJoined', socket.room);
         
+        var channelList = roomdata.get(socket, 'rooms');
+        io.to(socket.room).emit('getChannelList', channelList);
+        io.to(socket.room).emit()
+
         socket.on('disconnect', function () {
             roomdata.leaveRoom(socket);
             console.log('user disconnected');
@@ -22,11 +26,15 @@ module.exports.listen = function (server) {
         });
         
         socket.on('switchRoom', function (room) {
-            roomdata.leaveRoom(socket);
-            socket.room = room;
-            roomdata.joinRoom(socket, socket.room);
-            io.to(socket.room).emit('logging', 'user connected, new user count: ' + roomdata.get(socket, 'users').length);
-            io.to(socket.room).emit('roomJoined', socket.room);
+            if (room != socket.room) {
+                roomdata.leaveRoom(socket);
+                socket.room = room;
+                roomdata.joinRoom(socket, socket.room);
+                io.to(socket.room).emit('logging', 'user connected, new user count: ' + roomdata.get(socket, 'users').length);
+                io.to(socket.room).emit('roomJoined', socket.room);
+                channelList = roomdata.get(socket, 'rooms');
+                io.emit('getChannelList', channelList);
+            }
         });
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

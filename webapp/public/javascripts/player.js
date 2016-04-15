@@ -16,6 +16,14 @@ var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBt
 var currentContent = null;
 var usernameChat;
 
+btnCreateChannel.addEventListener('click', function () {
+    if (usernameChat) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(usernameChat);
+        $('#chatBox').append('<li> --- You have joined the channel ' + usernameChat + '</li>');
+        var chat = document.getElementById('chatBox');
+        chat.scrollTop = chat.scrollHeight;
+    }
+});
 
 //TODO Eventually get rid of this and simply go fetch the user's ID in Profile.
 usernameInput.addEventListener('keyup', function (e) {
@@ -344,5 +352,12 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         node.appendChild(aText);
         
         document.getElementById('smallContentQueueList').appendChild(node);
+    },
+
+    switchChannel: function (channel) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel);
+        $('#chatBox').append('<li> --- You have joined the channel ' + channel + '</li>');
+        var chat = document.getElementById('chatBox');
+        chat.scrollTop = chat.scrollHeight;
     },
 };

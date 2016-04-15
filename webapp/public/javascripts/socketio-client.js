@@ -18,6 +18,13 @@ socket.on('contentRejected', function (content) {
     console.log('Rejected ' + content.title + ' from the content queue');
 });
 
+socket.on('getChannelList', function (rooms) {
+    $("#channelList").html(""); //Empties it before filling it all.
+    for (var i = 0; i < rooms.length; i++) {
+        $('#channelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel("'+ rooms[i] + '")>'+ rooms[i] + '</a></li>');
+    }
+});
+
 socket.on('logging', function (msg) {
     console.log('Server message: ' + msg);
 });
@@ -51,8 +58,9 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
     },
 
     switchRoom: function (room){
-        console.log("requesting room switch");
+        console.log("requesting room switch to: " + room);
         socket.emit('switchRoom', room);
+        socket.emit('getNextContent', socket.room);
     },
 
     sendMessage: function (msg) {
