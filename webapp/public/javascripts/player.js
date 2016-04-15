@@ -14,9 +14,17 @@ var searchResultsDropdown = document.getElementById('searchResultsDropdown');
 var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
 var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
-
 //TODO(emile): Eventually get rid of this and simply go fetch the user's ID in Profile.
 var usernameChat = "Test_Dev_" + new Date().getSeconds();
+
+btnCreateChannel.addEventListener('click', function () {
+    if (usernameChat) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(usernameChat);
+        $('#chatBox').append('<li> --- You have joined the channel ' + usernameChat + '</li>');
+        var chat = document.getElementById('chatBox');
+        chat.scrollTop = chat.scrollHeight;
+    }
+});
 
 searchButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
@@ -34,11 +42,12 @@ searchBarInput.addEventListener('keyup', function (e) {
     }
 });
 
+
 inputChat.addEventListener('keyup', function (e) {
     var mess = document.getElementById('inputChat').value;
-    if (e.keyCode == 13 && mess) {       
-            SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat('<span><b>' + usernameChat + '</b>: ' + mess + '</span>');
-            document.getElementById('inputChat').value = '';
+    if (e.keyCode == 13 && mess) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat('<span><b>' + usernameChat + '</b>: ' + mess + '</span>');
+        document.getElementById('inputChat').value = '';
     }
 });
 
@@ -217,7 +226,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             console.log('Oops, ' + content.provider + ' does not have any information for the requested content. Are you sure ' + content.url + ' is valid?');
         }
         else {
-            this.displayContentInformation(content);
+            //this.displayContentInformation(content);
             SOCIALSOUNDSCLIENT.SOCKETIO.addContentToServer(content);
         }
     },
@@ -315,9 +324,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         searchResultsDropdown.style.display = 'inline';
     },
     
-    appendToContentQueue: function (content) {
+    appendToContentList: function (content) {
         var htmlContent = '';
-        htmlContent += '<li> <img src="images/' + content.provider + '-playlist.png"> <a href="' + content.url + '" target="_blank"> ' + content.title + '</a></img></li>';
+        htmlContent += '<li> <img src="images/' + content.provider + '-playlist.png"/> <a href="' + content.url + '" target="_blank"> ' + content.title + '</a></li>';
         $('#contentQueueList').append(htmlContent);
         
         var node = document.createElement("LI");                 // Create a <li> node
@@ -332,5 +341,26 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         node.appendChild(aText);
         
         document.getElementById('smallContentQueueList').appendChild(node);
+    },
+    
+    displayContentList: function (contentList) {
+        var self = this;
+        $('#contentQueueList').html('');
+        console.log('Content list length: ' + contentList.length);
+        if (contentList.length > 0) {
+            for (var i = 0; i < contentList.length; i++) {
+                self.appendToContentList(contentList[i]);
+            }
+        }
+        else {
+            console.log('No content to display');
+        }
+    },
+    
+    switchChannel: function (channel) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel);
+        $('#chatBox').append('<li> --- You have joined the channel ' + channel + '</li>');
+        var chat = document.getElementById('chatBox');
+        chat.scrollTop = chat.scrollHeight;
     },
 };

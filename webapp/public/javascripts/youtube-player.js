@@ -54,7 +54,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         var videoId = contentUrl.split('v=')[1];
         return videoId.indexOf('&') != -1 ? videoId.substring(0, videoId.indexOf('&')) : videoId;
     },
-        
+    
     
     getVideoInfo: function (contentUrl) {
         var self = this;
@@ -81,48 +81,48 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         .fail(function () {
             self.videoInfo = null;
         })
-        .always(function () { 
+        .always(function () {
             SOCIALSOUNDSCLIENT.BASEPLAYER.receiveContentInformation(self.videoInfo);
         });
     },  
     
-    muteYoutubePlayer: function (isMuted){
+    muteYoutubePlayer: function (isMuted) {
         if (this.youtubePlayer) {
             isMuted === true ? this.youtubePlayer.mute() : this.youtubePlayer.unMute();
         }
     },  
-     
+    
     isMutedYoutubePlayer: function () {
         if (this.youtubePlayer) {
             return this.youtubePlayer.isMuted();
         }
     },
-
+    
     pauseYoutubeContent: function () {
         if (this.youtubePlayer) {
             this.youtubePlayer.pauseVideo();
         }
     },
-
+    
     handleAPILoaded: function handleAPILoaded() {
         $('#searchYoutubeButton').attr('disabled', false);
     },  
     
     searchYoutube: function search(query) {
-
+        
         var numberOfResults = 5;
         var request = gapi.client.youtube.search.list({
             q: query,
             part: 'snippet',
             maxResults: numberOfResults,
         });
-    
+        
         request.execute(function (response) {
             var searchResults = response.result.items;
             var youtubeVideoUrl = 'https://www.youtube.com/watch?v=';
             var responseLength = searchResults.length < numberOfResults ? searchResults.length : numberOfResults;
             var results = [];
-
+            
             if (responseLength > 0) {
                 
                 for (var i = 0; i < responseLength; i++) {
