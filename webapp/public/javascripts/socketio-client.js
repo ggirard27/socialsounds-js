@@ -21,7 +21,7 @@ socket.on('contentRejected', function (content) {
 socket.on('getChannelList', function (channels) {
     $("#channelList").html(""); //Empties it before filling it all.
     for (var i = 0; i < channels.length; i++) {
-        $('#channelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel("'+ channels[i] + '")>'+ channels[i] + '</a></li>');
+        $('#channelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel("' + channels[i] + '")>' + channels[i] + '</a></li>');
     }
 });
 
@@ -47,22 +47,22 @@ socket.on('displayContentList', function (contentList) {
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 
 SOCIALSOUNDSCLIENT.SOCKETIO = {
-
-    getNextContentFromServer: function (){
+    
+    getNextContentFromServer: function () {
         socket.emit('getNextContent', socket.room);
     },
-
-    addContentToServer: function (content){
+    
+    addContentToServer: function (content) {
         console.log('Telling server to add ' + content.title + ' to the content queue');
         socket.emit('addContent', content, socket.room);
     },
-
-    switchRoom: function (room){
+    
+    switchRoom: function (room) {
         console.log("requesting room switch to: " + room);
         socket.emit('switchRoom', room);
         socket.emit('getNextContent', socket.room);
     },
-
+    
     sendMessage: function (msg) {
         console.log(msg)
         socket.emit('chatMessage', msg, socket.room);

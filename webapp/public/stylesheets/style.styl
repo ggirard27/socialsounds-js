@@ -125,9 +125,8 @@ body
     }
 }
 /***************************/
-/*          Views          */
+/*          Profile        */
 /***************************/
-/* Profile */
 .profileStyle
     margin-right: 20px
 
@@ -139,8 +138,10 @@ body
 
 .profileDataValue
     font-weight: normal
- 
-/* Index */
+
+/***************************/
+/*          Index          */
+/***************************/
 .indexContainer
     margin-top: 50px  
 
@@ -149,21 +150,24 @@ body
 
 .indexStyle
     margin-right: 10px
-    
-/* Login */
+
+/***************************/
+/*          Login          */
+/***************************/
 .loginTitle
     margin-right: 20px
-    
-/* SignUp */
+
+/***************************/
+/*        Sign up          */
+/***************************/
 .signUpTitle
     margin-right: 20px
     
-/* Player */
-.player-fluid-container-style
+/***************************/
+/*        Player           */
+/***************************/
+.embed-responsive
     background-color: black
-
-.player-container-style
-    width: 100% !important
     /*pointer-events: none*/
 
 #soundcloudPlayer
@@ -188,21 +192,16 @@ body
 #smallDisplayChatBtn
     display: none
 
-@css {
-    @media (min-width: 992px) {
-      #chatSection {
-        display: block !important;
-      }
-    }
-}
+.no-padding-style
+    padding-left: 0px !important
+    padding-right: 0px !important
 
-.edgy-right-element
-    border-top-right-radius: 4px !important
-    border-bottom-right-radius: 4px !important
-    -webkit-border-top-right-radius: 4px !important
-    -webkit-border-bottom-right-radius: 4px !important
-    -moz-border-radius-topright: 4px !important
-    -moz-border-radius-bottomright: 4px !important
+
+
+.btn
+    border-radius: 0 !important
+    -webkit-border-radius: 0 !important
+    -moz-border-radius: 0 !important
 
 .search-results-dropdown
     display: none
@@ -210,141 +209,57 @@ body
     margin-left: 5px
     margin-right: 5px
     width: 300px
-/*
-.channel-section
-    position: relative
-    float: left
-    height: 500px
-    width: 240px
-    background-color: cyan
-
-.channel-section-title
-    color: red
-
-.channel-section-skip-text
-    position: absolute
-    bottom:30px
-
-.channel-section-skip
-    position: absolute
-    bottom: 0
-
-.chat-section
-    background-color: yellow
-
-.chat-section-discusion
-    height: 200px
-    background-color: green
-
-.chat-section-text-input
-    width: 1000px
-*/
 
 /***************************/
 /*          Chat           */
 /***************************/
-@css {
-    .pages {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-    }
+@media (min-width: 992px)
+    #chatSection
+        display: block !important
 
-    #page {
-      height: 100%;
-      position: absolute;
-      width: 100%;
-    }
+#chatSection
+    min-height: 320px
+    max-height: 400px
+    width: 100%
+    margin: 0px
+    padding: 0px
 
-    /* Login Page */
+/* Messages */
+#chatArea
+    min-height: 290px
+    max-height: 370px
 
-    .loginPage {
-      background-color: #000;
-    }
+#chatBox
+    background-color: #DDDDDD
+    min-height: 290px
+    max-height: 370px
+    margin: 0px
+    padding: 0px
+    overflow-y: auto
+    list-style-type: none
+    font-size: large
 
-    .loginPage .form {
-      height: 100px;
-      text-align: center;
-      top: 50%;
-      width: 100%;
-    }
+#chatBox.ul li
+    padding: 5px 10px 5px 10px
 
-    .loginPage .form .usernameInput {
-      background-color: transparent;
-      border: none;
-      border-bottom: 2px solid #fff;
-      outline: none;
-      padding-bottom: 15px;
-      text-align: center;
-      width: 400px;
-    }
+#chatBox.ul li:nth-child(even)
+    background-color: #FFFFFF
 
-    .loginPage .title {
-      font-size: 200%;
-    }
+#chatBox.ul li:nth-child(off)
+    background: transparent
 
-    .loginPage .usernameInput {
-      font-size: 200%;
-      letter-spacing: 3px;
-    }
+#chatBox.ul li span
+    width: 100%
+    display: inline-block
+    overflow-wrap: break-word
 
-    .loginPage .title, .loginPage .usernameInput {
-      color: #fff;
-      font-weight: 100;
-    }
-
-    /* Chat page */
-
-    #chatPage {
-      display: none;
-      height: 400px;
-      border: 5 px solid #000;
-    }
-
-    /* Font */
-
-    #chatbox {
-      font-size: 150%;
-    }
-
-    #inputMessage {
-      font-size: 100%;
-    }
-
-    /* Messages */
-
-    #chatArea {
-      height: 340px;
-    }
-
-    #chatBox {
-      height: 100%;
-      margin: 0;
-      overflow-y: scroll;
-      padding: 10px 20px 10px 20px;
-      list-style-type: none;
-      border: 1px solid #000;
-      font-size: large;
-    }
-
-    #username {
-      font-weight: 700;
-      overflow: hidden;
-      padding-right: 15px;
-      text-align: right;
-    }
-
-    /* Input */
-
-    #inputChat {
-      border: 10px solid #000;
-      bottom: 0;
-      height: 60px;
-      left: 0;
-      outline: none;
-      padding-left: 10px;
-      right: 0;
-      width: 100%;
-    }
-}
+/* Input */
+#inputChat
+    left: 0
+    right: 0
+    bottom: 0
+    height: 30px
+    outline: none
+    padding-left: 10px
+    width: 100%
+    border: 1px solid #000

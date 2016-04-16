@@ -21,25 +21,23 @@ block content
                 .row
                     .input-group
                         .input-group-btn
-                        button.btn#addContentButton
-                            i.fa.fa-plus
+                            button.btn#addContentButton(title="Add to the playlist")
+                                i.fa.fa-plus
                         input.form-control#searchBarInput(type='text', placeholder='Search or enter url')
                         .input-group-btn
-                            button.btn#searchButton
+                            button.btn#searchButton(title="Search")
                                 i.fa.fa-search
                             button.btn#startBroadcastButton Start Broadcast
                     div
                         dropdown#searchResults
                             select.search-results-dropdown#searchResultsDropdown
                 .row
-                    .container-fluid.player-fluid-container-style
-                        .container.player-container-style
-                            .embed-responsive.embed-responsive-16by9
-                                iframe.embed-responsive-item#soundcloudPlayer
-                                .iframe.embed-responsive-item#vimeoPlayer
-                                .iframe.embed-responsive-item#youtubePlayer
+                    .embed-responsive.embed-responsive-16by9
+                        iframe.embed-responsive-item#soundcloudPlayer
+                        .iframe.embed-responsive-item#vimeoPlayer
+                        .iframe.embed-responsive-item#youtubePlayer
                 .row
-                    .col-xs-4.col-sm-4.col-md-6.col-lg-6
+                    .col-xs-4.col-sm-4.col-md-6.col-lg-6.no-padding-style
                         .pull-left
                             #fb-root
                                 a.fb-share-button#fbShareButton(data-href='http://socialsounds.azurewebsites.net', data-layout='button')
@@ -47,25 +45,23 @@ block content
                                 a.g-plus(data-action='share', data-annotation='none', data-height='24', data-href='http://socialsounds.azurewebsites.net')
                             #twitterShareButton
                                 a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
-                    .col-xs-4.col-sm-4.hidden-md.hidden-lg
+                    .col-xs-4.col-sm-4.hidden-md.hidden-lg.no-padding-style
                         .text-center
                             button.btn#smallDisplayChatBtn Chat
                             button.btn#smallDisplayPlaylistBtn Playlist
-                    .col-xs-4.col-sm-4.col-md-6.col-lg-6
+                    .col-xs-4.col-sm-4.col-md-6.col-lg-6.no-padding-style
                         .pull-right
-                            button.btn#btnOpenInBrowser Open in new window
-                            button.btn#btnMuteContent Mute
-          .ul.pages
-            .li#chatPage
-              .div#chatArea
+                            button.btn#btnOpenInBrowser(title="Open this content in new window")
+                                i.fa.fa-external-link
+                            button.btn#btnMuteContent(title="Mute/Unmute")
+                                i.fa.fa-volume-off
+                                //i.fa.fa-volume-up
+        .row
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12#chatSection
                 .ul#chatBox
-              input#inputChat(PlaceHolder="Type here...")
-            .li.loginPage#loginPage
-              .form
-                .h3.title What's your nickname? 
-                    input.usernameInput#usernameInput(type="text" maxlength="14")
-        .row#smallPlaylistSection
-            .col-xs-12.col-sm-12.hidden-md.hidden-lg
+                input#inputChat(PlaceHolder="Send a message" type="text")
+        .row
+            .col-xs-12.col-sm-12.hidden-md.hidden-lg#smallPlaylistSection
                 #smallContentQueueDiv
                     span Channel Title
                     ul#smallContentQueueList
@@ -74,6 +70,7 @@ block content
                             span 3/15 voted person voted to skip
                     div
                     button.btn#btnSkip Skip
+
 append bodyscripts
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')

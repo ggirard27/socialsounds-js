@@ -14,7 +14,8 @@ var searchResultsDropdown = document.getElementById('searchResultsDropdown');
 var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
 var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
-var usernameChat;
+//TODO(emile): Eventually get rid of this and simply go fetch the user's ID in Profile.
+var usernameChat = "Test_Dev_" + new Date().getSeconds();
 
 btnCreateChannel.addEventListener('click', function () {
     if (usernameChat) {
@@ -25,18 +26,6 @@ btnCreateChannel.addEventListener('click', function () {
     }
 });
 
-//TODO Eventually get rid of this and simply go fetch the user's ID in Profile.
-usernameInput.addEventListener('keyup', function (e) {
-    if (e.keyCode == 13) {
-        var username = document.getElementById('usernameInput').value;
-        if (username.length > 2) {
-            document.getElementById('chatPage').style.display = 'block';
-            document.getElementById('loginPage').style.visibility = 'hidden';
-            usernameChat = username;
-        }        
-    }
-});
-
 searchButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
     searchResultsDropdown.innerHTML = '';
@@ -44,7 +33,7 @@ searchButton.addEventListener('click', function () {
     if (contentUrl) {
         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
         SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube(contentUrl);
-    }   
+    }
 });
 
 searchBarInput.addEventListener('keyup', function (e) {
@@ -56,9 +45,9 @@ searchBarInput.addEventListener('keyup', function (e) {
 
 inputChat.addEventListener('keyup', function (e) {
     var mess = document.getElementById('inputChat').value;
-    if (e.keyCode == 13 && mess) {       
-            SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat('<b>' + usernameChat + '</b>: ' + mess);
-    document.getElementById('inputChat').value = '';
+    if (e.keyCode == 13 && mess) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.sendChat('<span><b>' + usernameChat + '</b>: ' + mess + '</span>');
+        document.getElementById('inputChat').value = '';
     }
 });
 
@@ -94,7 +83,7 @@ function showHideBroadcastButton() {
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
     var contentUrl = document.getElementById('searchBarInput').value;
-     if (contentUrl) {
+    if (contentUrl) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(contentUrl);
         document.getElementById('searchBarInput').value = '';
     }
@@ -106,7 +95,7 @@ startBroadcastButton.addEventListener('click', function () {
     //showHideBroadcastButton();
 });
 
-btnOpenInBrowser.addEventListener('click', function () {    
+btnOpenInBrowser.addEventListener('click', function () {
     var win = window.open(currentContent.url, '_blank');
     win.focus();
 });
@@ -134,18 +123,18 @@ searchResultsDropdown.addEventListener('change', function () {
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     isMuted: Boolean(false),
-       
+    
     
     playContent: function (content) {
-
+        
         currentContent = content;
         var self = this;
-
+        
         // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
         // which should take care of stopping the currently playing media before calling the playContent function. - GG
         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
-
+        
         if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
             // nothing to do
         } 
@@ -155,7 +144,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         // until here
         
         if (contentProviderList.indexOf(content.provider) > -1) {
-
+            
             self.showPlayer(content.provider);
             switch (content.provider) {
                 case 'soundcloud':
@@ -211,7 +200,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         return url.split('//')[1].split('.')[0] != 'www' ?  url.split('//')[1].split('.')[0] : url.split('//')[1].split('.')[1];
     },
     
-
+    
     requestContentInformation: function (contentUrl) {
         var contentProvider = this.getHostName(contentUrl);
         switch (contentProvider) {
@@ -257,7 +246,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         SOCIALSOUNDSCLIENT.SOCKETIO.sendMessage(msg);
     },
     
-/* Not sure whether we need to keep this function. We might want to do some stuff before 
+    /* Not sure whether we need to keep this function. We might want to do some stuff before 
  * passing the contentUrl to the next function... just not sure what. - GG
  */
     addContentFromSearch: function (contentUrl) {
@@ -269,7 +258,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         this.updateGoogleShareButtonUrl();
         this.updateTwitterShareButtonUrl();
     },
-
+    
     updateFacebookShareButtonUrl: function () {
         fbShareButton.innerHTML = '<fb:share-button href="' + currentContent.url + '" type="button"> </fb:share-button>';
         if (typeof (FB) !== 'undefined')
@@ -286,17 +275,17 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         twitterShareButton.innerHTML = '<a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-text=" " data-url="' + currentContent.url + '" data-hashtags="socialsounds">Tweet</a>';
         twttr.widgets.load();
     },
-
+    
     getPlayerMuteState: function () {
         return this.isMuted;
     },
-
+    
     setPlayerMuteState: function (muteState) {
         if (muteState != null) {
             this.isMuted = muteState;
-        } 
+        }
     },
-
+    
     applyPlayerMuteState: function () {
         var self = this;
         if (currentContent) {
@@ -315,12 +304,12 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             };
         }
     },
-
+    
     renderSearchResults: function (results, provider) {
-
+        
         searchResultsDropdown = document.getElementById('searchResultsDropdown');
         var htmlContent = '';
-
+        
         if (results.length > 0) {
             for (var i = 0; i < results.length; i++) {
                 htmlContent += '<option value="' + results[i].url + '">' + provider + " - " + results[i].title + '</option>';
@@ -334,12 +323,12 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         document.getElementById('searchBarInput').value = searchResultsDropdown.options[searchResultsDropdown.selectedIndex].value;
         searchResultsDropdown.style.display = 'inline';
     },
-
+    
     appendToContentList: function (content) {
         var htmlContent = '';
         htmlContent += '<li> <img src="images/' + content.provider + '-playlist.png"/> <a href="' + content.url + '" target="_blank"> ' + content.title + '</a></li>';
         $('#contentQueueList').append(htmlContent);
-
+        
         var node = document.createElement("LI");                 // Create a <li> node
         var img = document.createElement("IMG");                 // Create a <img> 
         var aText = document.createElement("A");                  // Create a <a>
@@ -347,13 +336,13 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         aText.href = content.url;
         aText.target = "_blank";
         aText.text = " " + content.title;
-
+        
         node.appendChild(img);
         node.appendChild(aText);
- 
+        
         document.getElementById('smallContentQueueList').appendChild(node);
     },
-
+    
     displayContentList: function (contentList) {
         var self = this;
         $('#contentQueueList').html('');
@@ -367,7 +356,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             console.log('No content to display');
         }
     },
-
+    
     switchChannel: function (channel) {
         SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel);
         $('#chatBox').append('<li> --- You have joined the channel ' + channel + '</li>');
