@@ -22,7 +22,11 @@ module.exports.listen = function (server) {
         }
         io.to(socket.id).emit('getChannelList', channelList);
 
+        //This bothers me greatly. See implemetation & connection of the websocket why is # of user always n+1;
+        io.to(socket.room).emit('updateSkipLabel', roomdata.get(socket, 'users').length, roomdata.get(socket, 'voteSkip'));
+
         socket.on('disconnect', function () {
+            io.to(socket.room).emit('updateSkipLabel', (roomdata.get(socket, 'users').length) - 1, roomdata.get(socket, 'voteSkip')); //Updates the bar because the nummber of users has decreased.
             roomdata.leaveRoom(socket);
             console.log('user disconnected');
             io.to(socket.room).emit('logging', 'user disconnected');
@@ -30,13 +34,24 @@ module.exports.listen = function (server) {
         
         socket.on('switchRoom', function (room) {
             if (room != socket.room) {
+                //Update the skip label of the room we are leaving
+                io.to(socket.room).emit('updateSkipLabel', (roomdata.get(socket, 'users').length)-1, roomdata.get(socket, 'voteSkip')); //Updates the bar because the nummber of users has decreased.
+                //Tell player to pause the song for the user leaving.
+                io.to(socket.id).emit('pauseContent');
+                //Actually leave the room
                 roomdata.leaveRoom(socket);
                 socket.room = room;
+                //Join new room
                 roomdata.joinRoom(socket, socket.room);
-                io.to(socket.room).emit('logging', 'user connected, new user count: ' + roomdata.get(socket, 'users').length);
+                var connectedUsers = roomdata.get(socket, 'users').length;
+                io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
+                //Update Channel list and sent it to the user
                 channelList = roomdata.channels;
-                io.emit('getChannelList', channelList);
+                io.emit('getChannelList', channelList);                
                 io.to(socket.id).emit('roomJoined', socket.room);
+                //Update the skip label of the room that we joined
+                io.to(socket.room).emit('updateSkipLabel', connectedUsers, roomdata.get(socket, 'voteSkip'));
+                //Get Content list and send it to the user
                 contentList = roomdata.get(socket, 'contentList');
                 io.to(socket.id).emit('displayContentList', contentList);
             }
@@ -50,6 +65,10 @@ module.exports.listen = function (server) {
             var contentQueue = roomdata.get(socket, 'contentQueue');
             if (contentQueue.getLength() > 0) {
                 var nextContent = contentQueue.dequeue();
+                //Resets the voteskips probably pretty bad for the performances..
+                roomdata.clearVoteSkip(socket.room);
+                io.to(socket.room).emit('updateSkipLabel', roomdata.get(socket, 'users').length, 0);
+
                 io.to(socket.room).emit('playNextContent', nextContent);
             }
             else {
@@ -79,6 +98,18 @@ module.exports.listen = function (server) {
         socket.on('chatMessage', function (msg, room) {
             io.to(socket.room).emit('chatMessage', msg);
         });
+
+        socket.on('voteSkip', function (room) {
+            var votes = roomdata.get(socket, 'voteSkip');
+            var userConnected = roomdata.get(socket, 'users').length
+            var votesRequired = Math.ceil(userConnected * 0.66) //two thirds of the people must agree to skip the song.
+            roomdata.incrementVoteSkip(room);
+            if (votes + 1 >= votesRequired)
+                io.to(socket.room).emit('skipSong');
+            else
+                io.to(socket.room).emit('updateSkipLabel', userConnected, votes+1);
+        });
+
     }); 
     
     return io

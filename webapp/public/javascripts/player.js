@@ -15,7 +15,13 @@ var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
 var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
 //TODO(emile): Eventually get rid of this and simply go fetch the user's ID in Profile.
-var usernameChat = "Test_Dev_" + new Date().getSeconds();
+var searchResultsDropdownSelectedItem;
+var usernameChat = userCookie.general.username;
+
+btnSkip.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.voteSkip();
+    document.getElementById('btnSkip').disabled = true;
+});
 
 btnCreateChannel.addEventListener('click', function () {
     if (usernameChat) {
@@ -27,12 +33,12 @@ btnCreateChannel.addEventListener('click', function () {
 });
 
 searchButton.addEventListener('click', function () {
-    var contentUrl = document.getElementById('searchBarInput').value;
+    var queryString = document.getElementById('searchBarInput').value;
     searchResultsDropdown.innerHTML = '';
     
-    if (contentUrl) {
-        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
-        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube(contentUrl);
+    if (queryString) {
+        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(queryString);
+        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube(queryString);
     }
 });
 
@@ -72,20 +78,17 @@ function showHideBroadcastButton() {
     
     if (startBroadcastButton.style.display === "none") {
         startBroadcastButton.style.display = "inline-block";
-        searchButton.className = searchButton.className.replace(/(?:^|\s)edgy-right-element(?!\S)/g , '')
     }
     else {
         startBroadcastButton.style.display = "none";
-        searchButton.className += " edgy-right-element";
     }
 };
 
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
-    var contentUrl = document.getElementById('searchBarInput').value;
-    if (contentUrl) {
-        SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(contentUrl);
-        document.getElementById('searchBarInput').value = '';
+    if (searchResultsDropdownSelectedItem) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
+        searchResultsDropdownSelectedItem = "";
     }
 });
 
@@ -124,9 +127,9 @@ function getEventTarget(e) {
 searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);
     var selectedContentUrl = target.getAttribute('data-link');
-    document.getElementById('searchBarInput').value = selectedContentUrl;
+    //document.getElementById('searchBarInput').value = selectedContentUrl;
+    searchResultsDropdownSelectedItem = selectedContentUrl;
 });
-
 
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
@@ -141,8 +144,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
         // which should take care of stopping the currently playing media before calling the playContent function. - GG
-        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
-        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
+        this.pauseContent();
         
         if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
             // nothing to do
@@ -180,6 +182,22 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         var nextContentUrl = SOCIALSOUNDSCLIENT.SOCKETIO.getNextContentFromServer();
     },
     
+    //Will eventually be removed when we will be able to join in a song at any moment.
+    pauseContent: function () {
+        if (contentProviderList.indexOf(currentContent.provider) > -1) {
+            switch (currentContent.provider) {
+                case 'soundcloud':
+                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
+                    break;
+                case 'vimeo':
+                    playVimeoContent(content);
+                    break;
+                case 'youtube':
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
+                    break;
+            }
+        }
+    },
     
     showPlayer: function (content) {
         if (contentProviderList.indexOf(content) > -1) {
@@ -321,7 +339,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             for (var i = 0; i < results.length; i++) {
                 var li = document.createElement("LI");
                 var a = document.createElement("A");
-
+                
                 a.href = "#";
                 a.text = provider + " - " + results[i].title;
                 a.setAttribute('data-link', results[i].url);

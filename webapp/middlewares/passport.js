@@ -80,6 +80,7 @@ module.exports = function (passport) {
                     // set all the current user general informations
                     newUser.general.created = new Date();
                     newUser.general.lastLogin = new Date();
+                    newUser.general.username = email;
                     // set all the current user local informations
                     newUser.local.email = email;
                     newUser.local.password = newUser.generateHash(password);
@@ -174,6 +175,9 @@ module.exports = function (passport) {
                         // set all the current users general informations
                         newUser.general.created = new Date();
                         newUser.general.lastLogin = new Date();
+                        if (!newUser.general.username) {
+                            newUser.general.username = profile.name.givenName + ' ' + profile.name.familyName;;
+                        }
                         // set all of the facebook information in our user model
                         newUser.facebook.id = profile.id; // set the users facebook id                   
                         newUser.facebook.token = token; // we will save the token that facebook provides to the user                    
@@ -253,6 +257,9 @@ module.exports = function (passport) {
                         // set all the current users general informations
                         newUser.general.created = new Date();
                         newUser.general.lastLogin = new Date();
+                        if (!newUser.general.username) {
+                            newUser.general.username = profile.displayName;
+                        }
                         // set all of the user data that we need
                         newUser.twitter.id = profile.id;
                         newUser.twitter.token = token;
@@ -325,6 +332,9 @@ module.exports = function (passport) {
                         // set all the current users general informations
                         newUser.general.created = new Date();
                         newUser.general.lastLogin = new Date();
+                        if (!newUser.general.username) {
+                            newUser.general.username = profile.displayName;
+                        }
                         // set all of the relevant information
                         newUser.google.id = profile.id;
                         newUser.google.token = token;

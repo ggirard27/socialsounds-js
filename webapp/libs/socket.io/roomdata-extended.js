@@ -24,7 +24,7 @@ exports.createRoom = function (socket, room) {
     if (this.channels.indexOf(room) < 0) {
         this.channels.push(room);
     }
-    this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [],};
+    this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [], voteSkip: 0};
 }
 
 exports.set = function (socket, variable, content) {
@@ -47,8 +47,9 @@ exports.get = function (socket, variable, content) {
         return undefined;
     }
     if (variable == "rooms") return channelList;
-    if (variable == "owner") return this.rooms[socket.roomdata_room].owner
-    if (variable == "users") return this.rooms[socket.roomdata_room].users
+    if (variable == "owner") return this.rooms[socket.roomdata_room].owner;
+    if (variable == "users") return this.rooms[socket.roomdata_room].users;
+    if (variable == "voteSkip") return this.rooms[socket.roomdata_room].voteSkip;
     if (variable == "contentList") {
         console.log("Should be returning contentQueue, and the length is: " + this.rooms[socket.roomdata_room].contentList.length);
         return this.rooms[socket.roomdata_room].contentList;
@@ -75,6 +76,14 @@ exports.clearRoom = function (room) {
         this.channels.splice(this.channels.indexOf(room));
     }
 };
+
+exports.incrementVoteSkip = function (room) {
+    this.rooms[room].voteSkip += 1;
+}
+
+exports.clearVoteSkip = function (room) {
+    this.rooms[room].voteSkip = 0;
+}
 
 exports.leaveRoom = function (socket) {
     var room = socket.roomdata_room;

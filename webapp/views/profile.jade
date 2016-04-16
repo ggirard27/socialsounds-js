@@ -19,6 +19,12 @@ block content
                             span.profileDataName Email: 
                             span.profileDataValue #{user.local.email}
                             br
+                            span.profileDataName Username: 
+                            span.profileDataValue #{user.general.username}
+                                form(action='/edit/username', method='post')
+                                    input.profileUsernameBox.form-control(type='text', placeholder='new username', name='username')
+                                    button.btn.btn-default.btn-sm(disabled) Change username
+                            br
                             span.profileDataName Account created: 
                             span.profileDataValue #{user.general.created}
                         if(user.facebook.token || user.google.token || user.twitter.token)

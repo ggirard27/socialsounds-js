@@ -9,7 +9,7 @@ block content
                     ul#contentQueueList
                     .progress
                         .progess-bar
-                            span 3/15 voted person voted to skip
+                            label#labelSkip 0/0 voted person voted to skip
                     div
                     button.btn#btnSkip Skip
                 #channelListDiv
@@ -27,7 +27,6 @@ block content
                                 span.caret
                             ul.dropdown-menu#searchResultsDropdown
                         input.form-control#searchBarInput(type='search' placeholder='Search or enter url')
-                        
                         .input-group-btn
                             button.btn#searchButton(title="Search")
                                 i.fa.fa-search
@@ -73,6 +72,8 @@ block content
                     button.btn#btnSkip Skip
 
 append bodyscripts
+    script(type='text/javascript').
+        var userCookie = !{JSON.stringify(user)}
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')
     script(src='/javascripts/player.js')

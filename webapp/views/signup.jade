@@ -10,10 +10,11 @@ block wrapperContent
             if sessionFlash && sessionFlash.message
                 .alert.alert-danger #{sessionFlash.message}
 
-            form(action='/signup', method='post')
+            form(action='/signup', method='post', onsubmit='return validateEmail()')
                 .form-group
                     label Email
-                    input.form-control(type='text', name='email')
+                    input.form-control#emailField(type='text', name='email')
+                .alert.alert-danger#emailErrorMessage(style='display: none') Invalid email address.
                 .form-group
                     label Password
                     input.form-control(type='password', name='password')
@@ -30,3 +31,12 @@ block wrapperContent
                 a(href='/')
                     span home
                 span .
+
+    script.
+        function validateEmail() {
+            var email = document.getElementById('emailField').value;
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            var isValid = re.test(email);
+            if (!isValid) document.getElementById('emailErrorMessage').style.display = 'inline-block';
+            return isValid;
+        }
