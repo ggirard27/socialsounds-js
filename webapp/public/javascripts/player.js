@@ -27,12 +27,12 @@ btnCreateChannel.addEventListener('click', function () {
 });
 
 searchButton.addEventListener('click', function () {
-    var contentUrl = document.getElementById('searchBarInput').value;
+    var queryString = document.getElementById('searchBarInput').value;
     searchResultsDropdown.innerHTML = '';
     
-    if (contentUrl) {
-        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(contentUrl);
-        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube(contentUrl);
+    if (queryString) {
+        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.searchSoundCloud(queryString);
+        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.searchYoutube(queryString);
     }
 });
 
@@ -82,10 +82,9 @@ function showHideBroadcastButton() {
 
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
-    var contentUrl = document.getElementById('searchBarInput').value;
+    var contentUrl = searchResultsDropdown[searchResultsDropdown.selectedIndex].value;
     if (contentUrl) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(contentUrl);
-        document.getElementById('searchBarInput').value = '';
     }
 });
 
@@ -113,12 +112,12 @@ function googleApiClientReady() {
         SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.handleAPILoaded();
     });
 };
-
+/*
 searchResultsDropdown.addEventListener('change', function () {
     var selectedContentUrl = searchResultsDropdown[searchResultsDropdown.selectedIndex].value;
     document.getElementById('searchBarInput').value = selectedContentUrl;
 });
-
+*/
 
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
@@ -321,7 +320,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         else {
             $('#searchResultsDropdown').append('<option value=""> No Result </option> </select>');
         }
-        document.getElementById('searchBarInput').value = searchResultsDropdown.options[searchResultsDropdown.selectedIndex].value;
         searchResultsDropdown.style.display = 'inline';
     },
     
