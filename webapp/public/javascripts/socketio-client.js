@@ -7,6 +7,7 @@ socket.on('roomJoined', function (room) {
 
 socket.on('playNextContent', function (content) {
     SOCIALSOUNDSCLIENT.BASEPLAYER.playContent(content);
+    document.getElementById('btnSkip').disabled = false;
 });
 
 socket.on('contentAdded', function (content) {
@@ -45,6 +46,20 @@ socket.on('displayContentList', function (contentList) {
     SOCIALSOUNDSCLIENT.BASEPLAYER.displayContentList(contentList);
 });
 
+socket.on('updateSkipLabel', function (users, votes) {
+    $('#labelSkip').text(votes + "/"+users + " users voted to skip");
+});
+
+socket.on('skipSong', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.getNextContentFromServer();
+    document.getElementById('btnSkip').disabled = false;
+});
+
+//Will eventually be removed when we will be able to join in a song at any moment.
+socket.on('pauseContent', function () {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.pauseContent();
+})
+
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 
 SOCIALSOUNDSCLIENT.SOCKETIO = {
@@ -61,12 +76,16 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
     switchRoom: function (room) {
         console.log("requesting room switch to: " + room);
         socket.emit('switchRoom', room);
-        socket.emit('getNextContent', socket.room);
+        //socket.emit('getNextContent', socket.room);
     },
     
     sendMessage: function (msg) {
         socket.emit('chatMessage', msg, socket.room);
     },
+
+    voteSkip: function () {
+        socket.emit('voteSkip', socket.room);
+    }
 }
 
 
