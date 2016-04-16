@@ -5,7 +5,8 @@ var bcrypt = require('bcrypt-node');
 var userSchema = mongoose.Schema({
     general: {
         created      : Date,
-        lastLogin    : Date
+        lastLogin    : Date,
+        username     : String
         //lovedSongs   : []
         //lovedStations : []
         //friends      : []

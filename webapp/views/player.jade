@@ -29,8 +29,7 @@ block content
                                 i.fa.fa-search
                             button.btn#startBroadcastButton Start Broadcast
                     div
-                        dropdown#searchResults
-                            select.search-results-dropdown#searchResultsDropdown
+                        select.search-results-dropdown#searchResultsDropdown
                 .row
                     .embed-responsive.embed-responsive-16by9
                         iframe.embed-responsive-item#soundcloudPlayer
@@ -72,6 +71,8 @@ block content
                     button.btn#btnSkip Skip
 
 append bodyscripts
+    script(type='text/javascript').
+        var userCookie = !{JSON.stringify(user)}
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')
     script(src='/javascripts/player.js')

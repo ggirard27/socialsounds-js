@@ -15,7 +15,7 @@ var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
 var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
 //TODO(emile): Eventually get rid of this and simply go fetch the user's ID in Profile.
-var usernameChat = "Test_Dev_" + new Date().getSeconds();
+var usernameChat = userCookie.general.username;
 
 btnCreateChannel.addEventListener('click', function () {
     if (usernameChat) {
