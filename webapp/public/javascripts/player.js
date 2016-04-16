@@ -17,6 +17,11 @@ var currentContent = null;
 //TODO(emile): Eventually get rid of this and simply go fetch the user's ID in Profile.
 var usernameChat = "Test_Dev_" + new Date().getSeconds();
 
+btnSkip.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.voteSkip();
+    document.getElementById('btnSkip').disabled = true;
+});
+
 btnCreateChannel.addEventListener('click', function () {
     if (usernameChat) {
         SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(usernameChat);
@@ -133,8 +138,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
         // which should take care of stopping the currently playing media before calling the playContent function. - GG
-        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
-        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
+        this.pauseContent();
         
         if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
             // nothing to do
@@ -172,7 +176,23 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         var nextContentUrl = SOCIALSOUNDSCLIENT.SOCKETIO.getNextContentFromServer();
     },
     
-    
+    //Will eventually be removed when we will be able to join in a song at any moment.
+    pauseContent: function () {
+        if (contentProviderList.indexOf(currentContent.provider) > -1) {
+            switch (currentContent.provider) {
+                case 'soundcloud':
+                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
+                    break;
+                case 'vimeo':
+                    playVimeoContent(content);
+                    break;
+                case 'youtube':
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
+                    break;
+            }
+        }
+    },
+
     showPlayer: function (content) {
         if (contentProviderList.indexOf(content) > -1) {
             for (var index = 0; index < contentProviderList.length; index++) {
