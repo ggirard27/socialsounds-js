@@ -20,17 +20,18 @@ block content
             .col-xs-12.col-sm-12.col-md-9.col-lg-9
                 .row
                     .input-group
-                        .input-group-btn
+                        .input-group-btn#searchBar
                             button.btn#addContentButton(title="Add to the playlist")
                                 i.fa.fa-plus
-                        input.form-control#searchBarInput(type='text', placeholder='Search or enter url')
+                            button.btn.dropdown-toggle#searchResultsDropdownBtn(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                                span.caret
+                            ul.dropdown-menu#searchResultsDropdown
+                        input.form-control#searchBarInput(type='search' placeholder='Search or enter url')
+                        
                         .input-group-btn
                             button.btn#searchButton(title="Search")
                                 i.fa.fa-search
                             button.btn#startBroadcastButton Start Broadcast
-                    div
-                        dropdown#searchResults
-                            select.search-results-dropdown#searchResultsDropdown
                 .row
                     .embed-responsive.embed-responsive-16by9
                         iframe.embed-responsive-item#soundcloudPlayer

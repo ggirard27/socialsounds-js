@@ -114,8 +114,16 @@ function googleApiClientReady() {
     });
 };
 
-searchResultsDropdown.addEventListener('change', function () {
-    var selectedContentUrl = searchResultsDropdown[searchResultsDropdown.selectedIndex].value;
+// IE does not know about the target attribute. It looks for srcElement
+// This function will get the event target in a browser-compatible way
+function getEventTarget(e) {
+    e = e || window.event;
+    return e.target || e.srcElement;
+}
+
+searchResultsDropdown.addEventListener('click', function (event) {
+    var target = getEventTarget(event);
+    var selectedContentUrl = target.getAttribute('data-link');
     document.getElementById('searchBarInput').value = selectedContentUrl;
 });
 
@@ -307,22 +315,33 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     },
     
     renderSearchResults: function (results, provider) {
-        
         searchResultsDropdown = document.getElementById('searchResultsDropdown');
-        var htmlContent = '';
         
         if (results.length > 0) {
             for (var i = 0; i < results.length; i++) {
-                htmlContent += '<option value="' + results[i].url + '">' + provider + " - " + results[i].title + '</option>';
+                var li = document.createElement("LI");
+                var a = document.createElement("A");
+
+                a.href = "#";
+                a.text = provider + " - " + results[i].title;
+                a.setAttribute('data-link', results[i].url);
+                
+                li.appendChild(a);
+                searchResultsDropdown.appendChild(li);
             }
-            htmlContent += '</select>';
-            $('#searchResultsDropdown').append(htmlContent);
         }
         else {
-            $('#searchResultsDropdown').append('<option value=""> No Result </option> </select>');
+            var li = document.createElement("LI");
+            var a = document.createElement("A");
+            a.href = "#";
+            a.text = "No Result";
+            a.setAttribute('data-link', "");
+            
+            li.appendChild(a);
+            searchResultsDropdown.appendChild(li);
         }
-        document.getElementById('searchBarInput').value = searchResultsDropdown.options[searchResultsDropdown.selectedIndex].value;
-        searchResultsDropdown.style.display = 'inline';
+        document.getElementById('searchResultsDropdownBtn').style.display = "inline-block";
+        document.getElementById('searchBar').className += " open";
     },
     
     appendToContentList: function (content) {
@@ -330,9 +349,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         htmlContent += '<li> <img src="images/' + content.provider + '-playlist.png"/> <a href="' + content.url + '" target="_blank"> ' + content.title + '</a></li>';
         $('#contentQueueList').append(htmlContent);
         
-        var node = document.createElement("LI");                 // Create a <li> node
-        var img = document.createElement("IMG");                 // Create a <img> 
-        var aText = document.createElement("A");                  // Create a <a>
+        var node = document.createElement("LI");
+        var img = document.createElement("IMG");
+        var aText = document.createElement("A");
         img.src = "images/" + content.provider + "-playlist.png";
         aText.href = content.url;
         aText.target = "_blank";
