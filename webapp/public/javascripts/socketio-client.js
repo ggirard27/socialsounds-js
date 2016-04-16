@@ -31,7 +31,7 @@ socket.on('logging', function (msg) {
 
 socket.on('noContent', function () {
     // Alert the users in an unobtrusive way, while still being clear. flash message?
-    console.log('No more content in queue, please add more and press start boradcast.');
+    console.log('No more content in queue, please add more and press start broadcast.');
 });
 
 socket.on('chatMessage', function (msg) {

@@ -3,7 +3,7 @@
 module.exports.listen = function (server) {
     
     io = require('socket.io')({
-        //'transports': ['websockets'],
+        'transports': ['websockets'],
     }).listen(server);
     
     var defaultRoom = 'default-room';
@@ -35,7 +35,7 @@ module.exports.listen = function (server) {
                 roomdata.joinRoom(socket, socket.room);
                 io.to(socket.room).emit('logging', 'user connected, new user count: ' + roomdata.get(socket, 'users').length);
                 channelList = roomdata.channels;
-                io.to(socket.id).emit('getChannelList', channelList);
+                io.emit('getChannelList', channelList);
             }
             io.to(socket.id).emit('roomJoined', socket.room);
             io.to(socket.id).emit('displayContentList', contentList);
