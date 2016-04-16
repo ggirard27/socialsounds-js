@@ -70,8 +70,8 @@ exports.joinRoom = function (socket, room) {
 
 exports.clearRoom = function (room) {
     delete this.rooms[room];
-    //We don't want to remove the default-channel shortcut.
-    if (room != 'default-channel') {
+    //We don't want to remove the default-room shortcut.
+    if (room != 'default-room') {
         this.channels.splice(this.channels.indexOf(room));
     }
 };
@@ -79,13 +79,11 @@ exports.clearRoom = function (room) {
 exports.leaveRoom = function (socket) {
     var room = socket.roomdata_room;
     if (socket.roomdata_room == undefined) throw new Error("socket id:" + socket.id + " is not in a room!");
-    if (room != 'default-channel') {
-        if (exports.Debug) console.log(socket.id + ": Leaving room: " + socket.roomdata_room);
-        var i = this.rooms[socket.roomdata_room].users.indexOf(socket.id);
-        if (i != -1) this.rooms[socket.roomdata_room].users.splice(i, 1);
-        socket.leave(socket.roomdata_room);
-        if (this.rooms[room].users.length == 0) {
-            this.clearRoom(room);
-        }
+    if (exports.Debug) console.log(socket.id + ": Leaving room: " + socket.roomdata_room);
+    var i = this.rooms[socket.roomdata_room].users.indexOf(socket.id);
+    if (i != -1) this.rooms[socket.roomdata_room].users.splice(i, 1);
+    socket.leave(socket.roomdata_room);
+    if (this.rooms[room].users.length == 0) {
+        this.clearRoom(room);
     }
 }

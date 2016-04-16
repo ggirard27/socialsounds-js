@@ -134,6 +134,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
         // which should take care of stopping the currently playing media before calling the playContent function. - GG
         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
+        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
         
         if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
             // nothing to do
@@ -359,6 +360,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     switchChannel: function (channel) {
         SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel);
+        //Should verify the user is actually switching channel..
         $('#chatBox').append('<li> --- You have joined the channel ' + channel + '</li>');
         var chat = document.getElementById('chatBox');
         chat.scrollTop = chat.scrollHeight;

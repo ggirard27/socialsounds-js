@@ -36,9 +36,10 @@ module.exports.listen = function (server) {
                 io.to(socket.room).emit('logging', 'user connected, new user count: ' + roomdata.get(socket, 'users').length);
                 channelList = roomdata.channels;
                 io.emit('getChannelList', channelList);
+                io.to(socket.id).emit('roomJoined', socket.room);
+                contentList = roomdata.get(socket, 'contentList');
+                io.to(socket.id).emit('displayContentList', contentList);
             }
-            io.to(socket.id).emit('roomJoined', socket.room);
-            io.to(socket.id).emit('displayContentList', contentList);
         });
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

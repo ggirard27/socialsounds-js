@@ -35,6 +35,7 @@ socket.on('noContent', function () {
 });
 
 socket.on('chatMessage', function (msg) {
+    console.log(msg);
     $('#chatBox').append('<li>' + msg + '</li>');
     var chat = document.getElementById('chatBox');
     chat.scrollTop = chat.scrollHeight;
@@ -64,7 +65,6 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
     },
     
     sendMessage: function (msg) {
-        console.log(msg)
         socket.emit('chatMessage', msg, socket.room);
     },
 }
