@@ -138,9 +138,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     playContent: function (content) {
         
-        currentContent = content;
         var self = this;
-        
+        currentContent = content;
+        self.toggleHighlightContentInList(currentContent);
         // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
         // which should take care of stopping the currently playing media before calling the playContent function. - GG
@@ -363,8 +363,18 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     },
     
     appendToContentList: function (content) {
+        
+        var id;
+        if (content.provider == 'youtube') {
+            id = content.apiId
+        }
+        else if (content.provider == 'soundcloud') {
+            var arrayOfStrings = content.apiId.split('/');
+            if (arrayOfStrings.length > 0) id = arrayOfStrings[arrayOfStrings.length - 1];
+        }
+
         var htmlContent = '';
-        htmlContent += '<li> <img src="images/' + content.provider + '-playlist.png"/> <a href="' + content.url + '" target="_blank"> ' + content.title + '</a></li>';
+        htmlContent += '<li > <img src="images/' + content.provider + '-playlist.png"/> <a href="' + content.url + '" target="_blank" class="' + id + '"> ' + content.title + '</a></li>';
         $('#contentQueueList').append(htmlContent);
         
         var node = document.createElement("LI");
@@ -402,4 +412,30 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         var chat = document.getElementById('chatBox');
         chat.scrollTop = chat.scrollHeight;
     },
+    
+    toggleHighlightContentInList: function (content) {
+        
+        var id;
+        if (content.provider == 'youtube') {
+            id = content.apiId
+        }
+        else if (content.provider == 'soundcloud') {
+            var arrayOfStrings = content.apiId.split('/');
+            if (arrayOfStrings.length > 0) id = arrayOfStrings[arrayOfStrings.length - 1];
+        }
+        
+        $('.highlightedElement').removeClass('highlightedElement')
+ 
+        $('.' + id).each(function(index, element) {
+
+            if (this.className != id + ' alreadyPlayed') {
+                debugger;
+                this.className = id + ' alreadyPlayed highlightedElement';
+                return false;
+            }
+        });
+        
+    },
+
+    
 };
