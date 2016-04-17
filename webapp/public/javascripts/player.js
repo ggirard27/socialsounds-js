@@ -25,8 +25,8 @@ btnSkip.addEventListener('click', function () {
 
 btnCreateChannel.addEventListener('click', function () {
     if (usernameChat) {
-        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(usernameChat);
-        $('#chatBox').append('<li> --- You have joined the channel ' + usernameChat + '</li>');
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(usernameChat.replace(/ /g, ''));  //Removing the spaces because it breaks the swtich channel event.
+        $('#chatBox').append('<li> --- You have joined the channel ' + usernameChat.replace(/ /g, '') + '</li>');
         var chat = document.getElementById('chatBox');
         chat.scrollTop = chat.scrollHeight;
     }
@@ -184,17 +184,19 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     //Will eventually be removed when we will be able to join in a song at any moment.
     pauseContent: function () {
-        if (contentProviderList.indexOf(currentContent.provider) > -1) {
-            switch (currentContent.provider) {
-                case 'soundcloud':
-                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
-                    break;
-                case 'vimeo':
-                    playVimeoContent(content);
-                    break;
-                case 'youtube':
-                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
-                    break;
+        if (currentContent) {
+            if (contentProviderList.indexOf(currentContent.provider) > -1) {
+                switch (currentContent.provider) {
+                    case 'soundcloud':
+                        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
+                        break;
+                    case 'vimeo':
+                        playVimeoContent(content);
+                        break;
+                    case 'youtube':
+                        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
+                        break;
+                }
             }
         }
     },
