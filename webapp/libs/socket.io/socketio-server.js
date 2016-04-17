@@ -15,6 +15,16 @@ module.exports.listen = function (server) {
         var contentList = roomdata.get(socket, 'contentList');
         io.to(socket.id).emit('roomJoined', socket.room);
         io.to(socket.id).emit('displayContentList', contentList);
+
+        var content = roomdata.get(socket, 'currentContent');
+        if (content) {
+            var time = new Date().getTime();
+            console.log("Current time: " + time)
+            var elapsedTime = Math.round((time - roomdata.get(socket, 'currentContentTimestamp')) / 1000);
+            console.log("timestamp: " + roomdata.get(socket, 'currentContentTimestamp'));
+            console.log('Elapsed time: ', elapsedTime);
+            io.to(socket.id).emit('playNextContent', content, elapsedTime);
+        }
         
         var channelList = roomdata.channels;
         for(var i = 0; i < channelList.length; i++) {
