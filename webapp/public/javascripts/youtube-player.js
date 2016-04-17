@@ -22,7 +22,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         };
     },
     
-    playYoutubeContent: function (content) {
+    playYoutubeContent: function (content, timestamp) {
         var self = this;
         if (typeof (YT) == 'undefined' || typeof (YT.Player) == 'undefined') {
             var tag = document.createElement('script');
@@ -33,7 +33,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
             window.onYouTubePlayerAPIReady = function () {
                 self.youtubePlayer = new YT.Player('youtubePlayer', {
                     videoId: self.getYoutubeId(content.url),
-                    playerVars: { 'autoplay': 1, 'controls': 1 },
+                    playerVars: { 'autoplay': 1, 'controls': 1, 'start': timestamp },
                     events: {
                         'onReady': self.onPlayerReady,
                         'onStateChange': self.onPlayerStateChange
@@ -44,6 +44,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         else {
             self.youtubePlayer.loadVideoById({
                 'videoId': self.getYoutubeId(content.url),
+                'startSeconds': timestamp,
                 'suggestedQuality': 'large'
             });
         };

@@ -50,14 +50,8 @@ exports.get = function (socket, variable, content) {
     if (variable == "owner") return this.rooms[socket.roomdata_room].owner;
     if (variable == "users") return this.rooms[socket.roomdata_room].users;
     if (variable == "voteSkip") return this.rooms[socket.roomdata_room].voteSkip;
-    if (variable == "contentList") {
-        console.log("Should be returning contentQueue, and the length is: " + this.rooms[socket.roomdata_room].contentList.length);
-        return this.rooms[socket.roomdata_room].contentList;
-    }
-    if (variable == "contentQueue") {
-        console.log("Should be returning contentQueue, and the length is: " + this.rooms[socket.roomdata_room].contentQueue.getLength());
-        return this.rooms[socket.roomdata_room].contentQueue;
-    }
+    if (variable == "contentList") return this.rooms[socket.roomdata_room].contentList;
+    if (variable == "contentQueue") return this.rooms[socket.roomdata_room].contentQueue;
     return this.rooms[socket.roomdata_room].variables[variable];
 }
 

@@ -136,7 +136,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     isMuted: Boolean(false),
     
     
-    playContent: function (content) {
+    playContent: function (content, timestamp) {
         
         var self = this;
         currentContent = content;
@@ -159,13 +159,13 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             self.showPlayer(content.provider);
             switch (content.provider) {
                 case 'soundcloud':
-                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(content);
+                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(content, timestamp);
                     break;
                 case 'vimeo':
                     playVimeoContent(content);
                     break;
                 case 'youtube':
-                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content);
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content, timestamp);
                     break;
                 default :
                     console.log("Oops, something went wrong while trying to launch: " + content.provider);

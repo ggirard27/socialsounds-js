@@ -10,9 +10,10 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     
     
     //TODO: Add a button Open in soundcloud
-    playSoundCloudContent: function (content) {
+    playSoundCloudContent: function (content, timestamp) {
         var self = this;
         var iFrame = document.getElementById('soundcloudPlayer');
+        var startTimeModifier = timestamp*1000;
         //This is for debugging, should never be used in final product
         if (!content) {
             SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
@@ -27,6 +28,9 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
                     //When the widget is ready:
                     self.widget.play();
                 });
+                self.widget.bind(SC.Widget.Events.PLAY, function () {
+                    self.widget.seekTo(startTimeModifier);
+                });
                 self.widget.bind(SC.Widget.Events.FINISH, function () {
                     SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
                 });
@@ -37,6 +41,9 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
                     //When the widget is ready:
                     SOCIALSOUNDSCLIENT.BASEPLAYER.applyPlayerMuteState();
                     self.widget.play();
+                });
+                self.widget.bind(SC.Widget.Events.PLAY, function () {
+                    self.widget.seekTo(startTimeModifier);
                 });
             }
         }
