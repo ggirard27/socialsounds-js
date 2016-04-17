@@ -4,6 +4,11 @@
 body
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
 
+.btn, .well, .form-control, .jumbotron
+    border-radius: 0 !important
+    -webkit-border-radius: 0 !important
+    -moz-border-radius: 0 !important
+
 /**************************/
 /*         Navbar         */
 /**************************/
@@ -209,10 +214,13 @@ body
     padding-left: 0px !important
     padding-right: 0px !important
 
-.btn
-    border-radius: 0 !important
-    -webkit-border-radius: 0 !important
-    -moz-border-radius: 0 !important
+a.highlightedElement
+    font-weight: bold
+
+#contentQueueList   
+    max-height: 350px
+    overflow: auto
+    
 
 /***************************/
 /*          Chat           */

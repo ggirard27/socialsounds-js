@@ -5,8 +5,8 @@ socket.on('roomJoined', function (room) {
     socket.room = room;
 });
 
-socket.on('playNextContent', function (content) {
-    SOCIALSOUNDSCLIENT.BASEPLAYER.playContent(content);
+socket.on('playNextContent', function (content, timestamp) {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.playContent(content, timestamp);
     document.getElementById('btnSkip').disabled = false;
 });
 

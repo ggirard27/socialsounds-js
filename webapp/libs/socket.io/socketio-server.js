@@ -15,6 +15,16 @@ module.exports.listen = function (server) {
         var contentList = roomdata.get(socket, 'contentList');
         io.to(socket.id).emit('roomJoined', socket.room);
         io.to(socket.id).emit('displayContentList', contentList);
+
+        var content = roomdata.get(socket, 'currentContent');
+        if (content) {
+            var time = new Date().getTime();
+            console.log("Current time: " + time)
+            var elapsedTime = Math.round((time - roomdata.get(socket, 'currentContentTimestamp')) / 1000);
+            console.log("timestamp: " + roomdata.get(socket, 'currentContentTimestamp'));
+            console.log('Elapsed time: ', elapsedTime);
+            io.to(socket.id).emit('playNextContent', content, elapsedTime);
+        }
         
         var channelList = roomdata.channels;
         for(var i = 0; i < channelList.length; i++) {
@@ -54,6 +64,15 @@ module.exports.listen = function (server) {
                 //Get Content list and send it to the user
                 contentList = roomdata.get(socket, 'contentList');
                 io.to(socket.id).emit('displayContentList', contentList);
+                var content = roomdata.get(socket, 'currentContent');
+                if (content) {
+                    var time = new Date().getTime();
+                    console.log("Current time: " + time)
+                    var elapsedTime = Math.round((time - roomdata.get(socket, 'currentContentTimestamp')) / 1000);
+                    console.log("timestamp: " + roomdata.get(socket, 'currentContentTimestamp'));
+                    console.log('Elapsed time: ', elapsedTime);
+                    io.to(socket.id).emit('playNextContent', content, elapsedTime);
+                }
             }
         });
 
@@ -65,11 +84,13 @@ module.exports.listen = function (server) {
             var contentQueue = roomdata.get(socket, 'contentQueue');
             if (contentQueue.getLength() > 0) {
                 var nextContent = contentQueue.dequeue();
+                roomdata.set(socket, 'currentContent', nextContent);
+                roomdata.set(socket, 'currentContentTimestamp', new Date().getTime());
                 //Resets the voteskips probably pretty bad for the performances..
                 roomdata.clearVoteSkip(socket.room);
                 io.to(socket.room).emit('updateSkipLabel', roomdata.get(socket, 'users').length, 0);
-
-                io.to(socket.room).emit('playNextContent', nextContent);
+                var timestamp = 0;
+                io.to(socket.room).emit('playNextContent', nextContent, timestamp);
             }
             else {
                 io.to(socket.room).emit('noContent');
