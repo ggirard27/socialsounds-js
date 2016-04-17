@@ -429,7 +429,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         $('.' + id).each(function(index, element) {
 
             if (this.className != id + ' alreadyPlayed') {
-                debugger;
                 this.className = id + ' alreadyPlayed highlightedElement';
                 return false;
             }
