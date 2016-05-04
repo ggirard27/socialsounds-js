@@ -13,7 +13,7 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     playSoundCloudContent: function (content, timestamp) {
         var self = this;
         var iFrame = document.getElementById('soundcloudPlayer');
-        var startTimeModifier = timestamp*1000;
+        var startTimeModifier = timestamp > 0 ? timestamp*1000 : 1;
         //This is for debugging, should never be used in final product
         if (!content) {
             SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();

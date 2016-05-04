@@ -20,9 +20,12 @@ socket.on('contentRejected', function (content) {
 });
 
 socket.on('getChannelList', function (channels) {
-    $("#channelList").html(""); //Empties it before filling it all.
+    //Desktop site
+    $("#channelList").html(""); //Empties it before filling it all, desktop website
+    $("#smallChannelList").html(""); //Empties it before filling it all, mobile website
     for (var i = 0; i < channels.length; i++) {
         $('#channelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel("' + channels[i] + '")>' + channels[i] + '</a></li>');
+        $('#smallChannelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel("' + channels[i] + '")>' + channels[i] + '</a></li>');
     }
 });
 
@@ -47,12 +50,15 @@ socket.on('displayContentList', function (contentList) {
 });
 
 socket.on('updateSkipLabel', function (users, votes) {
-    $('#labelSkip').text(votes + "/"+users + " users voted to skip");
+    $('#labelSkip').text(votes + "/" + users + " users voted to skip");
+    $('#smallLabelSkip').text(votes + "/" + users + " users voted to skip");
 });
 
 socket.on('skipSong', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.getNextContentFromServer();
     document.getElementById('btnSkip').disabled = false;
+    document.getElementById('smallBtnSkip').disabled = false;
+
 });
 
 //Will eventually be removed when we will be able to join in a song at any moment.

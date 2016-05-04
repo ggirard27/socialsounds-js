@@ -21,6 +21,11 @@ var usernameChat = userCookie.general.username;
 btnSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.voteSkip();
     document.getElementById('btnSkip').disabled = true;
+    document.getElementById('smallBtnSkip').disabled = true;
+});
+//Mobile site button..
+smallBtnSkip.addEventListener('click', function () {
+    btnSkip.click();
 });
 
 btnCreateChannel.addEventListener('click', function () {
@@ -30,6 +35,10 @@ btnCreateChannel.addEventListener('click', function () {
         var chat = document.getElementById('chatBox');
         chat.scrollTop = chat.scrollHeight;
     }
+});
+//So the mobile button also works.
+smallBtnCreateChannel.addEventListener('click', function () {
+    btnCreateChannel.click();
 });
 
 searchButton.addEventListener('click', function () {
@@ -139,12 +148,12 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     playContent: function (content, timestamp) {
         
         var self = this;
-        currentContent = content;
-        self.toggleHighlightContentInList(currentContent);
         // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
         // which should take care of stopping the currently playing media before calling the playContent function. - GG
         this.pauseContent();
+        currentContent = content;
+        self.toggleHighlightContentInList(currentContent);
         
         if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
             // nothing to do

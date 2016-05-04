@@ -67,9 +67,14 @@ block content
                     ul#smallContentQueueList
                     .progress
                         .progess-bar
-                            span 3/15 voted person voted to skip
+                            span#smallLabelSkip 0/0 voted person voted to skip
                     div
-                    button.btn#btnSkip Skip
+                    button.btn#smallBtnSkip Skip
+                    #smallChannelListDiv
+                    span Channel Title
+                    ul#smallChannelList
+                    div
+                        button.btn#smallBtnCreateChannel Create channel      
 
 append bodyscripts
     script(type='text/javascript').
