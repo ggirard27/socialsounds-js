@@ -66,8 +66,8 @@ exports.joinRoom = function (socket, room) {
 exports.clearRoom = function (room) {
     delete this.rooms[room];
     //We don't want to remove the default-room shortcut.
-    if (room != 'default-room') {
-        this.channels.splice(this.channels.indexOf(room));
+    if (room != 'default-room' && this.channels.indexOf(room) > -1) {
+        this.channels.splice(this.channels.indexOf(room), 1);
     }
 };
 
