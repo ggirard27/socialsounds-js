@@ -24,7 +24,7 @@ exports.createRoom = function (socket, room, password) {
     if (this.channels.indexOf(room) < 0) {
         this.channels.push(room);
     }
-    var isPasswordProtected = password == '' ? false : true;
+    var isPasswordProtected = (password == '' ? false : true);
     this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [], voteSkip: 0, passwordProtected: isPasswordProtected, passwordValue: password};
 }
 
@@ -59,22 +59,31 @@ exports.get = function (socket, variable, content) {
 exports.joinRoom = function (socket, room, password) {
     
     if (exports.Debug) console.log(socket.id + ": Joining room: " + room);
-    if (!this.roomExists(socket, room)) this.createRoom(socket, room, password);
-    if (this.rooms[room].passwordProtected) {
-        if (this.authorize(room, password)) {
-            this.rooms[room].users.push(socket.id);
-            socket.join(room);
-            socket.roomdata_room = room;
-            console.log("authorized request");
-        } else {
-            console.log("rejected request");
-        }
-    } else {
+
+    if (!this.roomExists(socket, room)) {
+        this.createRoom(socket, room, password);
+        this.rooms[room].users.push(socket.id);
         socket.join(room);
         socket.roomdata_room = room;
-        console.log("no password, automatically authorized request");
+    } 
+    else {
+        if (this.rooms[room].passwordProtected) {
+            if (this.authorize(room, password)) {
+                this.rooms[room].users.push(socket.id);
+                socket.join(room);
+                socket.roomdata_room = room;
+                console.log("authorized request");
+            } 
+            else {
+                console.log("rejected request");
+            }
+        } 
+        else {
+            socket.join(room);
+            socket.roomdata_room = room;
+            console.log("no password, automatically authorized request");
+        }
     }
-        
 };
 
 exports.clearRoom = function (room) {

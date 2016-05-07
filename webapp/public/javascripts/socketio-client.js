@@ -38,8 +38,14 @@ socket.on('getChannelList', function (channels) {
     $("#channelList").html(""); //Empties it before filling it all, desktop website
     $("#smallChannelList").html(""); //Empties it before filling it all, mobile website
     for (var i = 0; i < channels.length; i++) {
-        $('#channelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("'+channels[i]+'")>' + channels[i] + '</a></li>');
-        $('#smallChannelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("'+ channels[i] +'")>' + channels[i] + '</a></li>');
+        if (channels[i] != "default-room") {
+            $('#channelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("' + channels[i] + '")>' + channels[i] + '</a></li>');
+            $('#smallChannelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("' + channels[i] + '")>' + channels[i] + '</a></li>');
+        }
+        else {
+            $('#channelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom("' + channels[i] + '","")>' + channels[i] + '</a></li>');
+            $('#smallChannelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom("' + channels[i] + '","")>' + channels[i] + '</a></li>');
+        }
     }
 });
 

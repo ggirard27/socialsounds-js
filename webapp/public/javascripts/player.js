@@ -88,6 +88,14 @@ searchBarInput.addEventListener('keyup', function (e) {
 });
 
 
+createChannelPasswordConfirmField.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnCreateChannel.click();
+    }
+});
+
+
+
 inputChat.addEventListener('keyup', function (e) {
     var mess = document.getElementById('inputChat').value;
     if (e.keyCode == 13 && mess) {
