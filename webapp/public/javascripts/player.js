@@ -18,6 +18,25 @@ var currentContent = null;
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
+//On page load, looks if we have a certain room to access.
+$(document).ready(function () {
+    var room = window.location.search;
+    //Try and access the room mentionned, if it doesn't work then it creates it.    
+    if (room) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel(room.substring(1));
+    }
+});
+
+btnDashSkip.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
+});
+btnDashMute.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('mute');
+});
+btnDashPause.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('pause');
+});
+
 btnSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.voteSkip();
     document.getElementById('btnSkip').disabled = true;
@@ -157,7 +176,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     
     playContent: function (content, timestamp) {
-        
+        console.log("Now Playing: " + content.title);
         var self = this;
         // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
@@ -219,6 +238,12 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                 }
             }
         }
+    },
+    
+    muteContent: function () {
+        var self = this;
+        self.setPlayerMuteState(!self.isMuted);
+        self.applyPlayerMuteState();
     },
     
     showPlayer: function (content) {

@@ -10,7 +10,7 @@ var signupRoutes = function (passport) {
     });
     
     router.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile',
+        successRedirect : '/player',
         failureRedirect : '/signup',
         failureFlash : true
     }));

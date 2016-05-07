@@ -78,10 +78,11 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     },
     
     searchSoundCloud: function (query) {
+        var self = SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER;
         var results = [];
         
         SC.initialize({
-            client_id: '3d4d094dc75510a4b5ad612e2d249a41'
+            client_id: this.clientId
         });
         SC.get('/tracks', {
             q: query

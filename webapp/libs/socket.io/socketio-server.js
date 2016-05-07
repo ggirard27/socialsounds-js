@@ -40,7 +40,7 @@ module.exports.listen = function (server) {
             io.to(socket.room).emit('updateSkipLabel', (roomdata.get(socket, 'users').length) - 1, roomdata.get(socket, 'voteSkip')); //Updates the bar because the nummber of users has decreased.
             roomdata.leaveRoom(socket);
             console.log('user disconnected');
-            io.to(socket.room).emit('logging', 'user disconnected');
+            io.to(socket.room).emit('logging', 'user disconnected' + socket);
         });
         
         socket.on('createRoom', function (room, password) {
@@ -57,6 +57,8 @@ module.exports.listen = function (server) {
                 io.to(socket.id).emit('roomCreated', socket.room);
                 var connectedUsers = roomdata.get(socket, 'users').length;
                 io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
+                //Owner control if you are the owner.
+                io.to(socket.id).emit('showOwnerControls', socket.id == roomdata.get(socket, 'owner'));
                 //Update Channel list and sent it to the user
                 channelList = roomdata.channels;
                 io.emit('getChannelList', channelList);
@@ -174,6 +176,17 @@ module.exports.listen = function (server) {
                 io.to(socket.room).emit('skipSong');
             else
                 io.to(socket.room).emit('updateSkipLabel', userConnected, votes+1);
+        });
+
+        socket.on('controlPlayer', function (func) {
+            if (socket.id == roomdata.get(socket, 'owner')) {         
+                if (func == 'mute')
+                    io.to(socket.room).emit('mutePlayer');
+                else if (func == 'pause')
+                    io.to(socket.room).emit('pausePlayer');
+                else if (func == 'skip')
+                    io.to(socket.room).emit('skipSong')
+            }
         });
 
     }); 

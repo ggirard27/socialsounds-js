@@ -11,28 +11,47 @@ block content
         .row
             .col-sm-6
                 .well
-                    h3
-                        span.fa.fa-user.profileStyle
-                        span Local account
-                    if(user.local.email)
-                        p.profileDataSection
-                            span.profileDataName Email: 
-                            span.profileDataValue #{user.local.email}
-                            br
-                            span.profileDataName Username: 
-                            span.profileDataValue #{user.general.username}
-                                form(action='/edit/username', method='post')
-                                    input.profileUsernameBox.form-control(type='text', placeholder='new username', name='username')
-                                    button.btn.btn-default.btn-sm(disabled) Change username
-                            br
-                            span.profileDataName Account created: 
-                            span.profileDataValue #{user.general.created}
-                        if(user.facebook.token || user.google.token || user.twitter.token)
-                            a(href='/unlink/local').btn.btn-default Unlink Local account
-                        else
-                            a.btn.btn-default(disabled) Unlink Local account
-                    else
-                        a(href='/connect/local').btn.btn-default Connect Local account
+                    h3.text-info
+                        span.profileStyle
+                        span Friends
+
+            .col-sm-6
+                .well
+                    h3.text-info
+                        span.profileStyle
+                        span Saved stations
+        .row
+            .col-sm-12
+                .well
+                    h3.text-info
+                        span.profileStyle
+                        span Saved songs
+        .row
+            .col-sm-6
+                .well
+                    table
+                        tbody
+                            if(user.local.email)
+                                tr
+                                    td
+                                        span.profileDataName Email: 
+                                    td
+                                        span.profileDataValue #{user.local.email}
+                            tr
+                                td
+                                    span.profileDataName Username: 
+                                td
+                                    span.profileDataValue#usernameSpan #{user.general.username}
+                                    a#editUsernameBtn Edit
+                                    form.input-group#editUsername(action='/edit/username', method='post')
+                                        input.profileUsernameBox.form-control(type='text', placeholder='new username', name='username')
+                                        .input-group-btn
+                                            button.btn#editUsernameSaveBtn(disable) Save change
+                            tr
+                                td
+                                    span.profileDataName Account created:   
+                                td
+                                    span.profileDataValue #{user.general.created}
 
             .col-sm-6
                 .well(class=profile-facebook)
@@ -83,21 +102,6 @@ block content
                     else
                         a(href='/connect/google').btn.btn-default Connect Google account
 
-        .row
-            .col-sm-6
-                .well
-                    h3.text-info
-                        span.fa.profileStyle
-                        span Saved songs
 
-            .col-sm-6
-                .well
-                    h3.text-info
-                        span.fa.profileStyle
-                        span Saved stations
-        .row
-            .col-sm-12
-                .well
-                    h3.text-info
-                        span.fa.profileStyle
-                        span Friends
+append bodyscripts
+    script(src='/javascripts/profile.js')
