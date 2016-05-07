@@ -10,7 +10,7 @@ var loginRoutes = function (passport) {
     });
     
     router.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile',
+        successRedirect : '/player',
         failureRedirect : '/login',
         failureFlash : true
     }));
