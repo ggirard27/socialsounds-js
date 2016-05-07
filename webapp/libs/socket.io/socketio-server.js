@@ -11,7 +11,8 @@ module.exports.listen = function (server) {
     io.sockets.on('connection', function (socket) {
         
         socket.room = defaultRoom;
-        roomdata.joinRoom(socket, socket.room);  
+        var default_password = "";
+        roomdata.joinRoom(socket, socket.room, default_password);  
         var contentList = roomdata.get(socket, 'contentList');
         io.to(socket.id).emit('roomJoined', socket.room);
         io.to(socket.id).emit('displayContentList', contentList);
@@ -42,22 +43,23 @@ module.exports.listen = function (server) {
             io.to(socket.room).emit('logging', 'user disconnected');
         });
         
-        socket.on('switchRoom', function (room) {
-            if (room != socket.room) {
+        socket.on('createRoom', function (room, password) {
+            if (!roomdata.roomExists(socket, room)) {
                 //Update the skip label of the room we are leaving
-                io.to(socket.room).emit('updateSkipLabel', (roomdata.get(socket, 'users').length)-1, roomdata.get(socket, 'voteSkip')); //Updates the bar because the nummber of users has decreased.
+                io.to(socket.room).emit('updateSkipLabel', (roomdata.get(socket, 'users').length) - 1, roomdata.get(socket, 'voteSkip')); //Updates the bar because the nummber of users has decreased.
                 //Tell player to pause the song for the user leaving.
                 io.to(socket.id).emit('pauseContent');
                 //Actually leave the room
                 roomdata.leaveRoom(socket);
                 socket.room = room;
                 //Join new room
-                roomdata.joinRoom(socket, socket.room);
+                roomdata.joinRoom(socket, socket.room, password);
+                io.to(socket.id).emit('roomCreated', socket.room);
                 var connectedUsers = roomdata.get(socket, 'users').length;
                 io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
                 //Update Channel list and sent it to the user
                 channelList = roomdata.channels;
-                io.emit('getChannelList', channelList);                
+                io.emit('getChannelList', channelList);
                 io.to(socket.id).emit('roomJoined', socket.room);
                 //Update the skip label of the room that we joined
                 io.to(socket.room).emit('updateSkipLabel', connectedUsers, roomdata.get(socket, 'voteSkip'));
@@ -73,6 +75,49 @@ module.exports.listen = function (server) {
                     console.log('Elapsed time: ', elapsedTime);
                     io.to(socket.id).emit('playNextContent', content, elapsedTime);
                 }
+            } else {
+                io.to(socket.id).emit('createRoomFailed', room);
+            };
+        });
+        
+        socket.on('switchRoom', function (room, password) {
+            if (room != socket.room) {
+                if (roomdata.authorize(socket, room, password)) {
+                    //Update the skip label of the room we are leaving
+                    io.to(socket.room).emit('updateSkipLabel', (roomdata.get(socket, 'users').length) - 1, roomdata.get(socket, 'voteSkip')); //Updates the bar because the nummber of users has decreased.
+                    //Tell player to pause the song for the user leaving.
+                    io.to(socket.id).emit('pauseContent');
+                    //Actually leave the room
+                    roomdata.leaveRoom(socket);
+                    socket.room = room;
+                    //Join new room
+                    roomdata.joinRoom(socket, socket.room, password);
+                    var connectedUsers = roomdata.get(socket, 'users').length;
+                    io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
+                    //Update Channel list and sent it to the user
+                    channelList = roomdata.channels;
+                    io.emit('getChannelList', channelList);
+                    io.to(socket.id).emit('roomJoined', socket.room);
+                    io.to(socket.id).emit('roomSwitched', socket.room);
+                    //Update the skip label of the room that we joined
+                    io.to(socket.room).emit('updateSkipLabel', connectedUsers, roomdata.get(socket, 'voteSkip'));
+                    //Get Content list and send it to the user
+                    contentList = roomdata.get(socket, 'contentList');
+                    io.to(socket.id).emit('displayContentList', contentList);
+                    var content = roomdata.get(socket, 'currentContent');
+                    if (content) {
+                        var time = new Date().getTime();
+                        console.log("Current time: " + time)
+                        var elapsedTime = Math.round((time - roomdata.get(socket, 'currentContentTimestamp')) / 1000);
+                        console.log("timestamp: " + roomdata.get(socket, 'currentContentTimestamp'));
+                        console.log('Elapsed time: ', elapsedTime);
+                        io.to(socket.id).emit('playNextContent', content, elapsedTime);
+                    }
+                } else {
+                    io.to(socket.id).emit('joinRoomFailed', room);
+                }
+            } else {
+                io.to(socket.id).emit('roomSwitched', socket.room);
             }
         });
 

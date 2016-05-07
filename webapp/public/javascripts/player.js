@@ -29,13 +29,24 @@ smallBtnSkip.addEventListener('click', function () {
 });
 
 btnCreateChannel.addEventListener('click', function () {
-    if (usernameChat) {
-        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(usernameChat.replace(/ /g, ''));  //Removing the spaces because it breaks the swtich channel event.
-        $('#chatBox').append('<li> --- You have joined the channel ' + usernameChat.replace(/ /g, '') + '</li>');
-        var chat = document.getElementById('chatBox');
-        chat.scrollTop = chat.scrollHeight;
+    var channelName = document.getElementById('createChannelNameField').value;
+    var channelPassword = document.getElementById('createChannelPasswordField').value;
+    var channelPasswordConfirm = document.getElementById('createChannelPasswordConfirmField').value;
+    if (channelPassword == channelPasswordConfirm) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(channelName.replace(/ /g, ''), channelPassword);  //Removing the spaces because it breaks the swtich channel event.
+    } else {
+        $('#createChannelPasswordErrorMessage').show();
     }
+
 });
+
+btnSwitchChannel.addEventListener('click', function () {
+    var channelName = document.getElementById('switchChannelNameField').value;
+    var channelPassword = document.getElementById('switchChannelPasswordField').value;
+    SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channelName, channelPassword);  //Removing the spaces because it breaks the swtich channel event.
+});
+
+
 //So the mobile button also works.
 smallBtnCreateChannel.addEventListener('click', function () {
     btnCreateChannel.click();
@@ -416,12 +427,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
     },
     
-    switchChannel: function (channel) {
-        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel);
-        //Should verify the user is actually switching channel..
-        $('#chatBox').append('<li> --- You have joined the channel ' + channel + '</li>');
-        var chat = document.getElementById('chatBox');
-        chat.scrollTop = chat.scrollHeight;
+    switchChannel: function (channel, password) {
+        password = (password == null ? "" : password);
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel, password);
     },
     
     toggleHighlightContentInList: function (content) {

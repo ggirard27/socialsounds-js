@@ -3,6 +3,20 @@
 socket.on('roomJoined', function (room) {
     console.log('Joined room: ' + room);
     socket.room = room;
+    $('#chatBox').append('<li> --- You have joined the channel ' + room + '</li>');
+    var chat = document.getElementById('chatBox');
+    chat.scrollTop = chat.scrollHeight;
+});
+
+socket.on('roomCreated', function (room) {
+    console.log('Created room: ' + room);
+    socket.room = room;
+    $('#createChannelModal').modal('hide');
+});
+
+socket.on('roomSwitched', function (room) {
+    console.log('Switched to room: ' + room);
+    $('#switchChannelModal').modal('hide');
 });
 
 socket.on('playNextContent', function (content, timestamp) {
@@ -24,13 +38,21 @@ socket.on('getChannelList', function (channels) {
     $("#channelList").html(""); //Empties it before filling it all, desktop website
     $("#smallChannelList").html(""); //Empties it before filling it all, mobile website
     for (var i = 0; i < channels.length; i++) {
-        $('#channelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel("' + channels[i] + '")>' + channels[i] + '</a></li>');
-        $('#smallChannelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel("' + channels[i] + '")>' + channels[i] + '</a></li>');
+        $('#channelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("'+channels[i]+'")>' + channels[i] + '</a></li>');
+        $('#smallChannelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("'+ channels[i] +'")>' + channels[i] + '</a></li>');
     }
 });
 
 socket.on('logging', function (msg) {
     console.log('Server message: ' + msg);
+});
+
+socket.on('joinRoomFailed', function (room) {
+    $('#switchChannelPasswordErrorMessage').show();
+});
+
+socket.on('createRoomFailed', function (room) {
+  $('#channelNameErrorMessage').show();
 });
 
 socket.on('noContent', function () {
@@ -64,7 +86,11 @@ socket.on('skipSong', function () {
 //Will eventually be removed when we will be able to join in a song at any moment.
 socket.on('pauseContent', function () {
     SOCIALSOUNDSCLIENT.BASEPLAYER.pauseContent();
-})
+});
+
+function setSwitchRoomModalChannelNameValue(channelName){
+    $('#switchChannelNameField').val(channelName);
+};
 
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 
@@ -79,11 +105,19 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
         socket.emit('addContent', content, socket.room);
     },
     
-    switchRoom: function (room) {
+    switchRoom: function (room, password) {
+        if (password == null || password == 'undefined') {
+            password = '';
+        }
         console.log("requesting room switch to: " + room);
-        socket.emit('switchRoom', room);
-        //socket.emit('getNextContent', socket.room);
+        socket.emit('switchRoom', room, password);
     },
+
+    createRoom: function (room, password) {
+        console.log("requesting to create room: " + room);
+        socket.emit('createRoom', room, password);
+    },
+
     
     sendMessage: function (msg) {
         socket.emit('chatMessage', msg, socket.room);
