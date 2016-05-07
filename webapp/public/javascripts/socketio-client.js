@@ -18,7 +18,7 @@ socket.on('contentAdded', function (content) {
 socket.on('contentRejected', function (content) {
     console.log('Rejected ' + content.title + ' from the content queue');
 });
-
+    
 socket.on('getChannelList', function (channels) {
     //Desktop site
     $("#channelList").html(""); //Empties it before filling it all, desktop website
@@ -39,7 +39,6 @@ socket.on('noContent', function () {
 });
 
 socket.on('chatMessage', function (msg) {
-    console.log(msg);
     $('#chatBox').append('<li>' + msg + '</li>');
     var chat = document.getElementById('chatBox');
     chat.scrollTop = chat.scrollHeight;
@@ -61,10 +60,25 @@ socket.on('skipSong', function () {
 
 });
 
+socket.on('showOwnerControls', function (show) {
+    if (show)
+        $('#ownerDashboard').show();
+    else
+        $('#ownerDashboard').hide();           
+});
+
 //Will eventually be removed when we will be able to join in a song at any moment.
 socket.on('pauseContent', function () {
     SOCIALSOUNDSCLIENT.BASEPLAYER.pauseContent();
 })
+
+socket.on('pausePlayer', function () {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.pauseContent();
+});
+
+socket.on('mutePlayer', function () {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.muteContent();
+});
 
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 
@@ -82,7 +96,6 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
     switchRoom: function (room) {
         console.log("requesting room switch to: " + room);
         socket.emit('switchRoom', room);
-        //socket.emit('getNextContent', socket.room);
     },
     
     sendMessage: function (msg) {
@@ -91,6 +104,11 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
 
     voteSkip: function () {
         socket.emit('voteSkip', socket.room);
+    },
+
+    controlPlayer: function (func)
+    {
+        socket.emit('controlPlayer', func);
     }
 }
 

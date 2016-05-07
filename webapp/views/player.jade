@@ -4,6 +4,13 @@ block content
     .container-fluid
         .row
             .hidden-xs.hidden-sm.col-md-3.col-lg-3
+                div#ownerDashboard(style="display: none")
+                    span Owner control
+                        .row
+                            table
+                                button.btn#btnDashSkip Skip
+                                button.btn#btnDashMute Mute
+                                button.btn#btnDashPause Pause
                 #contentQueueDiv
                     span Playlist
                     ul#contentQueueList
