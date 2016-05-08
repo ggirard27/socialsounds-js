@@ -143,6 +143,8 @@ addContentButton.addEventListener('click', function () {
     if (searchResultsDropdownSelectedItem) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
         searchResultsDropdownSelectedItem = "";
+        $('#contentReadyToBeAddedMessage').hide();
+        $('#addContentButton').removeClass('btn-info');
     }
 });
 
@@ -181,7 +183,11 @@ function getEventTarget(e) {
 searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);
     var selectedContentUrl = target.getAttribute('data-link');
-    //document.getElementById('searchBarInput').value = selectedContentUrl;
+    var selectedContentTitle = target.innerHTML;
+    console.log("should be printing message: " + selectedContentTitle);
+    $('#contentReadyToBeAddedMessage').text('Currently selected : ' + selectedContentTitle);
+    $('#contentReadyToBeAddedMessage').show();
+    $('#addContentButton').addClass('btn-info');
     searchResultsDropdownSelectedItem = selectedContentUrl;
 });
 
@@ -402,7 +408,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                 var li = document.createElement("LI");
                 var a = document.createElement("A");
                 
-                a.href = "#";
                 a.text = provider + " - " + results[i].title;
                 a.setAttribute('data-link', results[i].url);
                 
@@ -413,7 +418,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         else {
             var li = document.createElement("LI");
             var a = document.createElement("A");
-            a.href = "#";
             a.text = "No Result";
             a.setAttribute('data-link', "");
             
