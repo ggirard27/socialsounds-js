@@ -1,6 +1,42 @@
 ﻿extends bodycontent
 
 block content
+    .modal.fade.active#createChannelModal(role='dialog', arial-labelled-by='createChannel', tabindex='-1')
+        .modal-dialog.modal-sm(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    h4.modal-title#createChannel Create a channel
+                .modal-body
+                    label Channel name 
+                    input.form-control#createChannelNameField(type='text', name='channelName')
+                    label Channel password 
+                    input.form-control#createChannelPasswordField(type='password', name='channelPassword')
+                    label Confirm password 
+                    input.form-control#createChannelPasswordConfirmField(type='password', name='channelPasswordConfirm')
+                    .alert.alert-danger#createChannelPasswordErrorMessage(style='display: none') Passwords don't match.
+                    .alert.alert-danger#createChannelNameErrorMessage(style='display: none') Channel name already taken, please chose a new one.
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-primary#btnCreateChannel(type='button') Create
+
+    .modal.fade.active#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1')
+        .modal-dialog.modal-sm(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    h4.modal-title#switchChannel Switch channel
+                .modal-body
+                    label Channel name 
+                    input.form-control#switchChannelNameField(type='text', name='channelName')
+                    label Channel password 
+                    input.form-control#switchChannelPasswordField(type='password', name='channelPassword')
+                    .alert.alert-danger#switchChannelPasswordErrorMessage(style='display: none') Invalid password, try again.
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-primary#btnSwitchChannel(type='button') Join
     .container-fluid
         .row
             .hidden-xs.hidden-sm.col-md-3.col-lg-3
@@ -23,44 +59,7 @@ block content
                     span Channel Title
                     ul#channelList
                     div
-                        button.btn#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel  
-                    
-                    .modal.fade#createChannelModal(role='dialog', arial-labelled-by='createChannel', tabindex='-1')
-                        .modal-dialog(role='document')
-                            .modal-content
-                                .modal-header
-                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
-                                        span(aria-hidden='true') &times;
-                                    h4.modal-title#createChannel Create a channel
-                                .modal-body
-                                    label Channel name 
-                                    input.form-control#createChannelNameField(type='text', name='channelName')
-                                    label Channel password 
-                                    input.form-control#createChannelPasswordField(type='password', name='channelPassword')
-                                    label Confirm password 
-                                    input.form-control#createChannelPasswordConfirmField(type='password', name='channelPasswordConfirm')
-                                    .alert.alert-danger#createChannelPasswordErrorMessage(style='display: none') Passwords don't match.
-                                    .alert.alert-danger#createChannelNameErrorMessage(style='display: none') Channel name already taken, please chose a new one.
-                                .modal-footer
-                                    button.btn.btn-default(type='button', data-dismiss='modal') Close
-                                    button.btn.btn-primary#btnCreateChannel(type='button') Create
-
-                    .modal.fade#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1')
-                        .modal-dialog(role='document')
-                            .modal-content
-                                .modal-header
-                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
-                                        span(aria-hidden='true') &times;
-                                    h4.modal-title#switchChannel Switch channel
-                                .modal-body
-                                    label Channel name 
-                                    input.form-control#switchChannelNameField(type='text', name='channelName')
-                                    label Channel password 
-                                    input.form-control#switchChannelPasswordField(type='password', name='channelPassword')
-                                    .alert.alert-danger#switchChannelPasswordErrorMessage(style='display: none') Invalid password, try again.
-                                .modal-footer
-                                    button.btn.btn-default(type='button', data-dismiss='modal') Close
-                                    button.btn.btn-primary#btnSwitchChannel(type='button') Join
+                        button.btn#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel
 
             .col-xs-12.col-sm-12.col-md-9.col-lg-9
                 .row
