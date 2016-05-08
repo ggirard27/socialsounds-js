@@ -107,8 +107,8 @@ socket.on('pauseContent', function () {
     SOCIALSOUNDSCLIENT.BASEPLAYER.pauseContent();
 });
 
-socket.on('pausePlayer', function () {
-    SOCIALSOUNDSCLIENT.BASEPLAYER.pauseContent();
+socket.on('pausePlayer', function (elapsedTime) {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.pauseContent(elapsedTime);
 });
 
 socket.on('mutePlayer', function () {

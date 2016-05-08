@@ -101,8 +101,6 @@ switchChannelPasswordField.addEventListener('keyup', function (e) {
     }
 });
 
-
-
 inputChat.addEventListener('keyup', function (e) {
     var mess = document.getElementById('inputChat').value;
     if (e.keyCode == 13 && mess) {
@@ -194,6 +192,7 @@ searchResultsDropdown.addEventListener('click', function (event) {
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     isMuted: Boolean(false),
+    isPaused: Boolean(false),
     
     
     playContent: function (content, timestamp) {
@@ -243,20 +242,21 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     },
     
     //Will eventually be removed when we will be able to join in a song at any moment.
-    pauseContent: function () {
+    pauseContent: function (elapsedTime) {
         if (currentContent) {
             if (contentProviderList.indexOf(currentContent.provider) > -1) {
                 switch (currentContent.provider) {
                     case 'soundcloud':
-                        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
+                        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer(this.isPaused, currentContent, elapsedTime);
                         break;
                     case 'vimeo':
                         playVimeoContent(content);
                         break;
                     case 'youtube':
-                        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
+                        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent(this.isPaused);
                         break;
                 }
+                this.isPaused = !this.isPaused;
             }
         }
     },
