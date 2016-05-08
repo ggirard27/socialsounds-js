@@ -37,6 +37,7 @@ block content
                 .modal-footer
                     button.btn.btn-default(type='button', data-dismiss='modal') Close
                     button.btn.btn-primary#btnSwitchChannel(type='button') Join
+
     .container-fluid
         .row
             .hidden-xs.hidden-sm.col-md-3.col-lg-3
@@ -48,15 +49,15 @@ block content
                                 button.btn#btnDashMute Mute
                                 button.btn#btnDashPause Pause
                 #contentQueueDiv
-                    span Playlist
-                    ul#contentQueueList
+                    span.h4 Playlist
+                    .list-group#contentQueueListGroup
                     .progress
                         .progess-bar
-                            label#labelSkip 0/0 voted person voted to skip
+                            label#labelSkip 0/0 users voted to skip
                     div
                     button.btn#btnSkip Skip
                 #channelListDiv
-                    span Channel Title
+                    span.h4 Channels
                     ul#channelList
                     div
                         button.btn#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel
@@ -109,20 +110,18 @@ block content
         .row
             .col-xs-12.col-sm-12.hidden-md.hidden-lg#smallPlaylistSection
                 #smallContentQueueDiv
-                    span Channel Title
+                    span.h4 Playlist
                     ul#smallContentQueueList
                     .progress
                         .progess-bar
-                            span#smallLabelSkip 0/0 voted person voted to skip
+                            span#smallLabelSkip 0/0 users voted to skip
                     div
                     button.btn#smallBtnSkip Skip
                     #smallChannelListDiv
-                    span Channel Title
+                    span.h4 Channels
                     ul#smallChannelList
                     div
                         button.btn#smallBtnCreateChannel Create channel
-                        input(type='checkbox')#passwordCheckbox  
-                        label.span Password protection
 
 append bodyscripts
     script(type='text/javascript').

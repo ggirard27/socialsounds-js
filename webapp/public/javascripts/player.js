@@ -440,8 +440,8 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
 
         var htmlContent = '';
-        htmlContent += '<li > <img src="images/' + content.provider + '-playlist.png"/> <a href="' + content.url + '" target="_blank" class="' + id + '"> ' + content.title + '</a></li>';
-        $('#contentQueueList').append(htmlContent);
+        htmlContent += '<a href="' + content.url + '" target="_blank" class="' + id + ' list-group-item"> <img src="images/' + content.provider + '-playlist.png"/> ' + content.title + '</a></li>';
+        $('#contentQueueListGroup').append(htmlContent);
         
         var node = document.createElement("LI");
         var img = document.createElement("IMG");
@@ -491,8 +491,8 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
  
         $('.' + id).each(function(index, element) {
 
-            if (this.className != id + ' alreadyPlayed') {
-                this.className = id + ' alreadyPlayed highlightedElement';
+            if (this.className != id + ' alreadyPlayed list-group-item') {
+                this.className = id + ' alreadyPlayed highlightedElement list-group-item';
                 return false;
             }
         });
