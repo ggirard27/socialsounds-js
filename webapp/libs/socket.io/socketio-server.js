@@ -183,8 +183,12 @@ module.exports.listen = function (server) {
             if (socket.id == roomdata.get(socket, 'owner')) {
                 if (func == 'mute')
                     io.to(socket.room).emit('mutePlayer');
-                else if (func == 'pause')
-                    io.to(socket.room).emit('pausePlayer');
+                else if (func == 'pause') {
+                    var time = new Date().getTime();
+                    console.log("Current time: " + time)
+                    var elapsedTime = Math.round((time - roomdata.get(socket, 'currentContentTimestamp')) / 1000);
+                    io.to(socket.room).emit('pausePlayer', elapsedTime);
+                }
                 else if (func == 'skip')
                     io.to(socket.room).emit('skipSong')
             }
