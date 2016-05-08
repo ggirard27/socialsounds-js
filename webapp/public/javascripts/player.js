@@ -94,6 +94,12 @@ createChannelPasswordConfirmField.addEventListener('keyup', function (e) {
     }
 });
 
+switchChannelPasswordField.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnSwitchChannel.click();
+    }
+});
+
 
 
 inputChat.addEventListener('keyup', function (e) {
