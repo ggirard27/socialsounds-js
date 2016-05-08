@@ -20,10 +20,11 @@ var usernameChat = userCookie.general.username;
 
 //On page load, looks if we have a certain room to access.
 $(document).ready(function () {
-    var room = window.location.search;
+    var room = window.location.hash;
     //Try and access the room mentionned, if it doesn't work then it creates it.    
-    if (room) {
-        SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel(room.substring(1));
+    if (room && room != '' && room != 'default-room') {
+        console.log("Testing room: " + room);
+        SOCIALSOUNDSCLIENT.SOCKETIO.testRoomExists(room);
     }
 });
 
@@ -355,7 +356,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     updateGoogleShareButtonUrl: function () {
         gpShareButton.setAttribute('data-href', currentContent.url);
-        gpShareButton.innerHTML = '<a class="g-plus" data-action="share" data-annotation="none" data-height="24" data-href="' + currentContent.url + '"</a>';
+        gpShareButton.innerHTML = '<a class="g-plus" data-prefilltext="test post, please ignore" data-action="share" data-annotation="none" data-height="24" data-href="' + currentContent.url + '"</a>';
         gapi.plus.go();
     },
     

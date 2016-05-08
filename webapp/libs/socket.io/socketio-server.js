@@ -12,11 +12,11 @@ module.exports.listen = function (server) {
         
         socket.room = defaultRoom;
         var default_password = "";
-        roomdata.joinRoom(socket, socket.room, default_password);  
+        roomdata.joinRoom(socket, socket.room, default_password);
         var contentList = roomdata.get(socket, 'contentList');
         io.to(socket.id).emit('roomJoined', socket.room);
         io.to(socket.id).emit('displayContentList', contentList);
-
+        
         var content = roomdata.get(socket, 'currentContent');
         if (content) {
             var time = new Date().getTime();
@@ -28,14 +28,14 @@ module.exports.listen = function (server) {
         }
         
         var channelList = roomdata.channels;
-        for(var i = 0; i < channelList.length; i++) {
+        for (var i = 0; i < channelList.length; i++) {
             console.log("Channel: " + channelList[i]);
         }
         io.to(socket.id).emit('getChannelList', channelList);
-
+        
         //This bothers me greatly. See implemetation & connection of the websocket why is # of user always n+1;
         io.to(socket.room).emit('updateSkipLabel', roomdata.get(socket, 'users').length, roomdata.get(socket, 'voteSkip'));
-
+        
         socket.on('disconnect', function () {
             io.to(socket.room).emit('updateSkipLabel', (roomdata.get(socket, 'users').length) - 1, roomdata.get(socket, 'voteSkip')); //Updates the bar because the nummber of users has decreased.
             roomdata.leaveRoom(socket);
@@ -63,6 +63,7 @@ module.exports.listen = function (server) {
                 channelList = roomdata.channels;
                 io.emit('getChannelList', channelList);
                 io.to(socket.id).emit('roomJoined', socket.room);
+                io.to(socket.id).emit('roomSwitched', socket.room);
                 //Update the skip label of the room that we joined
                 io.to(socket.room).emit('updateSkipLabel', connectedUsers, roomdata.get(socket, 'voteSkip'));
                 //Get Content list and send it to the user
@@ -122,7 +123,7 @@ module.exports.listen = function (server) {
                 io.to(socket.id).emit('roomSwitched', socket.room);
             }
         });
-
+        
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Player functions
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,20 +167,20 @@ module.exports.listen = function (server) {
         socket.on('chatMessage', function (msg, room) {
             io.to(socket.room).emit('chatMessage', msg);
         });
-
+        
         socket.on('voteSkip', function (room) {
             var votes = roomdata.get(socket, 'voteSkip');
             var userConnected = roomdata.get(socket, 'users').length
-            var votesRequired = Math.ceil(userConnected * 0.66) //two thirds of the people must agree to skip the song.
+            var votesRequired = Math.ceil(userConnected * 0.66)//two thirds of the people must agree to skip the song.
             roomdata.incrementVoteSkip(room);
             if (votes + 1 >= votesRequired)
                 io.to(socket.room).emit('skipSong');
             else
-                io.to(socket.room).emit('updateSkipLabel', userConnected, votes+1);
+                io.to(socket.room).emit('updateSkipLabel', userConnected, votes + 1);
         });
-
+        
         socket.on('controlPlayer', function (func) {
-            if (socket.id == roomdata.get(socket, 'owner')) {         
+            if (socket.id == roomdata.get(socket, 'owner')) {
                 if (func == 'mute')
                     io.to(socket.room).emit('mutePlayer');
                 else if (func == 'pause')
@@ -187,6 +188,12 @@ module.exports.listen = function (server) {
                 else if (func == 'skip')
                     io.to(socket.room).emit('skipSong')
             }
+        });
+        
+        socket.on('testRoomExists', function (room) {
+            var exists = roomdata.roomExists(socket, room);
+
+            io.to(socket.id).emit('showProperChannelModal', room, exists);
         });
 
     }); 
