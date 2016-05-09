@@ -10,7 +10,7 @@ var twitterShareButton = document.getElementById('twitterShareButton');
 var btnSkip = document.getElementById('btnSkip');
 var searchButton = document.getElementById('searchButton');
 var searchResultsDropdown = document.getElementById('searchResultsDropdown');
-var btnCreateChannel = document.getElementById('btnCreateChannel');
+var buttonCreateChannel = document.getElementById('btnCreateChannel');
 var currentContent = null;
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
@@ -40,7 +40,7 @@ btnSkip.addEventListener('click', function () {
     document.getElementById('btnSkip').disabled = true;
 });
 
-btnCreateChannel.addEventListener('click', function () {
+buttonCreateChannel.addEventListener('click', function () {
     var channelName = document.getElementById('createChannelNameField').value;
     var channelPassword = document.getElementById('createChannelPasswordField').value;
     var channelPasswordConfirm = document.getElementById('createChannelPasswordConfirmField').value;
