@@ -32,8 +32,6 @@ module.exports.listen = function (server) {
             console.log("Channel: " + channelList[i]);
         }
         io.to(socket.id).emit('getChannelList', channelList);
-        
-        //This bothers me greatly. See implemetation & connection of the websocket why is # of user always n+1;
         io.to(socket.room).emit('updateSkipLabel', roomdata.get(socket, 'users').length, roomdata.get(socket, 'voteSkip'));
         
         socket.on('disconnect', function () {
@@ -58,7 +56,7 @@ module.exports.listen = function (server) {
                 var connectedUsers = roomdata.get(socket, 'users').length;
                 io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
                 //Owner control if you are the owner.
-                io.to(socket.id).emit('showOwnerControls', socket.id == roomdata.get(socket, 'owner'));
+                io.to(socket.id).emit('showOwnerControls', (socket.id == roomdata.get(socket, 'owner') && (room != defaultRoom)));
                 //Update Channel list and sent it to the user
                 channelList = roomdata.channels;
                 io.emit('getChannelList', channelList);
@@ -97,6 +95,7 @@ module.exports.listen = function (server) {
                     roomdata.joinRoom(socket, socket.room, password);
                     var connectedUsers = roomdata.get(socket, 'users').length;
                     io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
+                    io.to(socket.id).emit('showOwnerControls', (socket.id == roomdata.get(socket, 'owner') && (room != defaultRoom)));
                     //Update Channel list and sent it to the user
                     channelList = roomdata.channels;
                     io.emit('getChannelList', channelList);

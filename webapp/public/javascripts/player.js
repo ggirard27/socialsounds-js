@@ -24,7 +24,7 @@ $(document).ready(function () {
     //Try and access the room mentionned, if it doesn't work then it creates it.    
     if (room && room != '' && room != 'default-room') {
         console.log("Testing room: " + room);
-        SOCIALSOUNDSCLIENT.SOCKETIO.testRoomExists(room);
+        SOCIALSOUNDSCLIENT.SOCKETIO.testRoomExists(room.substring(1));
     }
 });
 

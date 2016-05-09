@@ -118,7 +118,7 @@ socket.on('mutePlayer', function () {
 socket.on('showProperChannelModal', function (room, exists) {
     if (room != '#default-room') {
         exists ? $('#switchChannelModal').modal('show') : $('#createChannelModal').modal('show');
-        exists ? setSwitchRoomModalChannelNameValue(room.substring(1)) : setCreateRoomModalChannelNameValue(room.substring(1));
+        exists ? setSwitchRoomModalChannelNameValue(room) : setCreateRoomModalChannelNameValue(room);
     }
 });
 
