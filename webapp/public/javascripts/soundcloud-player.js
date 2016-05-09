@@ -7,6 +7,7 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
     widget: String(''),
     songMedia: { title: String(''), uploader: String(''), url: String(''), apiId: String(''), provider: String('') },
     songList: [],
+    timeStamp: 0,
     
     
     //TODO: Add a button Open in soundcloud
@@ -49,10 +50,16 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
         }
     },
     
-    pauseSoundCloudPlayer: function () {
+    pauseSoundCloudPlayer: function (isPaused, content, elapsedTime) {
         if (this.widget) {
-            this.widget.pause();
-        }
+            if (isPaused) {
+                this.playSoundCloudContent(content, this.timeStamp);
+            }
+            else {
+                this.widget.pause();
+                this.timeStamp = elapsedTime;
+            }
+        }   
     },
     
     muteSoundCloudPlayer: function (isMuted) {

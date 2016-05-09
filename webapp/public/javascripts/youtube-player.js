@@ -33,7 +33,7 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
             window.onYouTubePlayerAPIReady = function () {
                 self.youtubePlayer = new YT.Player('youtubePlayer', {
                     videoId: self.getYoutubeId(content.url),
-                    playerVars: { 'autoplay': 1, 'controls': 1, 'start': timestamp },
+                    playerVars: { 'autoplay': 1, 'controls': 0  , 'start': timestamp, 'iv_load_policy': 3, 'disabledkb': 0, 'rel': 0, 'showinfo': 0 },
                     events: {
                         'onReady': self.onPlayerReady,
                         'onStateChange': self.onPlayerStateChange
@@ -99,9 +99,11 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
         }
     },
     
-    pauseYoutubeContent: function () {
-        if (this.youtubePlayer) {
-            this.youtubePlayer.pauseVideo();
+    pauseYoutubeContent: function (isPaused) {
+        //TODO(emile): Remove this quickfix and fix it for real.
+        //(document.location.pathname === '/player')
+        if (this.youtubePlayer && (document.location.pathname === '/player')) {
+            isPaused === true ? this.youtubePlayer.playVideo() : this.youtubePlayer.pauseVideo();
         }
     },
     

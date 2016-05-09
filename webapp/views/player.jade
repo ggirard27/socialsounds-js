@@ -1,21 +1,66 @@
 ﻿extends bodycontent
 
 block content
+    .modal.fade.active#createChannelModal(role='dialog', arial-labelled-by='createChannel', tabindex='-1')
+        .modal-dialog.modal-sm(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    h4.modal-title#createChannel Create a channel
+                .modal-body
+                    label Channel name 
+                    input.form-control#createChannelNameField(type='text', name='channelName')
+                    label Channel password 
+                    input.form-control#createChannelPasswordField(type='password', name='channelPassword')
+                    label Confirm password 
+                    input.form-control#createChannelPasswordConfirmField(type='password', name='channelPasswordConfirm')
+                    .alert.alert-danger#createChannelPasswordErrorMessage(style='display: none') Passwords don't match.
+                    .alert.alert-danger#createChannelNameErrorMessage(style='display: none') Channel name already taken, please chose a new one.
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-primary#btnCreateChannel(type='button') Create
+
+    .modal.fade.active#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1')
+        .modal-dialog.modal-sm(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    h4.modal-title#switchChannel Switch channel
+                .modal-body
+                    label Channel name 
+                    input.form-control#switchChannelNameField(type='text', name='channelName')
+                    label Channel password 
+                    input.form-control#switchChannelPasswordField(type='password', name='channelPassword')
+                    .alert.alert-danger#switchChannelPasswordErrorMessage(style='display: none') Invalid password, try again.
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-primary#btnSwitchChannel(type='button') Join
+
     .container-fluid
         .row
             .hidden-xs.hidden-sm.col-md-3.col-lg-3
+                div#ownerDashboard(style="display: none")
+                    span Owner control
+                        .row
+                            table
+                                button.btn#btnDashSkip Skip
+                                button.btn#btnDashMute Mute
+                                button.btn#btnDashPause Pause
                 #contentQueueDiv
-                    span Playlist
-                    ul#contentQueueList
-                    button.btn#btnSkip Skip
+                    span.h4 Playlist
+                    .list-group#contentQueueListGroup
                     .progress
                         .progess-bar
-                            label#labelSkip 0/0 voted person voted to skip
+                            label#labelSkip 0/0 users voted to skip
+                    button.btn#btnSkip Skip
                 #channelListDiv
-                    span Channel Title
+                    span.h4 Channels
                     ul#channelList
                     div
-                        button.btn#btnCreateChannel Create channel                    
+                        button.btn#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel
+
             .col-xs-12.col-sm-12.col-md-9.col-lg-9
                 .row
                     .input-group
@@ -30,6 +75,8 @@ block content
                             button.btn#searchButton(title="Search")
                                 i.fa.fa-search
                             button.btn#startBroadcastButton Start Broadcast
+                .row
+                    .alert.alert-info#contentReadyToBeAddedMessage(style='display: none; margin-bottom: 0px')
                 .row
                     .embed-responsive.embed-responsive-16by9
                         iframe.embed-responsive-item#soundcloudPlayer
@@ -62,15 +109,15 @@ block content
         .row
             .col-xs-12.col-sm-12.hidden-md.hidden-lg#smallPlaylistSection
                 #smallContentQueueDiv
-                    span Playlist
+                    span.h4 Playlist
                     ul#smallContentQueueList
                     .progress
                         .progess-bar
-                            span#smallLabelSkip 0/0 voted person voted to skip
+                            span#smallLabelSkip 0/0 users voted to skip
                     div
                     button.btn#smallBtnSkip Skip
                     #smallChannelListDiv
-                    span Channel Title
+                    span.h4 Channels
                     ul#smallChannelList
                     div
                         button.btn#smallBtnCreateChannel Create channel      

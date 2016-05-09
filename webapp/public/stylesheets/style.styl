@@ -229,12 +229,14 @@ body
     padding-left: 0px !important
     padding-right: 0px !important
 
-a.highlightedElement
-    font-weight: bold
+.highlightedElement
+    background-color: #0079c1 !important
+    color: white !important
 
-#contentQueueList   
+#contentQueueListGroup
     max-height: 350px
     overflow: auto
+
     
 
 /***************************/
@@ -293,6 +295,10 @@ a.highlightedElement
 /***************************/
 /*        Remote           */
 /***************************/
+.selected-content-row-remote
+    position: fixed
+    z-index: 10
+
 .share-buttons-remote
     margin-top: 5px
 
@@ -326,11 +332,12 @@ a.highlightedElement
 
 .playlist-list
     overflow-y: auto
-    height: 75%
+    height: 134px
+    margin-bottom: 0px !important
 
 .channel-list
     overflow-y: auto
-    height: 46%
+    height: 30px
 
 .chat-area-remote
 

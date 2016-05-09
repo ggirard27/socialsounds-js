@@ -19,12 +19,13 @@ exports.dataExists = function (socket, variable) {
     return (this.rooms[socket.roomdata_room].variables[variable] == 'undefined') ? false : true;
 };
 
-exports.createRoom = function (socket, room) {
+exports.createRoom = function (socket, room, password) {
     if (exports.Debug) console.log(socket.id + ": Creating Room: " + room);
     if (this.channels.indexOf(room) < 0) {
         this.channels.push(room);
     }
-    this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [], voteSkip: 0};
+    var isPasswordProtected = (password == '' ? false : true);
+    this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [], voteSkip: 0, passwordProtected: isPasswordProtected, passwordValue: password};
 }
 
 exports.set = function (socket, variable, content) {
@@ -55,12 +56,34 @@ exports.get = function (socket, variable, content) {
     return this.rooms[socket.roomdata_room].variables[variable];
 }
 
-exports.joinRoom = function (socket, room) {
+exports.joinRoom = function (socket, room, password) {
+    
     if (exports.Debug) console.log(socket.id + ": Joining room: " + room);
-    if (!this.roomExists(socket, room)) this.createRoom(socket, room);
-    this.rooms[room].users.push(socket.id);
-    socket.join(room);
-    socket.roomdata_room = room;
+
+    if (!this.roomExists(socket, room)) {
+        this.createRoom(socket, room, password);
+        this.rooms[room].users.push(socket.id);
+        socket.join(room);
+        socket.roomdata_room = room;
+    } 
+    else {
+        if (this.rooms[room].passwordProtected) {
+            if (this.authorize(room, password)) {
+                this.rooms[room].users.push(socket.id);
+                socket.join(room);
+                socket.roomdata_room = room;
+                console.log("authorized request");
+            } 
+            else {
+                console.log("rejected request");
+            }
+        } 
+        else {
+            socket.join(room);
+            socket.roomdata_room = room;
+            console.log("no password, automatically authorized request");
+        }
+    }
 };
 
 exports.clearRoom = function (room) {
@@ -78,6 +101,15 @@ exports.incrementVoteSkip = function (room) {
 exports.clearVoteSkip = function (room) {
     this.rooms[room].voteSkip = 0;
 }
+
+exports.authorize = function (socket, room, password) {
+    if (this.roomExists(socket, room) && this.rooms[room].passwordProtected) {
+        return this.rooms[room].passwordValue == password ? true : false;
+    }
+    // Room does not exist, so all auth attempts are valid.
+    return true;
+}
+
 
 exports.leaveRoom = function (socket) {
     var room = socket.roomdata_room;

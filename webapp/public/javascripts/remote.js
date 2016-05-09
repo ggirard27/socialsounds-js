@@ -2,39 +2,60 @@
 var contentProviderList = ['soundcloud', 'vimeo', 'youtube']; // This needs to go server side when we have time. - GG
 
 var addContentButton = document.getElementById('addContentButton');
+var startBroadcastButton = document.getElementById('startBroadcastButton');
 var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
-var btnMuteContent = document.getElementById('btnMuteContent');
 var fbShareButton = document.getElementById('fbShareButton');
 var gpShareButton = document.getElementById('gpShareButton');
 var twitterShareButton = document.getElementById('twitterShareButton');
 var btnSkip = document.getElementById('btnSkip');
 var searchButton = document.getElementById('searchButton');
 var searchResultsDropdown = document.getElementById('searchResultsDropdown');
+var btnCreateChannel = document.getElementById('btnCreateChannel');
 var currentContent = null;
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
+//On page load, looks if we have a certain room to access.
 $(document).ready(function () {
-    var room = window.location.search;
+    var room = window.location.hash;
     //Try and access the room mentionned, if it doesn't work then it creates it.    
-    if (room) {
-        SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel(room.substring(1));
+    if (room && room != '' && room != 'default-room') {
+        console.log("Testing room: " + room);
+        SOCIALSOUNDSCLIENT.SOCKETIO.testRoomExists(room);
     }
 });
+
+//btnDashSkip.addEventListener('click', function () {
+//    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
+//});
+//btnDashMute.addEventListener('click', function () {
+//    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('mute');
+//});
+//btnDashPause.addEventListener('click', function () {
+//    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('pause');
+//});
 
 btnSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.voteSkip();
     document.getElementById('btnSkip').disabled = true;
-    document.getElementById('smallBtnSkip').disabled = true;
 });
 
 btnCreateChannel.addEventListener('click', function () {
-    if (usernameChat) {
-        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(usernameChat.replace(/ /g, ''));  //Removing the spaces because it breaks the swtich channel event.
-        $('#chatBox').append('<li> --- You have joined the channel ' + usernameChat.replace(/ /g, '') + '</li>');
-        var chat = document.getElementById('chatBox');
-        chat.scrollTop = chat.scrollHeight;
+    var channelName = document.getElementById('createChannelNameField').value;
+    var channelPassword = document.getElementById('createChannelPasswordField').value;
+    var channelPasswordConfirm = document.getElementById('createChannelPasswordConfirmField').value;
+    if (channelPassword == channelPasswordConfirm) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(channelName.replace(/ /g, ''), channelPassword);  //Removing the spaces because it breaks the swtich channel event.
+    } else {
+        $('#createChannelPasswordErrorMessage').show();
     }
+
+});
+
+btnSwitchChannel.addEventListener('click', function () {
+    var channelName = document.getElementById('switchChannelNameField').value;
+    var channelPassword = document.getElementById('switchChannelPasswordField').value;
+    SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channelName, channelPassword);  //Removing the spaces because it breaks the swtich channel event.
 });
 
 searchButton.addEventListener('click', function () {
@@ -54,6 +75,18 @@ searchBarInput.addEventListener('keyup', function (e) {
 });
 
 
+createChannelPasswordConfirmField.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnCreateChannel.click();
+    }
+});
+
+switchChannelPasswordField.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnSwitchChannel.click();
+    }
+});
+
 inputChat.addEventListener('keyup', function (e) {
     var mess = document.getElementById('inputChat').value;
     if (e.keyCode == 13 && mess) {
@@ -62,12 +95,31 @@ inputChat.addEventListener('keyup', function (e) {
     }
 });
 
+function showHideBroadcastButton() {
+    var style = searchButton.className;
+    
+    if (startBroadcastButton.style.display === "none") {
+        startBroadcastButton.style.display = "inline-block";
+    }
+    else {
+        startBroadcastButton.style.display = "none";
+    }
+};
+
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
     if (searchResultsDropdownSelectedItem) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
         searchResultsDropdownSelectedItem = "";
+        $('#contentReadyToBeAddedMessage').hide();
+        $('#addContentButton').removeClass('btn-info');
     }
+});
+
+startBroadcastButton.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
+    //TODO(emile): uncomment this line when we know that the queue is empty
+    //showHideBroadcastButton();
 });
 
 btnOpenInBrowser.addEventListener('click', function () {
@@ -92,102 +144,114 @@ function getEventTarget(e) {
 searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);
     var selectedContentUrl = target.getAttribute('data-link');
-    //document.getElementById('searchBarInput').value = selectedContentUrl;
+    var selectedContentTitle = target.innerHTML;
+    console.log("should be printing message: " + selectedContentTitle);
+    $('#contentReadyToBeAddedMessage').text('Currently selected : ' + selectedContentTitle);
+    $('#contentReadyToBeAddedMessage').show();
+    $('#addContentButton').addClass('btn-info');
     searchResultsDropdownSelectedItem = selectedContentUrl;
 });
 
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
-    //isMuted: Boolean(false),
+    isMuted: Boolean(false),
+    isPaused: Boolean(false),
     
     
-    //playContent: function (content, timestamp) {
-    //    console.log("Now Playing: " + content.title);
-    //    var self = this;
-    //    // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
-    //    // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
-    //    // which should take care of stopping the currently playing media before calling the playContent function. - GG
-    //    this.pauseContent();
-    //    currentContent = content;
-    //    self.toggleHighlightContentInList(currentContent);
+    playContent: function (content, timestamp) {
+        console.log("Now Playing: " + content.title);
+        var self = this;
+        // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
+        // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
+        // which should take care of stopping the currently playing media before calling the playContent function. - GG
+        this.pauseContent();
+        currentContent = content;
+        self.toggleHighlightContentInList(currentContent);
         
-    //    if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
-    //        // nothing to do
-    //    } 
-    //    else if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer.getPlayerState() == 1) {
-    //        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
-    //    }
-    //    // until here
+        if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
+            // nothing to do
+        } 
+        else if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer.getPlayerState() == 1) {
+            SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
+        }
+        // until here
         
-    //    if (contentProviderList.indexOf(content.provider) > -1) {
+        if (contentProviderList.indexOf(content.provider) > -1) {
             
-    //        self.showPlayer(content.provider);
-    //        switch (content.provider) {
-    //            case 'soundcloud':
-    //                SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(content, timestamp);
-    //                break;
-    //            case 'vimeo':
-    //                playVimeoContent(content);
-    //                break;
-    //            case 'youtube':
-    //                SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content, timestamp);
-    //                break;
-    //            default :
-    //                console.log("Oops, something went wrong while trying to launch: " + content.provider);
-    //                break;
-    //        };
-    //        self.updateSocialMediaShareButtonsUrl();
-    //    } 
-    //    else {
-    //        console.log("Invalid content provider passed to player: " + content.provider);
-    //    };
-    //},
+            self.showPlayer(content.provider);
+            switch (content.provider) {
+                case 'soundcloud':
+                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(content, timestamp);
+                    break;
+                case 'vimeo':
+                    playVimeoContent(content);
+                    break;
+                case 'youtube':
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content, timestamp);
+                    break;
+                default :
+                    console.log("Oops, something went wrong while trying to launch: " + content.provider);
+                    break;
+            };
+            self.updateSocialMediaShareButtonsUrl();
+        } 
+        else {
+            console.log("Invalid content provider passed to player: " + content.provider);
+        };
+    },
     
-    //getNextContent: function () {
-    //    var nextContentUrl = SOCIALSOUNDSCLIENT.SOCKETIO.getNextContentFromServer();
-    //},
+    getNextContent: function () {
+        var nextContentUrl = SOCIALSOUNDSCLIENT.SOCKETIO.getNextContentFromServer();
+    },
     
-    ////Will eventually be removed when we will be able to join in a song at any moment.
-    //pauseContent: function () {
-    //    if (currentContent) {
-    //        if (contentProviderList.indexOf(currentContent.provider) > -1) {
-    //            switch (currentContent.provider) {
-    //                case 'soundcloud':
-    //                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
-    //                    break;
-    //                case 'vimeo':
-    //                    playVimeoContent(content);
-    //                    break;
-    //                case 'youtube':
-    //                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
-    //                    break;
-    //            }
-    //        }
-    //    }
-    //},
+    //Will eventually be removed when we will be able to join in a song at any moment.
+    pauseContent: function (elapsedTime) {
+        if (currentContent) {
+            if (contentProviderList.indexOf(currentContent.provider) > -1) {
+                switch (currentContent.provider) {
+                    case 'soundcloud':
+                        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer(this.isPaused, currentContent, elapsedTime);
+                        break;
+                    case 'vimeo':
+                        playVimeoContent(content);
+                        break;
+                    case 'youtube':
+                        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent(this.isPaused);
+                        break;
+                }
+                this.isPaused = !this.isPaused;
+            }
+        }
+    },
     
-    //showPlayer: function (content) {
-    //    if (contentProviderList.indexOf(content) > -1) {
-    //        for (var index = 0; index < contentProviderList.length; index++) {
-    //            if (contentProviderList[index] == content) {
-    //                $(document.getElementById(contentProviderList[index] + 'Player')).show();
-    //            } 
-    //            else {
-    //                $(document.getElementById(contentProviderList[index] + 'Player')).hide();
-    //            };
-    //        };
-    //    }
-    //    else {
-    //        console.log("Invalid content provider passed to showPlayer: " + content);
-    //    }
-    //},
+    muteContent: function () {
+        var self = this;
+        self.setPlayerMuteState(!self.isMuted);
+        self.applyPlayerMuteState();
+    },
+    
+    showPlayer: function (content) {
+        if (contentProviderList.indexOf(content) > -1) {
+            for (var index = 0; index < contentProviderList.length; index++) {
+                if (contentProviderList[index] == content) {
+                    $(document.getElementById(contentProviderList[index] + 'Player')).show();
+                } 
+                else {
+                    $(document.getElementById(contentProviderList[index] + 'Player')).hide();
+                };
+            };
+        }
+        else {
+            console.log("Invalid content provider passed to showPlayer: " + content);
+        }
+    },
     
     
-    //hidePlayer: function () {
-    //    for (var index = 0; index < contentProviderList.length; index++) {
-    //        $(document.getElementById(contentProviderList[index] + 'Player')).hide();
-    //    };
-    //},
+    hidePlayer: function () {
+        for (var index = 0; index < contentProviderList.length; index++) {
+            $(document.getElementById(contentProviderList[index] + 'Player')).hide();
+        };
+    },
     
     // It extracts the host name from the url, trust me it works, as long as it IS a valid url. - GG
     getHostName: function (url) {
@@ -261,7 +325,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     updateGoogleShareButtonUrl: function () {
         gpShareButton.setAttribute('data-href', currentContent.url);
-        gpShareButton.innerHTML = '<a class="g-plus" data-action="share" data-annotation="none" data-height="24" data-href="' + currentContent.url + '"</a>';
+        gpShareButton.innerHTML = '<a class="g-plus" data-prefilltext="test post, please ignore" data-action="share" data-annotation="none" data-height="24" data-href="' + currentContent.url + '"</a>';
         gapi.plus.go();
     },
     
@@ -270,34 +334,34 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         twttr.widgets.load();
     },
     
-    //getPlayerMuteState: function () {
-    //    return this.isMuted;
-    //},
+    getPlayerMuteState: function () {
+        return this.isMuted;
+    },
     
-    //setPlayerMuteState: function (muteState) {
-    //    if (muteState != null) {
-    //        this.isMuted = muteState;
-    //    }
-    //},
+    setPlayerMuteState: function (muteState) {
+        if (muteState != null) {
+            this.isMuted = muteState;
+        }
+    },
     
-    //applyPlayerMuteState: function () {
-    //    var self = this;
-    //    if (currentContent) {
-    //        switch (currentContent.provider) {
-    //            case 'soundcloud':
-    //                SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.muteSoundCloudPlayer(self.getPlayerMuteState());
-    //                break;
-    //            case 'vimeo':
-    //                break;
-    //            case 'youtube':
-    //                SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.muteYoutubePlayer(self.getPlayerMuteState());
-    //                break;
-    //            default :
-    //                console.log('Oops, something went wrong while trying to mute : ' + currentContent.provider);
-    //                break;
-    //        };
-    //    }
-    //},
+    applyPlayerMuteState: function () {
+        var self = this;
+        if (currentContent) {
+            switch (currentContent.provider) {
+                case 'soundcloud':
+                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.muteSoundCloudPlayer(self.getPlayerMuteState());
+                    break;
+                case 'vimeo':
+                    break;
+                case 'youtube':
+                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.muteYoutubePlayer(self.getPlayerMuteState());
+                    break;
+                default :
+                    console.log('Oops, something went wrong while trying to mute : ' + currentContent.provider);
+                    break;
+            };
+        }
+    },
     
     renderSearchResults: function (results, provider) {
         searchResultsDropdown = document.getElementById('searchResultsDropdown');
@@ -307,7 +371,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                 var li = document.createElement("LI");
                 var a = document.createElement("A");
                 
-                a.href = "#";
                 a.text = provider + " - " + results[i].title;
                 a.setAttribute('data-link', results[i].url);
                 
@@ -318,7 +381,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         else {
             var li = document.createElement("LI");
             var a = document.createElement("A");
-            a.href = "#";
             a.text = "No Result";
             a.setAttribute('data-link', "");
             
@@ -341,21 +403,8 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
         
         var htmlContent = '';
-        htmlContent += '<li > <img src="images/' + content.provider + '-playlist.png"/> <a href="' + content.url + '" target="_blank" class="' + id + '"> ' + content.title + '</a></li>';
-        $('#contentQueueList').append(htmlContent);
-        
-        var node = document.createElement("LI");
-        var img = document.createElement("IMG");
-        var aText = document.createElement("A");
-        img.src = "images/" + content.provider + "-playlist.png";
-        aText.href = content.url;
-        aText.target = "_blank";
-        aText.text = " " + content.title;
-        
-        node.appendChild(img);
-        node.appendChild(aText);
-        
-        document.getElementById('smallContentQueueList').appendChild(node);
+        htmlContent += '<a href="' + content.url + '" target="_blank" class="' + id + ' list-group-item"> <img src="images/' + content.provider + '-playlist.png"/> ' + content.title + '</a></li>';
+        $('#contentQueueListGroup').append(htmlContent);
     },
     
     displayContentList: function (contentList) {
@@ -372,12 +421,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
     },
     
-    switchChannel: function (channel) {
-        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel);
-        //Should verify the user is actually switching channel..
-        $('#chatBox').append('<li> --- You have joined the channel ' + channel + '</li>');
-        var chat = document.getElementById('chatBox');
-        chat.scrollTop = chat.scrollHeight;
+    switchChannel: function (channel, password) {
+        password = (password == null ? "" : password);
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel, password);
     },
     
     toggleHighlightContentInList: function (content) {
@@ -395,8 +441,8 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         
         $('.' + id).each(function (index, element) {
             
-            if (this.className != id + ' alreadyPlayed') {
-                this.className = id + ' alreadyPlayed highlightedElement';
+            if (this.className != id + ' alreadyPlayed list-group-item') {
+                this.className = id + ' alreadyPlayed highlightedElement list-group-item';
                 return false;
             }
         });

@@ -18,12 +18,24 @@ var currentContent = null;
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
+//On page load, looks if we have a certain room to access.
 $(document).ready(function () {
-    var room = window.location.search;
+    var room = window.location.hash;
     //Try and access the room mentionned, if it doesn't work then it creates it.    
-    if (room) {
-        SOCIALSOUNDSCLIENT.BASEPLAYER.switchChannel(room.substring(1));
+    if (room && room != '' && room != 'default-room') {
+        console.log("Testing room: " + room);
+        SOCIALSOUNDSCLIENT.SOCKETIO.testRoomExists(room);
     }
+});
+
+btnDashSkip.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
+});
+btnDashMute.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('mute');
+});
+btnDashPause.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('pause');
 });
 
 btnSkip.addEventListener('click', function () {
@@ -37,13 +49,24 @@ smallBtnSkip.addEventListener('click', function () {
 });
 
 btnCreateChannel.addEventListener('click', function () {
-    if (usernameChat) {
-        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(usernameChat.replace(/ /g, ''));  //Removing the spaces because it breaks the swtich channel event.
-        $('#chatBox').append('<li> --- You have joined the channel ' + usernameChat.replace(/ /g, '') + '</li>');
-        var chat = document.getElementById('chatBox');
-        chat.scrollTop = chat.scrollHeight;
+    var channelName = document.getElementById('createChannelNameField').value;
+    var channelPassword = document.getElementById('createChannelPasswordField').value;
+    var channelPasswordConfirm = document.getElementById('createChannelPasswordConfirmField').value;
+    if (channelPassword == channelPasswordConfirm) {
+        SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(channelName.replace(/ /g, ''), channelPassword);  //Removing the spaces because it breaks the swtich channel event.
+    } else {
+        $('#createChannelPasswordErrorMessage').show();
     }
+
 });
+
+btnSwitchChannel.addEventListener('click', function () {
+    var channelName = document.getElementById('switchChannelNameField').value;
+    var channelPassword = document.getElementById('switchChannelPasswordField').value;
+    SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channelName, channelPassword);  //Removing the spaces because it breaks the swtich channel event.
+});
+
+
 //So the mobile button also works.
 smallBtnCreateChannel.addEventListener('click', function () {
     btnCreateChannel.click();
@@ -65,6 +88,18 @@ searchBarInput.addEventListener('keyup', function (e) {
     }
 });
 
+
+createChannelPasswordConfirmField.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnCreateChannel.click();
+    }
+});
+
+switchChannelPasswordField.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnSwitchChannel.click();
+    }
+});
 
 inputChat.addEventListener('keyup', function (e) {
     var mess = document.getElementById('inputChat').value;
@@ -106,6 +141,8 @@ addContentButton.addEventListener('click', function () {
     if (searchResultsDropdownSelectedItem) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
         searchResultsDropdownSelectedItem = "";
+        $('#contentReadyToBeAddedMessage').hide();
+        $('#addContentButton').removeClass('btn-info');
     }
 });
 
@@ -144,13 +181,18 @@ function getEventTarget(e) {
 searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);
     var selectedContentUrl = target.getAttribute('data-link');
-    //document.getElementById('searchBarInput').value = selectedContentUrl;
+    var selectedContentTitle = target.innerHTML;
+    console.log("should be printing message: " + selectedContentTitle);
+    $('#contentReadyToBeAddedMessage').text('Currently selected : ' + selectedContentTitle);
+    $('#contentReadyToBeAddedMessage').show();
+    $('#addContentButton').addClass('btn-info');
     searchResultsDropdownSelectedItem = selectedContentUrl;
 });
 
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     isMuted: Boolean(false),
+    isPaused: Boolean(false),
     
     
     playContent: function (content, timestamp) {
@@ -200,22 +242,29 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     },
     
     //Will eventually be removed when we will be able to join in a song at any moment.
-    pauseContent: function () {
+    pauseContent: function (elapsedTime) {
         if (currentContent) {
             if (contentProviderList.indexOf(currentContent.provider) > -1) {
                 switch (currentContent.provider) {
                     case 'soundcloud':
-                        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer();
+                        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer(this.isPaused, currentContent, elapsedTime);
                         break;
                     case 'vimeo':
                         playVimeoContent(content);
                         break;
                     case 'youtube':
-                        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
+                        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent(this.isPaused);
                         break;
                 }
+                this.isPaused = !this.isPaused;
             }
         }
+    },
+    
+    muteContent: function () {
+        var self = this;
+        self.setPlayerMuteState(!self.isMuted);
+        self.applyPlayerMuteState();
     },
     
     showPlayer: function (content) {
@@ -313,7 +362,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     updateGoogleShareButtonUrl: function () {
         gpShareButton.setAttribute('data-href', currentContent.url);
-        gpShareButton.innerHTML = '<a class="g-plus" data-action="share" data-annotation="none" data-height="24" data-href="' + currentContent.url + '"</a>';
+        gpShareButton.innerHTML = '<a class="g-plus" data-prefilltext="test post, please ignore" data-action="share" data-annotation="none" data-height="24" data-href="' + currentContent.url + '"</a>';
         gapi.plus.go();
     },
     
@@ -359,7 +408,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                 var li = document.createElement("LI");
                 var a = document.createElement("A");
                 
-                a.href = "#";
                 a.text = provider + " - " + results[i].title;
                 a.setAttribute('data-link', results[i].url);
                 
@@ -370,7 +418,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         else {
             var li = document.createElement("LI");
             var a = document.createElement("A");
-            a.href = "#";
             a.text = "No Result";
             a.setAttribute('data-link', "");
             
@@ -393,8 +440,8 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
 
         var htmlContent = '';
-        htmlContent += '<li > <img src="images/' + content.provider + '-playlist.png"/> <a href="' + content.url + '" target="_blank" class="' + id + '"> ' + content.title + '</a></li>';
-        $('#contentQueueList').append(htmlContent);
+        htmlContent += '<a href="' + content.url + '" target="_blank" class="' + id + ' list-group-item"> <img src="images/' + content.provider + '-playlist.png"/> ' + content.title + '</a></li>';
+        $('#contentQueueListGroup').append(htmlContent);
         
         var node = document.createElement("LI");
         var img = document.createElement("IMG");
@@ -424,12 +471,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
     },
     
-    switchChannel: function (channel) {
-        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel);
-        //Should verify the user is actually switching channel..
-        $('#chatBox').append('<li> --- You have joined the channel ' + channel + '</li>');
-        var chat = document.getElementById('chatBox');
-        chat.scrollTop = chat.scrollHeight;
+    switchChannel: function (channel, password) {
+        password = (password == null ? "" : password);
+        SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channel, password);
     },
     
     toggleHighlightContentInList: function (content) {
@@ -447,8 +491,8 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
  
         $('.' + id).each(function(index, element) {
 
-            if (this.className != id + ' alreadyPlayed') {
-                this.className = id + ' alreadyPlayed highlightedElement';
+            if (this.className != id + ' alreadyPlayed list-group-item') {
+                this.className = id + ' alreadyPlayed highlightedElement list-group-item';
                 return false;
             }
         });

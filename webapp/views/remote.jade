@@ -1,6 +1,43 @@
 ﻿extends bodycontent
 
 block content
+    .modal.fade.active#createChannelModal(role='dialog', arial-labelled-by='createChannel', tabindex='-1')
+        .modal-dialog.modal-sm(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    h4.modal-title#createChannel Create a channel
+                .modal-body
+                    label Channel name 
+                    input.form-control#createChannelNameField(type='text', name='channelName')
+                    label Channel password 
+                    input.form-control#createChannelPasswordField(type='password', name='channelPassword')
+                    label Confirm password 
+                    input.form-control#createChannelPasswordConfirmField(type='password', name='channelPasswordConfirm')
+                    .alert.alert-danger#createChannelPasswordErrorMessage(style='display: none') Passwords don't match.
+                    .alert.alert-danger#createChannelNameErrorMessage(style='display: none') Channel name already taken, please chose a new one.
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-primary#btnCreateChannel(type='button') Create
+
+    .modal.fade.active#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1')
+        .modal-dialog.modal-sm(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    h4.modal-title#switchChannel Switch channel
+                .modal-body
+                    label Channel name 
+                    input.form-control#switchChannelNameField(type='text', name='channelName')
+                    label Channel password 
+                    input.form-control#switchChannelPasswordField(type='password', name='channelPassword')
+                    .alert.alert-danger#switchChannelPasswordErrorMessage(style='display: none') Invalid password, try again.
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-primary#btnSwitchChannel(type='button') Join
+
     .container-fluid
         .row.search-section-remote
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
@@ -16,6 +53,9 @@ block content
                         .input-group-btn
                             button.btn#searchButton(title="Search")
                                 i.fa.fa-search
+                            button.btn#startBroadcastButton Start Broadcast
+                .row.selected-content-row-remote
+                    .alert.alert-info#contentReadyToBeAddedMessage(style='display: none; margin-bottom: 0px')
                 .row.share-buttons-remote
                     .col-xs-10.col-sm-10.col-md-10.col-lg-10.no-padding-style
                         .pull-left
@@ -34,8 +74,7 @@ block content
                 .row.playlist-content-section-remote
                     .row
                         span.h4 Playlist
-                    .row.playlist-list
-                        ol#contentQueueList
+                    .list-group.playlist-list#contentQueueListGroup
                     .row
                         button.btn.pull-right#btnSkip Skip
                     .row
