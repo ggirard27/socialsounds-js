@@ -1,0 +1,70 @@
+﻿extends bodycontent
+
+block content
+    .container-fluid
+        .row.search-section-remote
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                .row
+                    .input-group
+                        .input-group-btn#searchBar
+                            button.btn#addContentButton(title="Add to the playlist")
+                                i.fa.fa-plus
+                            button.btn.dropdown-toggle#searchResultsDropdownBtn(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                                span.caret
+                            ul.dropdown-menu#searchResultsDropdown
+                        input.form-control#searchBarInput(type='search' placeholder='Search or enter url')
+                        .input-group-btn
+                            button.btn#searchButton(title="Search")
+                                i.fa.fa-search
+                .row.share-buttons-remote
+                    .col-xs-10.col-sm-10.col-md-10.col-lg-10.no-padding-style
+                        .pull-left
+                            #fb-root
+                                a.fb-share-button#fbShareButton(data-href='http://socialsounds.azurewebsites.net', data-layout='button')
+                            #gpShareButton
+                                a.g-plus(data-action='share', data-annotation='none', data-height='24', data-href='http://socialsounds.azurewebsites.net')
+                            #twitterShareButton
+                                a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
+                    .col-xs-2.col-sm-2.col-md-2.col-lg-2.no-padding-style
+                        .pull-right
+                            button.btn#btnOpenInBrowser(title="Open this content in new window")
+                                i.fa.fa-external-link
+        .row.content-section-remote
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12(style="height: 100%;")
+                .row.playlist-content-section-remote
+                    .row
+                        span.h4 Playlist
+                    .row.playlist-list
+                        ol#contentQueueList
+                    .row
+                        button.btn.pull-right#btnSkip Skip
+                    .row
+                        .progress
+                            .progess-bar(role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100")
+                                span#labelSkip 0/0 voted person voted to skip
+                .row.channel-list-content-section-remote
+                    .row
+                        span.h4 Channels
+                    .row.channel-list
+                        ol#channelList
+                    .row
+                        button.btn.pull-right#btnCreateChannel Create channel
+        .row.chat-section-remote
+            .chat-area-remote.no-padding-style#chatSection
+                .chat-box-remote.ul#chatBox
+                input.input-chat-remote#inputChat(PlaceHolder="Send a message" type="text")
+
+append bodyscripts
+    script(type='text/javascript').
+        var userCookie = !{JSON.stringify(user)}
+    script(src='https://cdn.socket.io/socket.io-1.4.5.js')
+    script(src='/javascripts/socketio-client.js')
+    script(src='/javascripts/remote.js')
+    script(src='/javascripts/youtube-player.js')
+    script(src='http://connect.soundcloud.com/sdk/sdk-3.0.0.js')
+    script(src='https://w.soundcloud.com/player/api.js')
+    script(src='/javascripts/soundcloud-player.js')
+    script(src='/javascripts/facebook-social-plugin.js')
+    script(src='https://apis.google.com/js/client.js?onload=googleApiClientReady')
+    script(src='https://apis.google.com/js/platform.js' async defer)
+    script(src='/javascripts/twitter-social-plugin.js')

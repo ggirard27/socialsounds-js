@@ -7,11 +7,10 @@ block content
                 #contentQueueDiv
                     span Playlist
                     ul#contentQueueList
+                    button.btn#btnSkip Skip
                     .progress
                         .progess-bar
                             label#labelSkip 0/0 voted person voted to skip
-                    div
-                    button.btn#btnSkip Skip
                 #channelListDiv
                     span Channel Title
                     ul#channelList
@@ -57,13 +56,13 @@ block content
                                 i.fa.fa-volume-off
                                 //i.fa.fa-volume-up
         .row
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12#chatSection
-                .ul#chatBox
-                input#inputChat(PlaceHolder="Send a message" type="text")
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12.chat-section#chatSection
+                .chat-box.ul#chatBox
+                input.input-chat#inputChat(PlaceHolder="Send a message" type="text")
         .row
             .col-xs-12.col-sm-12.hidden-md.hidden-lg#smallPlaylistSection
                 #smallContentQueueDiv
-                    span Channel Title
+                    span Playlist
                     ul#smallContentQueueList
                     .progress
                         .progess-bar

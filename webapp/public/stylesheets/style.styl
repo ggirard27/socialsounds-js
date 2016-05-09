@@ -1,7 +1,10 @@
 ﻿/*****************************/
 /*          Globals          */
 /*****************************/
+html, #wrapper, #contentSection, .container-fluid
+    height: 100%
 body
+    height: 100%
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
 
 .btn, .well, .form-control, .jumbotron
@@ -15,6 +18,9 @@ body
 @css {
     /* make sidebar nav vertical */ 
     @media (min-width: 992px) {
+      #navbarSocialsounds{
+        width: 70px;
+      }
       .sidebar-nav .navbar .navbar-collapse {
         padding: 0;
         max-height: none;
@@ -42,7 +48,7 @@ body
         bottom: 0;
         position: fixed;
       }
-      #content-section {
+      #contentSection {
         margin-left: 70px;
         padding-top: 12px;
         padding-bottom: 12px;
@@ -56,74 +62,77 @@ body
     /*
     http://work.smarchal.com/twbscolor/css/e74c3cc0392becf0f1ffbbbc0
     */
-    #navbar-socialsounds.navbar-default {
+    #navbarSocialsounds.navbar-default {
       background-color: #002d56;
       border-color: #0079c1;
       border-radius: 0;
       border: 0;
     }
-    #navbar-socialsounds.navbar-default .navbar-brand {
+    #navbarSocialsounds.navbar-default .navbar-brand {
       color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-brand:hover,
-    #navbar-socialsounds.navbar-default .navbar-brand:focus {
+    #navbarSocialsounds.navbar-default .navbar-brand:hover,
+    #navbarSocialsounds.navbar-default .navbar-brand:focus {
       color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-text {
+    #navbarSocialsounds.navbar-default .navbar-text {
       color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-nav > li > a {
+    #navbarSocialsounds.navbar-default .navbar-nav > li > a {
       color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-nav > li > a:hover,
-    #navbar-socialsounds.navbar-default .navbar-nav > li > a:focus {
+    #navbarSocialsounds.navbar-default .navbar-nav > li > a:hover,
+    #navbarSocialsounds.navbar-default .navbar-nav > li > a:focus {
       background-color: #264c6f;
       color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-nav > .active > a,
-    #navbar-socialsounds.navbar-default .navbar-nav > .active > a:hover,
-    #navbar-socialsounds.navbar-default .navbar-nav > .active > a:focus {
+    #navbarSocialsounds.navbar-default .navbar-nav > .active > a,
+    #navbarSocialsounds.navbar-default .navbar-nav > .active > a:hover,
+    #navbarSocialsounds.navbar-default .navbar-nav > .active > a:focus {
       background-color: #0079c1;
       color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-nav > .open > a,
-    #navbar-socialsounds.navbar-default .navbar-nav > .open > a:hover,
-    #navbar-socialsounds.navbar-default .navbar-nav > .open > a:focus {
+    #navbarSocialsounds.navbar-default .navbar-nav > .open > a,
+    #navbarSocialsounds.navbar-default .navbar-nav > .open > a:hover,
+    #navbarSocialsounds.navbar-default .navbar-nav > .open > a:focus {
       background-color: #0079c1;
       color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-toggle {
+    #navbarSocialsounds.navbar-default .navbar-toggle {
       border-color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-toggle:hover,
-    #navbar-socialsounds.navbar-default .navbar-toggle:focus {
+    #navbarSocialsounds.navbar-default .navbar-toggle:hover,
+    #navbarSocialsounds.navbar-default .navbar-toggle:focus {
       background-color: #264c6f;
     }
-    #navbar-socialsounds.navbar-default .navbar-toggle .icon-bar {
+    #navbarSocialsounds.navbar-default .navbar-toggle .icon-bar {
       background-color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-collapse,
-    #navbar-socialsounds.navbar-default .navbar-form {
+    #navbarSocialsounds.navbar-default .navbar-collapse,
+    #navbarSocialsounds.navbar-default .navbar-form {
       border-color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-link {
+    #navbarSocialsounds.navbar-default .navbar-link {
       color: #ffffff;
     }
-    #navbar-socialsounds.navbar-default .navbar-link:hover {
+    #navbarSocialsounds.navbar-default .navbar-link:hover {
       color: #002d56;
     }
 
     @media (max-width: 992px) {
-      #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+      #contentSection {
+        padding-top: 55px;
+      }
+      #navbarSocialsounds.navbar-default .navbar-nav .open .dropdown-menu > li > a {
         color: #ffffff;
       }
-      #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
-      #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+      #navbarSocialsounds.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+      #navbarSocialsounds.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
         color: #002d56;
       }
-      #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
-      #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-      #navbar-socialsounds.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+      #navbarSocialsounds.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+      #navbarSocialsounds.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+      #navbarSocialsounds.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
         color: #002d56;
         background-color: #0079c1;
       }
@@ -232,10 +241,10 @@ a.highlightedElement
 /*          Chat           */
 /***************************/
 @media (min-width: 992px)
-    #chatSection
+    .chat-section
         display: block !important
 
-#chatSection
+.chat-section
     min-height: 320px
     max-height: 400px
     width: 100%
@@ -244,10 +253,9 @@ a.highlightedElement
 
 /* Messages */
 #chatArea
-    min-height: 290px
-    max-height: 370px
+    height: 370px
 
-#chatBox
+.chat-box
     background-color: #DDDDDD
     min-height: 290px
     max-height: 370px
@@ -257,22 +265,22 @@ a.highlightedElement
     list-style-type: none
     font-size: large
 
-#chatBox.ul li
+.chat-box .ul li
     padding: 5px 10px 5px 10px
 
-#chatBox.ul li:nth-child(even)
+.chat-box .ul li:nth-child(even)
     background-color: #FFFFFF
 
-#chatBox.ul li:nth-child(off)
+.chat-box .ul li:nth-child(off)
     background: transparent
 
-#chatBox.ul li span
+.chat-box .ul li span
     width: 100%
     display: inline-block
     overflow-wrap: break-word
 
 /* Input */
-#inputChat
+.input-chat
     left: 0
     right: 0
     bottom: 0
@@ -281,3 +289,77 @@ a.highlightedElement
     padding-left: 10px
     width: 100%
     border: 1px solid #000
+
+/***************************/
+/*        Remote           */
+/***************************/
+.share-buttons-remote
+    margin-top: 5px
+
+.search-section-remote
+/*    position: fixed
+    margin-right: 0 !important */
+
+.content-section-remote
+    top: 128px
+    bottom: 200px
+    position: fixed
+    width: 100%
+    overflow-y: auto
+
+.chat-section-remote
+    bottom: 0
+    height: 200px
+    position: fixed
+    width: 100%
+    background-color: #f2f2f2
+
+.playlist-content-section-remote
+    height: 75%
+    margin-right: 0px !important
+    margin-left: 0px !important
+
+.channel-list-content-section-remote
+    height: 25%
+    margin-right: 0px !important
+    margin-left: 0px !important
+
+.playlist-list
+    overflow-y: auto
+    height: 75%
+
+.channel-list
+    overflow-y: auto
+    height: 46%
+
+.chat-area-remote
+
+.chat-box-remote
+    top: 0
+    right: 0
+    height: 160px
+    margin: 0px
+    padding-left: 5px
+    overflow-y: auto
+    list-style-type: none
+
+.chat-box-remote .ul li
+    padding: 5px 10px 5px 10px
+
+.chat-box-remote .ul li span
+    width: 100%
+    display: inline-block
+    overflow-wrap: break-word
+
+.input-chat-remote
+    left: 0
+    right: 0
+    bottom: 0
+    border: 0
+    width: 100%
+    position: absolute
+    height: 40px
+    margin: 0
+    padding-left: 15px
+    padding-bottom: 10px
+    box-sizing: border-box

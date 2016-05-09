@@ -3,7 +3,7 @@
 block wrapperContent
     #navigation-section
         .sidebar-nav
-            .navbar.navbar-default#navbar-socialsounds(role="navigation")
+            .navbar.navbar-default.navbar-fixed-top#navbarSocialsounds(role="navigation")
                 .navbar-header
                     button.navbar-toggle(type="button" data-toggle="collapse" data-target=".sidebar-navbar-collapse")
                         span.sr-only Toggle navigation
@@ -16,9 +16,11 @@ block wrapperContent
                         block sidebarcontent
                             li#playerLink
                                 a(href='/player') Player
+                            li#remoteLink
+                                a(href='/remote') Remote
                             li#profileLink
                                 a(href='/profile') Profile
-    #content-section
+    #contentSection
         block content
 block bodyscripts
     script(src='/javascripts/bodyContent.js')

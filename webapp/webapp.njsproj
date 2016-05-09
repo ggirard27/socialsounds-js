@@ -43,6 +43,7 @@
     <Compile Include="models\user.js" />
     <Compile Include="public\javascripts\facebook-social-plugin.js" />
     <Compile Include="public\javascripts\bodyContent.js" />
+    <Compile Include="public\javascripts\remote.js" />
     <Compile Include="public\javascripts\profile.js" />
     <Compile Include="public\javascripts\socketio-client.js" />
     <Compile Include="public\javascripts\soundcloud-player.js" />
@@ -59,6 +60,7 @@
     <Compile Include="routes\index.js" />
     <Compile Include="routes\login.js" />
     <Compile Include="routes\logout.js" />
+    <Compile Include="routes\remote.js" />
     <Compile Include="routes\player.js" />
     <Compile Include="routes\profile.js" />
     <Compile Include="routes\signup.js" />
@@ -94,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="views\login.jade" />
+    <Content Include="views\remote.jade" />
     <Content Include="views\player.jade" />
     <Content Include="views\profile.jade" />
     <Content Include="views\signup.jade" />
