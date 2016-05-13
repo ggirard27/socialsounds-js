@@ -79,6 +79,7 @@ exports.joinRoom = function (socket, room, password) {
             }
         } 
         else {
+            this.rooms[room].users.push(socket.id);
             socket.join(room);
             socket.roomdata_room = room;
             console.log("no password, automatically authorized request");
