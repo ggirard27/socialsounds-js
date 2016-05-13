@@ -39,17 +39,31 @@ btnSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.voteSkip();
     document.getElementById('btnSkip').disabled = true;
 });
-
-buttonCreateChannel.addEventListener('click', function () {
+btnCreateChannel.addEventListener('click', function () {
     var channelName = document.getElementById('createChannelNameField').value;
     var channelPassword = document.getElementById('createChannelPasswordField').value;
     var channelPasswordConfirm = document.getElementById('createChannelPasswordConfirmField').value;
+    var privateChannel = document.getElementById('cboxPrivate').checked;
     if (channelPassword == channelPasswordConfirm) {
-        SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(channelName.replace(/ /g, ''), channelPassword);  //Removing the spaces because it breaks the swtich channel event.
+        if (privateChannel)
+            SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(Math.random().toString(36).substring(7), channelPassword, privateChannel);
+        else
+            SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(channelName.replace(/ /g, ''), channelPassword, privateChannel);  //Removing the spaces because it breaks the swtich channel event.
     } else {
         $('#createChannelPasswordErrorMessage').show();
     }
 
+});
+
+cboxPrivate.addEventListener('click', function () {
+    var privateChannel = document.getElementById('cboxPrivate').checked;
+    var channelName = document.getElementById('createChannelNameField');
+    if (privateChannel) {
+        channelName.disabled = true;
+    }
+    else {
+        channelName.disabled = false;
+    }
 });
 
 btnSwitchChannel.addEventListener('click', function () {

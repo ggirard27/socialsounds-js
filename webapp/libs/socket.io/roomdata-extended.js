@@ -19,13 +19,13 @@ exports.dataExists = function (socket, variable) {
     return (this.rooms[socket.roomdata_room].variables[variable] == 'undefined') ? false : true;
 };
 
-exports.createRoom = function (socket, room, password) {
+exports.createRoom = function (socket, room, password, privateChannel) {
     if (exports.Debug) console.log(socket.id + ": Creating Room: " + room);
-    if (this.channels.indexOf(room) < 0) {
+    if (this.channels.indexOf(room) < 0 && !privateChannel) {
         this.channels.push(room);
     }
     var isPasswordProtected = (password == '' ? false : true);
-    this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [], voteSkip: 0, passwordProtected: isPasswordProtected, passwordValue: password};
+    this.rooms[room] = { owner: socket.id, users: [], variables: {}, contentQueue: new q.Queue(), contentList: [], voteSkip: 0, passwordProtected: isPasswordProtected, passwordValue: password };
 }
 
 exports.set = function (socket, variable, content) {
@@ -56,12 +56,12 @@ exports.get = function (socket, variable, content) {
     return this.rooms[socket.roomdata_room].variables[variable];
 }
 
-exports.joinRoom = function (socket, room, password) {
+exports.joinRoom = function (socket, room, password, privateChannel) {
     
     if (exports.Debug) console.log(socket.id + ": Joining room: " + room);
 
     if (!this.roomExists(socket, room)) {
-        this.createRoom(socket, room, password);
+        this.createRoom(socket, room, password, privateChannel);
         this.rooms[room].users.push(socket.id);
         socket.join(room);
         socket.roomdata_room = room;

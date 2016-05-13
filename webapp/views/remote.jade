@@ -20,6 +20,8 @@ block content
                 .modal-footer
                     button.btn.btn-default(type='button', data-dismiss='modal') Close
                     button.btn.btn-primary#btnCreateChannel(type='button') Create
+                    input(type='checkbox')#cboxPrivate
+                    label.span Private channel
 
     .modal.fade.active#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1')
         .modal-dialog.modal-sm(role='document')
@@ -73,7 +75,7 @@ block content
             .col-xs-12.col-sm-12.col-md-12.col-lg-12(style="height: 100%;")
                 .row.playlist-content-section-remote
                     .row
-                        span.h4 Playlist
+                        label.h4#channelLabel Playlist
                     .list-group.playlist-list#contentQueueListGroup
                     .row
                         button.btn.pull-right#btnSkip Skip

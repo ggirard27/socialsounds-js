@@ -12,7 +12,7 @@ module.exports.listen = function (server) {
         
         socket.room = defaultRoom;
         var default_password = "";
-        roomdata.joinRoom(socket, socket.room, default_password);
+        roomdata.joinRoom(socket, socket.room, default_password, false);
         var contentList = roomdata.get(socket, 'contentList');
         io.to(socket.id).emit('roomJoined', socket.room);
         io.to(socket.id).emit('displayContentList', contentList);
@@ -31,7 +31,7 @@ module.exports.listen = function (server) {
         for (var i = 0; i < channelList.length; i++) {
             console.log("Channel: " + channelList[i]);
         }
-        io.to(socket.id).emit('getChannelList', channelList);
+        io.to(socket.id).emit('getChannelList',  socket.room, channelList);
         io.to(socket.room).emit('updateSkipLabel', roomdata.get(socket, 'users').length, roomdata.get(socket, 'voteSkip'));
         
         socket.on('disconnect', function () {
@@ -41,7 +41,7 @@ module.exports.listen = function (server) {
             io.to(socket.room).emit('logging', 'user disconnected' + socket);
         });
         
-        socket.on('createRoom', function (room, password) {
+        socket.on('createRoom', function (room, password, privateChannel) {
             if (!roomdata.roomExists(socket, room)) {
                 //Update the skip label of the room we are leaving
                 io.to(socket.room).emit('updateSkipLabel', (roomdata.get(socket, 'users').length) - 1, roomdata.get(socket, 'voteSkip')); //Updates the bar because the nummber of users has decreased.
@@ -51,7 +51,7 @@ module.exports.listen = function (server) {
                 roomdata.leaveRoom(socket);
                 socket.room = room;
                 //Join new room
-                roomdata.joinRoom(socket, socket.room, password);
+                roomdata.joinRoom(socket, socket.room, password, privateChannel);
                 io.to(socket.id).emit('roomCreated', socket.room);
                 var connectedUsers = roomdata.get(socket, 'users').length;
                 io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
@@ -59,7 +59,7 @@ module.exports.listen = function (server) {
                 io.to(socket.id).emit('showOwnerControls', (socket.id == roomdata.get(socket, 'owner') && (room != defaultRoom)));
                 //Update Channel list and sent it to the user
                 channelList = roomdata.channels;
-                io.emit('getChannelList', channelList);
+                io.to(socket.id).emit('getChannelList', socket.room, channelList);
                 io.to(socket.id).emit('roomJoined', socket.room);
                 io.to(socket.id).emit('roomSwitched', socket.room);
                 //Update the skip label of the room that we joined
@@ -92,13 +92,13 @@ module.exports.listen = function (server) {
                     roomdata.leaveRoom(socket);
                     socket.room = room;
                     //Join new room
-                    roomdata.joinRoom(socket, socket.room, password);
+                    roomdata.joinRoom(socket, socket.room, password, false);
                     var connectedUsers = roomdata.get(socket, 'users').length;
                     io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
                     io.to(socket.id).emit('showOwnerControls', (socket.id == roomdata.get(socket, 'owner') && (room != defaultRoom)));
                     //Update Channel list and sent it to the user
                     channelList = roomdata.channels;
-                    io.emit('getChannelList', channelList);
+                    io.to(socket.id).emit('getChannelList', socket.room, channelList);
                     io.to(socket.id).emit('roomJoined', socket.room);
                     io.to(socket.id).emit('roomSwitched', socket.room);
                     //Update the skip label of the room that we joined

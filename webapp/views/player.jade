@@ -20,6 +20,8 @@ block content
                 .modal-footer
                     button.btn.btn-default(type='button', data-dismiss='modal') Close
                     button.btn.btn-primary#btnCreateChannel(type='button') Create
+                    input(type='checkbox')#cboxPrivate
+                    label.span Private channel
 
     .modal.fade.active#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1')
         .modal-dialog.modal-sm(role='document')
@@ -49,7 +51,7 @@ block content
                                 button.btn#btnDashMute Mute
                                 button.btn#btnDashPause Pause
                 #contentQueueDiv
-                    span.h4 Playlist
+                    label.h4#channelLabel Playlist
                     .list-group#contentQueueListGroup
                     .progress
                         .progess-bar

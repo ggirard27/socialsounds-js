@@ -40,12 +40,13 @@ socket.on('contentRejected', function (content) {
     console.log('Rejected ' + content.title + ' from the content queue');
 });
     
-socket.on('getChannelList', function (channels) {
+socket.on('getChannelList', function (room, channels) {
     //Desktop site
-    $("#channelList").html(""); //Empties it before filling it all, desktop website
-    $("#smallChannelList").html(""); //Empties it before filling it all, mobile website
+    $('#channelList').html(""); //Empties it before filling it all, desktop website
+    $('#smallChannelList').html(""); //Empties it before filling it all, mobile website
+    $('#channelLabel').text(room + " Playlist");
     for (var i = 0; i < channels.length; i++) {
-        if (channels[i] != "default-room") {
+        if (channels[i] != "default-room") { 
             $('#channelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("' + channels[i] + '")>' + channels[i] + '</a></li>');
             $('#smallChannelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("' + channels[i] + '")>' + channels[i] + '</a></li>');
         }
@@ -151,9 +152,9 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
         socket.emit('switchRoom', room, password);
     },
 
-    createRoom: function (room, password) {
+    createRoom: function (room, password, privateChannel) {
         console.log("requesting to create room: " + room);
-        socket.emit('createRoom', room, password);
+        socket.emit('createRoom', room, password, privateChannel);
     },
 
     
