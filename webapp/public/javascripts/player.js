@@ -56,8 +56,12 @@ btnCreateChannel.addEventListener('click', function () {
     if (channelPassword == channelPasswordConfirm) {
         if (privateChannel)
             SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(Math.random().toString(36).substring(7), channelPassword, privateChannel);
-        else
-            SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(channelName.replace(/ /g, ''), channelPassword, privateChannel);  //Removing the spaces because it breaks the swtich channel event.
+        else {
+            if (channelName.length < 1)
+                $('#createChannelNameErrorMessage').show();
+            else
+                SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(channelName.replace(/ /g, ''), channelPassword, privateChannel);  //Removing the spaces because it breaks the swtich channel event.
+        }
     } else {
         $('#createChannelPasswordErrorMessage').show();
     }

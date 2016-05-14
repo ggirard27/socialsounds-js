@@ -85,6 +85,7 @@ socket.on('displayContentList', function (contentList) {
 });
 
 socket.on('updateSkipLabel', function (users, votes) {
+    $('#nbUsers').text(users);
     $('#labelSkip').text(votes + "/" + users + " users voted to skip");
     $('#smallLabelSkip').text(votes + "/" + users + " users voted to skip");
 });
