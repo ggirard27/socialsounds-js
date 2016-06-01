@@ -100,6 +100,10 @@ socket.on('updateSkipLabel', function (users, votes) {
     $('#nbUsers').text(users);
     $('#labelSkip').text(votes + "/" + users + " users voted to skip");
     $('#smallLabelSkip').text(votes + "/" + users + " users voted to skip");
+
+    var progessBar = document.getElementById('progessBar');
+    progessBar.style.width = (votes / users) * 100 + '%';
+    progessBar.setAttribute('aria-valuenow', (votes / users) * 100);
 });
 
 socket.on('skipSong', function () {
