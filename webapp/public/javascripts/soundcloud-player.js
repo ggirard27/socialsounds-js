@@ -62,6 +62,12 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
         }   
     },
     
+    stopSoundCloudPlayer: function () {
+        if (this.widget) {
+            this.widget.pause();
+        }
+    },
+    
     muteSoundCloudPlayer: function (isMuted) {
         if (this.widget) {
             isMuted === true ? this.widget.setVolume(0) : this.widget.setVolume(75);

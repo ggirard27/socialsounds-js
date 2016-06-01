@@ -51,7 +51,7 @@ block content
                                 button.btn#btnDashMute Mute
                                 button.btn#btnDashPause Pause
                 #contentQueueDiv
-                    label.h4#channelLabel Playlist
+                    label.h4#channelLabel #{room} playlist
                     .list-group#contentQueueListGroup
                     .progress
                         .progess-bar
@@ -111,7 +111,7 @@ block content
         .row
             .col-xs-12.col-sm-12.hidden-md.hidden-lg#smallPlaylistSection
                 #smallContentQueueDiv
-                    span.h4 Playlist
+                    span.h4 #{room} playlist
                     ul#smallContentQueueList
                     .progress
                         .progess-bar
@@ -127,6 +127,7 @@ block content
 append bodyscripts
     script(type='text/javascript').
         var userCookie = !{JSON.stringify(user)}
+        var roomId = !{JSON.stringify(room)}
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')
     script(src='/javascripts/player.js')

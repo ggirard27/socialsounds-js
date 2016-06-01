@@ -18,16 +18,6 @@ var currentContent = null;
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
-//On page load, looks if we have a certain room to access.
-$(document).ready(function () {
-    var room = window.location.hash;
-    //Try and access the room mentionned, if it doesn't work then it creates it.    
-    if (room && room != '' && room != 'default-room') {
-        console.log("Testing room: " + room);
-        SOCIALSOUNDSCLIENT.SOCKETIO.testRoomExists(room.substring(1));
-    }
-});
-
 btnDashSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
 });
@@ -54,14 +44,22 @@ btnCreateChannel.addEventListener('click', function () {
     var channelPasswordConfirm = document.getElementById('createChannelPasswordConfirmField').value;
     var privateChannel = document.getElementById('cboxPrivate').checked;
     if (channelPassword == channelPasswordConfirm) {
-        if (privateChannel)
-            SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(Math.random().toString(36).substring(7), channelPassword, privateChannel);
+        if (privateChannel) {
+            channelName = Math.random().toString(36).substring(7);
+            SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(channelName, channelPassword, privateChannel);
+        }
         else
             SOCIALSOUNDSCLIENT.SOCKETIO.createRoom(channelName.replace(/ /g, ''), channelPassword, privateChannel);  //Removing the spaces because it breaks the swtich channel event.
     } else {
         $('#createChannelPasswordErrorMessage').show();
     }
-
+    var title = 'ssPlayer - ' + channelName;
+    var url = '/player/rooms/' + channelName;
+    if (typeof (history.pushState) != "undefined") {
+        console.log("im in, bitches");
+        var obj = { Title: title, Url: url };
+        history.pushState(obj, obj.Title, obj.Url);
+    }
 });
 
 cboxPrivate.addEventListener('click', function () {
@@ -216,7 +214,8 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
         // which should take care of stopping the currently playing media before calling the playContent function. - GG
-        this.pauseContent();
+        console.log('Function playContent is requesting to stop content');
+        this.stopContent();
         currentContent = content;
         self.toggleHighlightContentInList(currentContent);
         
@@ -259,16 +258,41 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     //Will eventually be removed when we will be able to join in a song at any moment.
     pauseContent: function (elapsedTime) {
         if (currentContent) {
+            console.log('requesting congtent pause');
             if (contentProviderList.indexOf(currentContent.provider) > -1) {
                 switch (currentContent.provider) {
                     case 'soundcloud':
+                        console.log('requesting sc pause');
                         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer(this.isPaused, currentContent, elapsedTime);
                         break;
                     case 'vimeo':
                         playVimeoContent(content);
                         break;
                     case 'youtube':
+                        console.log('requesting youtube pause');
                         SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent(this.isPaused);
+                        break;
+                }
+                this.isPaused = !this.isPaused;
+            }
+        }
+    },
+    
+    stopContent: function () {
+        if (currentContent) {
+            console.log('requesting congtent stop');
+            if (contentProviderList.indexOf(currentContent.provider) > -1) {
+                switch (currentContent.provider) {
+                    case 'soundcloud':
+                        console.log('requesting sc stop');
+                        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.stopSoundCloudPlayer();
+                        break;
+                    case 'vimeo':
+                        playVimeoContent(content);
+                        break;
+                    case 'youtube':
+                        console.log('requesting youtube stop');
+                        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
                         break;
                 }
                 this.isPaused = !this.isPaused;

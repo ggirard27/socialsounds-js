@@ -9,12 +9,23 @@ var loginRoutes = function (passport) {
         });
     });
     
-    router.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/player',
+    router.post('/login', getRoomid, passport.authenticate('local-login', {
         failureRedirect : '/login',
         failureFlash : true
-    }));
+        }), 
+        function (req, res) {
+            res.redirect('/player/rooms/' + req.session.returnRoom)
+        }
+    );
     return router;
+    
+    function getRoomid(req, res, next) {
+        if (typeof(req.session.returnRoom) === "undefined") {
+            req.session.returnRoom = 'default-room';
+        } 
+        console.log('Set the req.session.returnRoom at ' + req.session.returnRoom);
+        return next();
+    }
 };
 
 module.exports = loginRoutes;

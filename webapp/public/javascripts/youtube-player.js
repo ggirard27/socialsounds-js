@@ -102,8 +102,14 @@ SOCIALSOUNDSCLIENT.YOUTUBEPLAYER = {
     pauseYoutubeContent: function (isPaused) {
         //TODO(emile): Remove this quickfix and fix it for real.
         //(document.location.pathname === '/player')
-        if (this.youtubePlayer && (document.location.pathname === '/player')) {
+        if (this.youtubePlayer) {
             isPaused === true ? this.youtubePlayer.playVideo() : this.youtubePlayer.pauseVideo();
+        }
+    },
+    
+    stopYoutubeContent: function (){
+        if (this.youtubePlayer) {
+           this.youtubePlayer.stopVideo();
         }
     },
     

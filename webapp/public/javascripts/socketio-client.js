@@ -1,18 +1,28 @@
-﻿var socket = io();
+﻿
+var socket = io();
+socket.user = userCookie.general.username;;
+console.log('socket user is ' + socket.user);
+
+socket.on("connect", function () {
+    // roomId comes from the template and the request to render the template
+    //Try and access the room mentionned, if it doesn't work then it creates it.    
+    if (typeof (roomId) !== 'undefined') {
+        if (roomId == 'default-room') {
+            SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom('default-room', false);
+        }
+        else {
+            console.log("Testing room: " + roomId);
+            SOCIALSOUNDSCLIENT.SOCKETIO.switchOrCreateIfNotExists(roomId);
+        }
+    }
+});
 
 socket.on('roomJoined', function (room) {
     console.log('Joined room: ' + room);
-    socket.room = room;
-    SOCIALSOUNDSCLIENT.BASEPLAYER.updateSocialMediaButton
-    if (history.pushState) {
-        history.pushState(null, null, '#' + room);
-    }
-    else {
-        location.hash = '#' + room;
-    }
     $('#chatBox').append('<li> --- You have joined the channel ' + room + '</li>');
     var chat = document.getElementById('chatBox');
     chat.scrollTop = chat.scrollHeight;
+    SOCIALSOUNDSCLIENT.SOCKETIO.setUsername(socket.user);
 });
 
 socket.on('roomCreated', function (room) {
@@ -31,8 +41,8 @@ socket.on('playNextContent', function (content, timestamp) {
     document.getElementById('btnSkip').disabled = false;
 });
 
-socket.on('contentAdded', function (content) {
-    console.log('Added ' + content.title + ' to the content queue');
+socket.on('contentAdded', function (content, index) {
+    console.log('Added ' + content.title + ' to the content queue, at index: ' + index);
     SOCIALSOUNDSCLIENT.BASEPLAYER.appendToContentList(content);
 });
 
@@ -44,16 +54,9 @@ socket.on('getChannelList', function (room, channels) {
     //Desktop site
     $('#channelList').html(""); //Empties it before filling it all, desktop website
     $('#smallChannelList').html(""); //Empties it before filling it all, mobile website
-    $('#channelLabel').text(room + " Playlist");
     for (var i = 0; i < channels.length; i++) {
-        if (channels[i] != "default-room") { 
-            $('#channelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("' + channels[i] + '")>' + channels[i] + '</a></li>');
-            $('#smallChannelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("' + channels[i] + '")>' + channels[i] + '</a></li>');
-        }
-        else {
-            $('#channelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom("' + channels[i] + '","")>' + channels[i] + '</a></li>');
-            $('#smallChannelList').append('<li><a href="#" onclick=SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom("' + channels[i] + '","")>' + channels[i] + '</a></li>');
-        }
+        $('#channelList').append('<li><a onclick=writeChannelUrlRequest("' + channels[i] + '")>' + channels[i] + '</a></li>');
+        $('#smallChannelList').append('<li><a onclick=writeChannelUrlRequest("' + channels[i] + '")>' + channels[i] + '</a></li>');
     }
 });
 
@@ -117,7 +120,8 @@ socket.on('mutePlayer', function () {
 });
 
 socket.on('showProperChannelModal', function (room, exists) {
-    if (room != '#default-room') {
+    console.log("showing proper modal for room " + room)
+    if (room != 'default-room') {
         exists ? $('#switchChannelModal').modal('show') : $('#createChannelModal').modal('show');
         exists ? setSwitchRoomModalChannelNameValue(room) : setCreateRoomModalChannelNameValue(room);
     }
@@ -131,6 +135,10 @@ function setCreateRoomModalChannelNameValue(channelName) {
     $('#createChannelNameField').val(channelName);
 };
 
+function writeChannelUrlRequest(channelName) {
+    document.location = document.location.protocol + '/player/rooms/' + channelName;
+};
+
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 
 SOCIALSOUNDSCLIENT.SOCKETIO = {
@@ -139,14 +147,14 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
         socket.emit('getNextContent', socket.room);
     },
     
-    addContentToServer: function (content) {
+    addContentToServer: function (content, user) {
         console.log('Telling server to add ' + content.title + ' to the content queue');
         socket.emit('addContent', content, socket.room);
     },
     
     switchRoom: function (room, password) {
         if (password == null || password == 'undefined') {
-            password = '';
+            password = false;
         }
         console.log("requesting room switch to: " + room);
         socket.emit('switchRoom', room, password);
@@ -173,6 +181,14 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
 
     testRoomExists: function (room) {
         socket.emit('testRoomExists', room);
+    },
+
+    setUsername: function (user) {
+        socket.emit('setUsername', user);
+    },
+
+    switchOrCreateIfNotExists: function (room) {
+        socket.emit('switchOrCreateIfNotExists', room);
     },
 }
 
