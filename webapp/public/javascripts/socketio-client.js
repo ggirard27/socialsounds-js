@@ -44,7 +44,7 @@ socket.on('getChannelList', function (room, channels) {
     //Desktop site
     $('#channelList').html(""); //Empties it before filling it all, desktop website
     $('#smallChannelList').html(""); //Empties it before filling it all, mobile website
-    $('#channelLabel').text(room + " Playlist");
+    $('#channelLabel').text(room);
     for (var i = 0; i < channels.length; i++) {
         if (channels[i] != "default-room") { 
             $('#channelList').append('<li><a href="#" data-toggle="modal" data-target="#switchChannelModal" onclick=setSwitchRoomModalChannelNameValue("' + channels[i] + '")>' + channels[i] + '</a></li>');
