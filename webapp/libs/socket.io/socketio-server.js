@@ -9,7 +9,7 @@ module.exports.listen = function (server) {
     var defaultRoom = 'default-room';
     
     io.sockets.on('connection', function (socket) {
-       
+        
 
         socket.on('disconnect', function () {
             if (socket.room) {
@@ -37,7 +37,7 @@ module.exports.listen = function (server) {
                 var connectedUsers = roomdata.get(socket, 'users').length;
                 io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
                 //Owner control if you are the owner.
-                io.to(socket.id).emit('showOwnerControls', (socket.id == roomdata.get(socket, 'owner') && (room != defaultRoom)));
+                io.to(socket.id).emit('showOwnerControls', (socket.user == roomdata.get(socket, 'owner') && (room != defaultRoom)));
                 //Update Channel list and sent it to the user
                 channelList = roomdata.channels;
                 io.to(socket.id).emit('getChannelList', socket.room, channelList);
@@ -78,7 +78,7 @@ module.exports.listen = function (server) {
                     roomdata.joinRoom(socket, socket.room, password, false);
                     var connectedUsers = roomdata.get(socket, 'users').length;
                     io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
-                    io.to(socket.id).emit('showOwnerControls', (socket.id == roomdata.get(socket, 'owner') && (room != defaultRoom)));
+                    io.to(socket.id).emit('showOwnerControls', (socket.user == roomdata.get(socket, 'owner') && (room != defaultRoom)));
                     //Update Channel list and sent it to the user
                     channelList = roomdata.channels;
                     io.to(socket.id).emit('getChannelList', socket.room, channelList);
@@ -107,7 +107,7 @@ module.exports.listen = function (server) {
         });
         
         socket.on('setUsername', function (user) {
-            socket.user
+            socket.user = user;
         });
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
