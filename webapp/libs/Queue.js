@@ -14,6 +14,7 @@ http://creativecommons.org/publicdomain/zero/1.0/legalcode
 /* Creates a new queue. A queue is a first-in-first-out (FIFO) data structure -
  * items are added to the end of the queue and removed from the front.
  */
+/*
 exports.Queue = function Queue() {
     
     // initialise the queue and offset
@@ -30,17 +31,10 @@ exports.Queue = function Queue() {
         return (queue.length == 0);
     }
     
-    /* Enqueues the specified item. The parameter is:
-   *
-   * item - the item to enqueue
-   */
   this.enqueue = function (item) {
         queue.push(item);
     }
-    
-    /* Dequeues an item and returns it. If the queue is empty, the value
-   * 'undefined' is returned.
-   */
+
   this.dequeue = function () {
         
         // if the queue is empty, return immediately
@@ -60,10 +54,62 @@ exports.Queue = function Queue() {
 
     }
     
-    /* Returns the item at the front of the queue (without dequeuing it). If the
-   * queue is empty then undefined is returned.
-   */
   this.peek = function () {
+        return (queue.length > 0 ? queue[offset] : undefined);
+    }
+
+}
+*/
+
+exports.ContentList = function ContentList(owner) {
+
+    var queueOwner = owner;
+    var queue = [];
+    var users = [];
+    var currentIndex = 0;
+    
+    this.removeContent = function (index, user) {
+        if (users[index] == user || user == queueOwner) {
+            queue[index] = null;
+        }
+    }
+    
+    this.getLength = function () {
+        return (queue.length);
+    }
+    
+    this.getRemaining = function () {
+        return (queue.length - currentIndex);
+    }
+    
+    this.getCurrentIndex = function () {
+        return (currentIndex);
+    }
+    
+    this.isEmpty = function () {
+        return (queue.length == 0);
+    }
+    
+    this.enqueue = function (item, user) {
+        queue.push(item);
+        users.push(user);
+        return queue.length;
+    }
+    
+    this.dequeue = function () {
+
+        if (queue.length == 0) return undefined;
+        
+        while (queue[currentIndex] == null) currentIndex++;
+        
+        var item = queue[currentIndex];
+
+        currentIndex++;
+
+        return item;
+    }
+    
+    this.peek = function () {
         return (queue.length > 0 ? queue[offset] : undefined);
     }
 

@@ -178,7 +178,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
         // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
         // which should take care of stopping the currently playing media before calling the playContent function. - GG
-        this.pauseContent();
+        this.stopContent();
         currentContent = content;
         self.toggleHighlightContentInList(currentContent);
         
@@ -221,16 +221,41 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     //Will eventually be removed when we will be able to join in a song at any moment.
     pauseContent: function (elapsedTime) {
         if (currentContent) {
+            console.log('requesting content pause');
             if (contentProviderList.indexOf(currentContent.provider) > -1) {
                 switch (currentContent.provider) {
                     case 'soundcloud':
+                        console.log('requesting soundcloud pause');
                         SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.pauseSoundCloudPlayer(this.isPaused, currentContent, elapsedTime);
                         break;
                     case 'vimeo':
                         playVimeoContent(content);
                         break;
                     case 'youtube':
+                        console.log('requesting youtube pause');
                         SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent(this.isPaused);
+                        break;
+                }
+                this.isPaused = !this.isPaused;
+            }
+        }
+    },
+    
+    stopContent: function () {
+        if (currentContent) {
+            console.log('requesting congtent stop');
+            if (contentProviderList.indexOf(currentContent.provider) > -1) {
+                switch (currentContent.provider) {
+                    case 'soundcloud':
+                        console.log('requesting sc stop');
+                        SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.stopSoundCloudPlayer();
+                        break;
+                    case 'vimeo':
+                        playVimeoContent(content);
+                        break;
+                    case 'youtube':
+                        console.log('requesting youtube stop');
+                        SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
                         break;
                 }
                 this.isPaused = !this.isPaused;

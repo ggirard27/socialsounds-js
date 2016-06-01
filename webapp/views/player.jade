@@ -42,7 +42,7 @@ block content
 
     .container-fluid
         div
-            span.h1#channelLabel
+            span.h1#channelTitle #{room}
         div
             .left-div
                 .playlist-section-title
@@ -97,7 +97,7 @@ block content
                             button.btn#btnMuteContent(title="Mute/Unmute")
                                 i.fa.fa-volume-off
                                 //i.fa.fa-volume-up
-                div#ownerDashboard(style="display: none")
+                #ownerDashboard
                     div
                         span.h3 Owner controls
                     .btn-group
@@ -139,6 +139,7 @@ block content
 append bodyscripts
     script(type='text/javascript').
         var userCookie = !{JSON.stringify(user)}
+        var roomId = !{JSON.stringify(room)}
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')
     script(src='/javascripts/player.js')

@@ -70,7 +70,7 @@ app.use('/', routes);
 app.post('/login', login);
 app.get('/login', login);
 app.get('/logout', logout);
-app.get('/player', player);
+app.get('/player/rooms/:roomid', player);
 app.get('/remote', remote);
 app.get('/profile', profile);
 app.get('/signup', signup);
