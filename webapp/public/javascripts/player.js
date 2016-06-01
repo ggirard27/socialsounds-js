@@ -60,7 +60,6 @@ btnCreateChannel.addEventListener('click', function () {
     var title = 'ssPlayer - ' + channelName;
     var url = '/player/rooms/' + channelName;
     if (typeof (history.pushState) != "undefined") {
-        console.log("im in, bitches");
         var obj = { Title: title, Url: url };
         history.pushState(obj, obj.Title, obj.Url);
     }

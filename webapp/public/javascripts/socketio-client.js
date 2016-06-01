@@ -20,6 +20,7 @@ socket.on("connect", function () {
 
 socket.on('roomJoined', function (room) {
     console.log('Joined room: ' + room);
+    socket.room = room;
     $('#chatBox').append('<li> --- You have joined the channel ' + room + '</li>');
     var chat = document.getElementById('chatBox');
     chat.scrollTop = chat.scrollHeight;
@@ -34,6 +35,7 @@ socket.on('roomCreated', function (room) {
 
 socket.on('roomSwitched', function (room) {
     console.log('Switched to room: ' + room);
+    socket.room = room;
     $('#switchChannelModal').modal('hide');
 });
 
@@ -45,6 +47,12 @@ socket.on('playNextContent', function (content, timestamp) {
 socket.on('contentAdded', function (content, index) {
     console.log('Added ' + content.title + ' to the content queue, at index: ' + index);
     SOCIALSOUNDSCLIENT.BASEPLAYER.appendToContentList(content);
+    console.log("oh hello");
+    console.log(socket.room);
+    if (socket.room == 'default-room') {
+        console.log("oh hello");
+        SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
+    }
 });
 
 socket.on('contentRejected', function (content) {
