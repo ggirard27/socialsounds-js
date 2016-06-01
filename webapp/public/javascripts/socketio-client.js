@@ -1,11 +1,12 @@
 ﻿
 var socket = io();
-socket.user = userCookie.general.username;;
+socket.user = userCookie.general.username;
 console.log('socket user is ' + socket.user);
 
 socket.on("connect", function () {
     // roomId comes from the template and the request to render the template
-    //Try and access the room mentionned, if it doesn't work then it creates it.    
+    //Try and access the room mentionned, if it doesn't work then it creates it.
+    SOCIALSOUNDSCLIENT.SOCKETIO.setUsername(socket.user);
     if (typeof (roomId) !== 'undefined') {
         if (roomId == 'default-room') {
             SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom('default-room', false);
