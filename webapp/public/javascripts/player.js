@@ -142,17 +142,6 @@ smallDisplayPlaylistButton.addEventListener('click', function () {
     smallDisplayChatButton.style.display = "inline-block";
 });
 
-function showHideBroadcastButton() {
-    var style = searchButton.className;
-    
-    if (startBroadcastButton.style.display === "none") {
-        startBroadcastButton.style.display = "inline-block";
-    }
-    else {
-        startBroadcastButton.style.display = "none";
-    }
-};
-
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
     if (searchResultsDropdownSelectedItem) {
@@ -165,8 +154,6 @@ addContentButton.addEventListener('click', function () {
 
 startBroadcastButton.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
-    //TODO(emile): uncomment this line when we know that the queue is empty
-    //showHideBroadcastButton();
 });
 
 btnOpenInBrowser.addEventListener('click', function () {
