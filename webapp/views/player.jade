@@ -41,30 +41,21 @@ block content
                     button.btn.btn-primary#btnSwitchChannel(type='button') Join
 
     .container-fluid
-        .row
-            .hidden-xs.hidden-sm.col-md-3.col-lg-3
-                div#ownerDashboard(style="display: none")
-                    span Owner control
-                        .row
-                            table
-                                button.btn#btnDashSkip Skip
-                                button.btn#btnDashMute Mute
-                                button.btn#btnDashPause Pause
-                #contentQueueDiv
-                    label.h4#channelLabel #{room} playlist
-                    .list-group#contentQueueListGroup
+        div
+            span.h1#channelTitle #{room}
+        div
+            .left-div
+                .playlist-section-title
+                    span.h3 Playlist
+                .playlist-section
+                    .list-group.content-queue-list-group#contentQueueListGroup
+                .skip-section
                     .progress
                         .progess-bar
                             label#labelSkip 0/0 users voted to skip
                     button.btn#btnSkip Skip
-                #channelListDiv
-                    span.h4 Channels
-                    ul#channelList
-                    div
-                        button.btn#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel
-
-            .col-xs-12.col-sm-12.col-md-9.col-lg-9
-                .row
+            .center-div
+                div
                     .input-group
                         .input-group-btn#searchBar
                             button.btn#addContentButton(title="Add to the playlist")
@@ -76,15 +67,14 @@ block content
                         .input-group-btn
                             button.btn#searchButton(title="Search")
                                 i.fa.fa-search
-                            button.btn#startBroadcastButton Start Broadcast
-                .row
+                div
                     .alert.alert-info#contentReadyToBeAddedMessage(style='display: none; margin-bottom: 0px')
-                .row
+                div
                     .embed-responsive.embed-responsive-16by9
                         iframe.embed-responsive-item#soundcloudPlayer
                         .iframe.embed-responsive-item#vimeoPlayer
                         .iframe.embed-responsive-item#youtubePlayer
-                .row
+                div
                     .col-xs-4.col-sm-4.col-md-6.col-lg-6.no-padding-style
                         .pull-left
                             #fb-root
@@ -107,14 +97,33 @@ block content
                             button.btn#btnMuteContent(title="Mute/Unmute")
                                 i.fa.fa-volume-off
                                 //i.fa.fa-volume-up
-        .row
-            .chat-section.col-xs-12.col-sm-12.col-md-12.col-lg-12#chatSection
-                .chat-box.ul#chatBox
-                input.input-chat#inputChat(PlaceHolder="Send a message" type="text")
-        .row
+                #ownerDashboard
+                    div
+                        span.h3 Owner controls
+                    .btn-group
+                        button.btn#btnDashSkip Skip
+                        button.btn#btnDashMute Mute
+                        button.btn#btnDashPause Pause
+                        button.btn#startBroadcastButton Start Broadcast
+                div
+                    #channelListDiv
+                        span.h4 Channels
+                        ul#channelList
+                        div
+                            button.btn#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel 
+            .right-div
+                .chat-section-title
+                    span.h3 Chat
+                .chat-section#chatSection
+                    .chat-messages
+                        .chat-box.ul#chatBox
+                    .chat-interface
+                        input.input-chat#inputChat(PlaceHolder="Send a message" type="text" maxlength="300")
+       
+       .row
             .col-xs-12.col-sm-12.hidden-md.hidden-lg#smallPlaylistSection
                 #smallContentQueueDiv
-                    span.h4 #{room} playlist
+                    span.h4 Playlist
                     ul#smallContentQueueList
                     .progress
                         .progess-bar

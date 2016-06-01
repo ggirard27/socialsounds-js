@@ -14,7 +14,6 @@ var searchResultsDropdown = document.getElementById('searchResultsDropdown');
 var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
 var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
-//TODO(emile): Eventually get rid of this and simply go fetch the user's ID in Profile.
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
@@ -63,6 +62,8 @@ btnCreateChannel.addEventListener('click', function () {
         var obj = { Title: title, Url: url };
         history.pushState(obj, obj.Title, obj.Url);
     }
+    document.getElementById('channelTitle').textContent = channelName;
+    document.getElementById('ownerDashboard').style.display = 'block';
 });
 
 cboxPrivate.addEventListener('click', function () {
@@ -501,7 +502,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     displayContentList: function (contentList) {
         var self = this;
-        $('#contentQueueList').html('');
+        $('#contentQueueListGroup').html('');
         console.log('Content list length: ' + contentList.length);
         if (contentList.length > 0) {
             for (var i = 0; i < contentList.length; i++) {

@@ -233,34 +233,76 @@ body
     background-color: #0079c1 !important
     color: white !important
 
-#contentQueueListGroup
-    max-height: 350px
-    overflow: auto
+.left-div
+    float: left
+    height: 100%
+    width: 300px
+    padding-right: 5px
 
+.center-div
+    height: 100%
+    padding-right: 300px
+    padding-left: 300px
     
+.right-div
+    top: 0
+    right: 0
+    bottom: 0
+    position: absolute
+    width: 300px
+    background-color: #f2f2f2
+    padding-left: 5px
+    padding-right: 5px
+    
+.playlist-section-title
+    text-align: center
+    box-shadow: inset 0 -1px 0 0 #dad8de
+    z-index: 5
 
-/***************************/
-/*          Chat           */
-/***************************/
-@media (min-width: 992px)
-    .chat-section
-        display: block !important
+.playlist-section
+    top: 85px
+    bottom: 80px
+    position: absolute
+    width: inherit
+    
+.content-queue-list-group
+    height: 100%
+    overflow: auto
+    padding-right: 5px
+
+.skip-section
+    bottom: 0
+    width: inherit
+    position: absolute
+
+/* Chat */
+.chat-section-title
+    text-align: center
+    box-shadow: inset 0 -1px 0 0 #dad8de
+    z-index: 5
+    margin-top: 20px
+    margin-bottom: 10px
 
 .chat-section
-    height: 400px
+    top: 50px
+    right: 0
+    bottom: 0
+    position: absolute
     width: 100%
     margin: 0px
-    padding: 0px !important
-    background-color: #f2f2f2
 
-/* Messages */
-#chatArea
-    height: 370px
+.chat-messages
+    top: 0
+    bottom: 35px
+    position: absolute
+    width: 100%
 
 .chat-box
-    height: 370px
+    height: 100%
     margin: 0px
-    padding: 0px
+    padding-bottom: 0px
+    padding-left: 5px
+    padding-right: 5px
     overflow-y: auto
     list-style-type: none
     font-size: large
@@ -268,23 +310,22 @@ body
 .chat-box .ul li
     padding: 5px 10px 5px 10px
 
-.chat-box .ul li:nth-child(even)
-    background-color: #FFFFFF
-
-.chat-box .ul li:nth-child(off)
-    background: transparent
-
 .chat-box .ul li span
     width: 100%
     display: inline-block
     overflow-wrap: break-word
 
-/* Input */
-.input-chat
+.chat-interface
     left: 0
     right: 0
     bottom: 0
     height: 30px
+    width: 100%
+    position: absolute
+    padding-left: 5px
+    padding-right: 5px
+    
+.input-chat
     outline: none
     padding-left: 10px
     width: 100%
