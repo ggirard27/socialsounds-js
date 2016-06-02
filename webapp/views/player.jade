@@ -65,19 +65,15 @@ block content
                 .playlist-section
                     .list-group.content-queue-list-group#contentQueueListGroup
                 .skip-section
-                    label#labelSkip 0/0 users voted to skip
+                    div
+                        button.btn#btnSkip Skip
+                    label#labelSkip 0/0 user voted to skip
                     .progress
                         .progess-bar.progress-bar-info#progessBar(role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%")
                             label 
-                    button.btn#btnSkip Skip
-                    button.btn#exportBtn Export
-                    button.btn#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
-                #channelListDiv
-                    span.h4 Channels
-                    ul#channelList
-                    div
-                        button.btn#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel
-
+                    .hidden-xs.hidden-sm
+                        button.btn#exportBtn Export
+                        button.btn#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
             .center-div
                 div
                     .input-group
