@@ -233,7 +233,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     console.log("Oops, something went wrong while trying to launch: " + content.provider);
                     break;
             };
-            self.updateSocialMediaShareButtonsUrl();
         } 
         else {
             console.log("Invalid content provider passed to player: " + content.provider);
@@ -383,19 +382,19 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     },
     
     updateFacebookShareButtonUrl: function () {
-        fbShareButton.innerHTML = '<fb:share-button href="' + currentContent.url + '" type="button"> </fb:share-button>';
+        fbShareButton.innerHTML = '<fb:share-button href="' + window.location.href + '" type="button"> </fb:share-button>';
         if (typeof (FB) !== 'undefined')
             FB.XFBML.parse(document.getElementById('fbShareButton'));
     },
     
     updateGoogleShareButtonUrl: function () {
-        gpShareButton.setAttribute('data-href', currentContent.url);
-        gpShareButton.innerHTML = '<a class="g-plus" data-prefilltext="test post, please ignore" data-action="share" data-annotation="none" data-height="24" data-href="' + currentContent.url + '"</a>';
+        gpShareButton.setAttribute('data-href', window.location.href);
+        gpShareButton.innerHTML = '<a class="g-plus" data-prefilltext="" data-action="share" data-annotation="none" data-height="24" data-href="' + window.location.href + '"</a>';
         gapi.plus.go();
     },
     
     updateTwitterShareButtonUrl: function () {
-        twitterShareButton.innerHTML = '<a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-text=" " data-url="' + currentContent.url + '" data-hashtags="socialsounds">Tweet</a>';
+        twitterShareButton.innerHTML = '<a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-text=" " data-url="' + window.location.href + '" data-hashtags="socialsounds">Tweet</a>';
         twttr.widgets.load();
     },
     
