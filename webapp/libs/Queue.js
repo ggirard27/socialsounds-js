@@ -113,4 +113,8 @@ exports.ContentList = function ContentList(owner) {
         return (queue.length > 0 ? queue[offset] : undefined);
     }
 
+    this.getQueue = function () {
+        return queue;
+    }
+
 }

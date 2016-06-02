@@ -17,6 +17,20 @@ var currentContent = null;
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
+btnImportContent.addEventListener('click', function () {
+    var playlist = document.getElementById('importContentData').value;
+    var index = playlist.indexOf('https');
+    while (index > -1) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(playlist.substring(index, playlist.indexOf(' ', index)));
+        index = playlist.indexOf('https', index + 1); // next link
+    }
+
+    //Clear text box
+    document.getElementById('importContentData').value = '';
+    $('#importContentModal').modal('hide');
+    
+});
+
 btnDashSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
 });
@@ -105,6 +119,9 @@ searchBarInput.addEventListener('keyup', function (e) {
     }
 });
 
+exportBtn.addEventListener('click', function (e) {
+    SOCIALSOUNDSCLIENT.SOCKETIO.exportContent();
+});
 
 createChannelPasswordConfirmField.addEventListener('keyup', function (e) {
     if (e.keyCode == 13) {
