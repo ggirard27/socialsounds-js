@@ -7,13 +7,13 @@ var facebookRoutes = function (passport) {
         scope : ['email']
     }));
     
-    router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        successRedirect : '/player',
+    router.get('/auth/facebook/callback', getRoomid, passport.authenticate('facebook', {
+        failureRedirect : '/',
         failureFlash : true
         }), 
         function (req, res) {
-        res.redirect('/player/rooms/' + req.session.returnRoom)
-    }
+            res.redirect('/player/rooms/' + req.session.returnRoom)
+        }
     );
     return router;
     

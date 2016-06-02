@@ -5,13 +5,13 @@ var twitterRoutes = function (passport) {
     
     router.get('/auth/twitter', passport.authenticate('twitter'));
     
-    router.get('/auth/twitter/callback', passport.authenticate('twitter', {
-        successRedirect : '/profile',
+    router.get('/auth/twitter/callback', getRoomid,  passport.authenticate('twitter', {
+        failureRedirect : '/',
         failureFlash : true
         }), 
         function (req, res) {
-        res.redirect('/player/rooms/' + req.session.returnRoom)
-    }
+            res.redirect('/player/rooms/' + req.session.returnRoom)
+        }
     );
     return router;
     

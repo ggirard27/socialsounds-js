@@ -7,13 +7,13 @@ var googleRoutes = function (passport) {
         scope : ['profile', 'email']
     }));
     
-    router.get('/auth/google/callback', passport.authenticate('google', {
-        successRedirect : '/profile',
+    router.get('/auth/google/callback', getRoomid,  passport.authenticate('google', {
+        failureRedirect : '/',
         failureFlash : true
         }), 
         function (req, res) {
-        res.redirect('/player/rooms/' + req.session.returnRoom)
-    }
+            res.redirect('/player/rooms/' + req.session.returnRoom)
+        }
     );
     return router;
     
