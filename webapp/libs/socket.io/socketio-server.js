@@ -165,7 +165,7 @@ module.exports.listen = function (server) {
         });
         
         socket.on('controlPlayer', function (func) {
-            if (socket.id == roomdata.get(socket, 'owner')) {
+            if (socket.user == roomdata.get(socket, 'owner')) {
                 if (func == 'mute')
                     io.to(socket.room).emit('mutePlayer');
                 else if (func == 'pause') {
