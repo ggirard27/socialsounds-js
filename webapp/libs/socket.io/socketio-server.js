@@ -47,7 +47,7 @@ module.exports.listen = function (server) {
                 io.to(socket.room).emit('updateSkipLabel', connectedUsers, roomdata.get(socket, 'voteSkip'));
                 //Get Content list and send it to the user
                 contentList = roomdata.get(socket, 'contentList');
-                io.to(socket.id).emit('displayContentList', contentList);
+                io.to(socket.id).emit('displayContentList', contentList.getQueue());
                 var content = roomdata.get(socket, 'currentContent');
                 if (content) {
                     var time = new Date().getTime();
@@ -88,7 +88,7 @@ module.exports.listen = function (server) {
                     io.to(socket.room).emit('updateSkipLabel', connectedUsers, roomdata.get(socket, 'voteSkip'));
                     //Get Content list and send it to the user
                     contentList = roomdata.get(socket, 'contentList');
-                    io.to(socket.id).emit('displayContentList', contentList);
+                    io.to(socket.id).emit('displayContentList', contentList.getQueue());
                     var content = roomdata.get(socket, 'currentContent');
                     if (content) {
                         var time = new Date().getTime();
