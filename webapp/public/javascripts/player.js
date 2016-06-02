@@ -411,6 +411,13 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     applyPlayerMuteState: function () {
         var self = this;
+        if (self.getPlayerMuteState()) {
+            $('#volumeOff').show();
+            $('#volumeOn').hide();
+        } else {
+            $('#volumeOff').hide();
+            $('#volumeOn').show();
+        }
         if (currentContent) {
             switch (currentContent.provider) {
                 case 'soundcloud':
