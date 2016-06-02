@@ -170,7 +170,7 @@ module.exports.listen = function (server) {
                     io.to(socket.room).emit('mutePlayer');
                 else if (func == 'pause') {
                     var time = new Date().getTime();
-                    console.log("Current time: " + time)
+                    console.log("Current time: " + time);
                     var elapsedTime = Math.round((time - roomdata.get(socket, 'currentContentTimestamp')) / 1000);
                     io.to(socket.room).emit('pausePlayer', elapsedTime);
                 }
@@ -186,6 +186,11 @@ module.exports.listen = function (server) {
             if (room != 'default-room') {
                 io.to(socket.id).emit('showProperChannelModal', room, exists);
             }
+        });
+
+        socket.on('getContentList', function () {
+            var contentList = roomdata.get(socket, 'contentList');
+            io.to(socket.id).emit('exportContentList', contentList.getQueue());
         });
 
     }); 
