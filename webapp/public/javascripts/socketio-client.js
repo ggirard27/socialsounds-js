@@ -59,10 +59,8 @@ socket.on('contentRejected', function (content) {
 socket.on('getChannelList', function (room, channels) {
     //Desktop site
     $('#channelList').html(""); //Empties it before filling it all, desktop website
-    $('#smallChannelList').html(""); //Empties it before filling it all, mobile website
     for (var i = 0; i < channels.length; i++) {
         $('#channelList').append('<li><a onclick=writeChannelUrlRequest("' + channels[i] + '")>' + channels[i] + '</a></li>');
-        $('#smallChannelList').append('<li><a onclick=writeChannelUrlRequest("' + channels[i] + '")>' + channels[i] + '</a></li>');
     }
 });
 
@@ -108,7 +106,6 @@ socket.on('displayContentList', function (contentList) {
 socket.on('updateSkipLabel', function (users, votes) {
     $('#nbUsers').text(users);
     $('#labelSkip').text(votes + "/" + users + " users voted to skip");
-    $('#smallLabelSkip').text(votes + "/" + users + " users voted to skip");
 
     var progessBar = document.getElementById('progessBar');
     progessBar.style.width = (votes / users) * 100 + '%';
@@ -118,8 +115,6 @@ socket.on('updateSkipLabel', function (users, votes) {
 socket.on('skipSong', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.getNextContentFromServer();
     document.getElementById('btnSkip').disabled = false;
-    document.getElementById('smallBtnSkip').disabled = false;
-
 });
 
 socket.on('showOwnerControls', function (show) {
