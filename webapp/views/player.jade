@@ -23,6 +23,21 @@ block content
                     input(type='checkbox')#cboxPrivate
                     label.span Private channel
 
+      .modal.fade.active#importContentModal(role='dialog', arial-labelled-by='importContent', tabindex='-1')
+        .modal-dialog.modal-sm(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    h4.modal-title#importContent Import playlist
+                .modal-body
+                    label Import content 
+                    input.form-control#importContentData(type='text', name='content')
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-primary#btnImportContent(type='button') Import
+
+
     .modal.fade.active#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1')
         .modal-dialog.modal-sm(role='document')
             .modal-content
@@ -57,6 +72,8 @@ block content
                         .progess-bar
                             label#labelSkip 0/0 users voted to skip
                     button.btn#btnSkip Skip
+                    button.btn#exportBtn Export
+                    button.btn#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
                 #channelListDiv
                     span.h4 Channels
                     ul#channelList

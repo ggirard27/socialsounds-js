@@ -72,6 +72,18 @@ socket.on('createRoomFailed', function (room) {
   $('#channelNameErrorMessage').show();
 });
 
+socket.on('exportContentList', function(contentList) {
+    var list = socket.user + ' playlist \r\n ';
+    for (var i = 0; i < contentList.length; i++) {
+        list += contentList[i].title + ' ' + contentList[i].url + ' \r\n';
+    }
+    var link = document.createElement('a');
+    mimeType = 'text/plain';
+    link.setAttribute('download', socket.user+'_playlist.txt');
+    link.setAttribute('href', 'data:' + mimeType + ';charset=utf-16,' + encodeURIComponent(list));
+    link.click();
+});
+
 socket.on('noContent', function () {
     // Alert the users in an unobtrusive way, while still being clear. flash message?
     console.log('No more content in queue, please add more and press start broadcast.');
@@ -190,6 +202,10 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
 
     switchOrCreateIfNotExists: function (room) {
         socket.emit('switchOrCreateIfNotExists', room);
+    },
+
+    exportContent: function () {
+        socket.emit('getContentList');
     },
 }
 
