@@ -1,11 +1,12 @@
 ﻿
 var socket = io();
-socket.user = userCookie.general.username;;
+socket.user = userCookie.general.username;
 console.log('socket user is ' + socket.user);
 
 socket.on("connect", function () {
     // roomId comes from the template and the request to render the template
-    //Try and access the room mentionned, if it doesn't work then it creates it.    
+    //Try and access the room mentionned, if it doesn't work then it creates it.
+    SOCIALSOUNDSCLIENT.SOCKETIO.setUsername(socket.user);
     if (typeof (roomId) !== 'undefined') {
         if (roomId == 'default-room') {
             SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom('default-room', false);
@@ -19,6 +20,7 @@ socket.on("connect", function () {
 
 socket.on('roomJoined', function (room) {
     console.log('Joined room: ' + room);
+    socket.room = room;
     $('#chatBox').append('<li> --- You have joined the channel ' + room + '</li>');
     var chat = document.getElementById('chatBox');
     chat.scrollTop = chat.scrollHeight;
@@ -33,6 +35,7 @@ socket.on('roomCreated', function (room) {
 
 socket.on('roomSwitched', function (room) {
     console.log('Switched to room: ' + room);
+    socket.room = room;
     $('#switchChannelModal').modal('hide');
 });
 
@@ -44,6 +47,12 @@ socket.on('playNextContent', function (content, timestamp) {
 socket.on('contentAdded', function (content, index) {
     console.log('Added ' + content.title + ' to the content queue, at index: ' + index);
     SOCIALSOUNDSCLIENT.BASEPLAYER.appendToContentList(content);
+    console.log("oh hello");
+    console.log(socket.room);
+    if (socket.room == 'default-room') {
+        console.log("oh hello");
+        SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
+    }
 });
 
 socket.on('contentRejected', function (content) {
@@ -103,6 +112,10 @@ socket.on('updateSkipLabel', function (users, votes) {
     $('#nbUsers').text(users);
     $('#labelSkip').text(votes + "/" + users + " users voted to skip");
     $('#smallLabelSkip').text(votes + "/" + users + " users voted to skip");
+
+    var progessBar = document.getElementById('progessBar');
+    progessBar.style.width = (votes / users) * 100 + '%';
+    progessBar.setAttribute('aria-valuenow', (votes / users) * 100);
 });
 
 socket.on('skipSong', function () {

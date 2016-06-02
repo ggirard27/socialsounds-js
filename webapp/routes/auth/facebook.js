@@ -7,11 +7,23 @@ var facebookRoutes = function (passport) {
         scope : ['email']
     }));
     
-    router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-    }));
+    router.get('/auth/facebook/callback', getRoomid, passport.authenticate('facebook', {
+        failureRedirect : '/',
+        failureFlash : true
+        }), 
+        function (req, res) {
+            res.redirect('/player/rooms/' + req.session.returnRoom)
+        }
+    );
     return router;
+    
+    function getRoomid(req, res, next) {
+        if (typeof (req.session.returnRoom) === "undefined") {
+            req.session.returnRoom = 'default-room';
+        }
+        console.log('Set the req.session.returnRoom at ' + req.session.returnRoom);
+        return next();
+    }
 };
 
 module.exports = facebookRoutes;

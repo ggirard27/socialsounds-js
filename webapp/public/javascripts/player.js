@@ -14,7 +14,6 @@ var searchResultsDropdown = document.getElementById('searchResultsDropdown');
 var smallDisplayChatButton = document.getElementById('smallDisplayChatBtn');
 var smallDisplayPlaylistButton = document.getElementById('smallDisplayPlaylistBtn');
 var currentContent = null;
-//TODO(emile): Eventually get rid of this and simply go fetch the user's ID in Profile.
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
@@ -74,10 +73,11 @@ btnCreateChannel.addEventListener('click', function () {
     var title = 'ssPlayer - ' + channelName;
     var url = '/player/rooms/' + channelName;
     if (typeof (history.pushState) != "undefined") {
-        console.log("im in, bitches");
         var obj = { Title: title, Url: url };
         history.pushState(obj, obj.Title, obj.Url);
     }
+    document.getElementById('channelTitle').textContent = channelName;
+    document.getElementById('ownerDashboard').style.display = 'block';
 });
 
 cboxPrivate.addEventListener('click', function () {
@@ -159,17 +159,6 @@ smallDisplayPlaylistButton.addEventListener('click', function () {
     smallDisplayChatButton.style.display = "inline-block";
 });
 
-function showHideBroadcastButton() {
-    var style = searchButton.className;
-    
-    if (startBroadcastButton.style.display === "none") {
-        startBroadcastButton.style.display = "inline-block";
-    }
-    else {
-        startBroadcastButton.style.display = "none";
-    }
-};
-
 //TODO: If the URL can't be parsed correctly display a error for the user.
 addContentButton.addEventListener('click', function () {
     if (searchResultsDropdownSelectedItem) {
@@ -182,8 +171,6 @@ addContentButton.addEventListener('click', function () {
 
 startBroadcastButton.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
-    //TODO(emile): uncomment this line when we know that the queue is empty
-    //showHideBroadcastButton();
 });
 
 btnOpenInBrowser.addEventListener('click', function () {
@@ -519,7 +506,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     displayContentList: function (contentList) {
         var self = this;
-        $('#contentQueueList').html('');
+        $('#contentQueueListGroup').html('');
         console.log('Content list length: ' + contentList.length);
         if (contentList.length > 0) {
             for (var i = 0; i < contentList.length; i++) {
