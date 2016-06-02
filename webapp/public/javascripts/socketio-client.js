@@ -25,6 +25,7 @@ socket.on('roomJoined', function (room) {
     var chat = document.getElementById('chatBox');
     chat.scrollTop = chat.scrollHeight;
     SOCIALSOUNDSCLIENT.SOCKETIO.setUsername(socket.user);
+    SOCIALSOUNDSCLIENT.BASEPLAYER.updateSocialMediaShareButtonsUrl();
 });
 
 socket.on('roomCreated', function (room) {
