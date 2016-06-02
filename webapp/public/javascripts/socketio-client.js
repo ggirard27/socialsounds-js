@@ -47,10 +47,7 @@ socket.on('playNextContent', function (content, timestamp) {
 socket.on('contentAdded', function (content, index) {
     console.log('Added ' + content.title + ' to the content queue, at index: ' + index);
     SOCIALSOUNDSCLIENT.BASEPLAYER.appendToContentList(content);
-    console.log("oh hello");
-    console.log(socket.room);
-    if (socket.room == 'default-room') {
-        console.log("oh hello");
+    if (socket.room == 'default-room' && currentContent === null) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
     }
 });

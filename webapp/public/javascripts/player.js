@@ -203,11 +203,14 @@ searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);
     var selectedContentUrl = target.getAttribute('data-link');
     var selectedContentTitle = target.innerHTML;
-    console.log("should be printing message: " + selectedContentTitle);
-    $('#contentReadyToBeAddedMessage').text('Currently selected : ' + selectedContentTitle);
+    $('#contentReadyToBeAddedMessage').text('Added : ' + selectedContentTitle + ' to playlist.');
     $('#contentReadyToBeAddedMessage').show();
-    $('#addContentButton').addClass('btn-info');
     searchResultsDropdownSelectedItem = selectedContentUrl;
+    if (searchResultsDropdownSelectedItem) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
+        searchResultsDropdownSelectedItem = "";
+    }
+
 });
 
 SOCIALSOUNDSCLIENT.BASEPLAYER = {
