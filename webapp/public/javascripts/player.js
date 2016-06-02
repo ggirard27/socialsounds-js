@@ -1,7 +1,6 @@
 ﻿var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 var contentProviderList = ['soundcloud', 'vimeo', 'youtube']; // This needs to go server side when we have time. - GG
 
-var addContentButton = document.getElementById('addContentButton');
 var startBroadcastButton = document.getElementById('startBroadcastButton');
 var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
 var btnMuteContent = document.getElementById('btnMuteContent');
@@ -44,11 +43,6 @@ btnDashPause.addEventListener('click', function () {
 btnSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.voteSkip();
     document.getElementById('btnSkip').disabled = true;
-    document.getElementById('smallBtnSkip').disabled = true;
-});
-//Mobile site button..
-smallBtnSkip.addEventListener('click', function () {
-    btnSkip.click();
 });
 
 btnCreateChannel.addEventListener('click', function () {
@@ -97,12 +91,6 @@ btnSwitchChannel.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(channelName, channelPassword);  //Removing the spaces because it breaks the swtich channel event.
 });
 
-
-//So the mobile button also works.
-smallBtnCreateChannel.addEventListener('click', function () {
-    btnCreateChannel.click();
-});
-
 searchButton.addEventListener('click', function () {
     var queryString = document.getElementById('searchBarInput').value;
     searchResultsDropdown.innerHTML = '';
@@ -144,7 +132,7 @@ inputChat.addEventListener('keyup', function (e) {
 });
 
 smallDisplayChatButton.addEventListener('click', function () {
-    document.getElementById('smallPlaylistSection').style.display = "none";
+    document.getElementById('playlistSection').style.display = "none";
     smallDisplayChatButton.style.display = "none";
     
     document.getElementById('chatSection').style.display = "block";
@@ -155,18 +143,8 @@ smallDisplayPlaylistButton.addEventListener('click', function () {
     document.getElementById('chatSection').style.display = "none";
     smallDisplayPlaylistButton.style.display = "none";
     
-    document.getElementById('smallPlaylistSection').style.display = "block";
+    document.getElementById('playlistSection').style.display = "block";
     smallDisplayChatButton.style.display = "inline-block";
-});
-
-//TODO: If the URL can't be parsed correctly display a error for the user.
-addContentButton.addEventListener('click', function () {
-    if (searchResultsDropdownSelectedItem) {
-        SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
-        searchResultsDropdownSelectedItem = "";
-        $('#contentReadyToBeAddedMessage').hide();
-        $('#addContentButton').removeClass('btn-info');
-    }
 });
 
 startBroadcastButton.addEventListener('click', function () {
@@ -432,6 +410,13 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     applyPlayerMuteState: function () {
         var self = this;
+        if (self.getPlayerMuteState()) {
+            $('#volumeOff').show();
+            $('#volumeOn').hide();
+        } else {
+            $('#volumeOff').hide();
+            $('#volumeOn').show();
+        }
         if (currentContent) {
             switch (currentContent.provider) {
                 case 'soundcloud':
@@ -473,7 +458,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             li.appendChild(a);
             searchResultsDropdown.appendChild(li);
         }
-        document.getElementById('searchResultsDropdownBtn').style.display = "inline-block";
         document.getElementById('searchBar').className += " open";
     },
     
@@ -491,19 +475,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         var htmlContent = '';
         htmlContent += '<a href="' + content.url + '" target="_blank" class="' + id + ' list-group-item"> <img src="/images/' + content.provider + '-playlist.png"/> ' + content.title + '</a></li>';
         $('#contentQueueListGroup').append(htmlContent);
-        
-        var node = document.createElement("LI");
-        var img = document.createElement("IMG");
-        var aText = document.createElement("A");
-        img.src = "images/" + content.provider + "-playlist.png";
-        aText.href = content.url;
-        aText.target = "_blank";
-        aText.text = " " + content.title;
-        
-        node.appendChild(img);
-        node.appendChild(aText);
-        
-        document.getElementById('smallContentQueueList').appendChild(node);
     },
     
     displayContentList: function (contentList) {

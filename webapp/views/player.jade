@@ -58,8 +58,8 @@ block content
     .container-fluid
         div
             span.h1#channelTitle #{room}
-        div
-            .left-div
+        .container-fluid-main-section
+            .left-div#playlistSection
                 .playlist-section-title
                     span.h3 Playlist
                 .playlist-section
@@ -78,11 +78,10 @@ block content
                 div
                     .input-group
                         .input-group-btn#searchBar
-                            button.btn#addContentButton(title="Add to the playlist")
-                                i.fa.fa-plus
                             button.btn.dropdown-toggle#searchResultsDropdownBtn(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                 span.caret
                             ul.dropdown-menu#searchResultsDropdown
+                                li There is notting to see here
                         input.form-control#searchBarInput(type='search' placeholder='Search or enter url')
                         .input-group-btn
                             button.btn#searchButton(title="Search")
@@ -115,8 +114,8 @@ block content
                             button.btn#btnOpenInBrowser(title="Open this content in new window")
                                 i.fa.fa-external-link
                             button.btn#btnMuteContent(title="Mute/Unmute")
-                                i.fa.fa-volume-off
-                                //i.fa.fa-volume-up
+                                i.fa.fa-volume-off#volumeOff
+                                i.fa.fa-volume-up#volumeOn(style="display: none")
                 #ownerDashboard
                     div
                         span.h3 Owner controls
@@ -131,30 +130,14 @@ block content
                         ul#channelList
                         div
                             button.btn#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel 
-            .right-div
+            .right-div#chatSection
                 .chat-section-title
                     span.h3 Chat
-                .chat-section#chatSection
+                .chat-section
                     .chat-messages
                         .chat-box.ul#chatBox
                     .chat-interface
-                        input.input-chat#inputChat(PlaceHolder="Send a message" type="text" maxlength="300")
-       
-       .row
-            .col-xs-12.col-sm-12.hidden-md.hidden-lg#smallPlaylistSection
-                #smallContentQueueDiv
-                    span.h4 Playlist
-                    ul#smallContentQueueList
-                    .progress
-                        .progess-bar
-                            span#smallLabelSkip 0/0 users voted to skip
-                    div
-                    button.btn#smallBtnSkip Skip
-                    #smallChannelListDiv
-                    span.h4 Channels
-                    ul#smallChannelList
-                    div
-                        button.btn#smallBtnCreateChannel Create channel      
+                        input.input-chat#inputChat(PlaceHolder="Send a message" type="text" maxlength="300")   
 
 append bodyscripts
     script(type='text/javascript').
