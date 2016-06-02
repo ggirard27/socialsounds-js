@@ -92,6 +92,7 @@ socket.on('exportContentList', function(contentList) {
 
 socket.on('noContent', function () {
     // Alert the users in an unobtrusive way, while still being clear. flash message?
+    currentContent = null;
     console.log('No more content in queue, please add more and press start broadcast.');
 });
 
