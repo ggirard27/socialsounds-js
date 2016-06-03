@@ -154,18 +154,19 @@ module.exports.listen = function (server) {
         });
         
         socket.on('voteSkip', function (room) {
+            var contentList = roomdata.get(socket, 'contentList');
             var votes = roomdata.get(socket, 'voteSkip');
             var userConnected = roomdata.get(socket, 'users').length
             var votesRequired = Math.ceil(userConnected * 0.66)//two thirds of the people must agree to skip the song.
             roomdata.incrementVoteSkip(room);
-            if (votes + 1 >= votesRequired)
+            if (votes + 1 >= votesRequired && contentList.getRemaining() > 0)
                 io.to(socket.room).emit('skipSong');
             else
                 io.to(socket.room).emit('updateSkipLabel', userConnected, votes + 1);
         });
         
         socket.on('controlPlayer', function (func) {
-            if (socket.user == roomdata.get(socket, 'owner')) {
+            if (socket.user == roomdata.get(socket, 'owner')) { 
                 if (func == 'mute')
                     io.to(socket.room).emit('mutePlayer');
                 else if (func == 'pause') {
