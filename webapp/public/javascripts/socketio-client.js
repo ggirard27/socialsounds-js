@@ -21,7 +21,7 @@ socket.on("connect", function () {
 socket.on('roomJoined', function (room) {
     console.log('Joined room: ' + room);
     socket.room = room;
-    $('#chatBox').append('<li> --- You have joined the channel ' + room + '</li>');
+    $('#chatBox').append('<li><span> --- You have joined the channel ' + room + '</span></li>');
     var chat = document.getElementById('chatBox');
     chat.scrollTop = chat.scrollHeight;
     SOCIALSOUNDSCLIENT.SOCKETIO.setUsername(socket.user);
