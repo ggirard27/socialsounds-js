@@ -25,6 +25,12 @@ if (document.documentElement.clientWidth < 992) {
     document.getElementById('chatSection').style.top = bottom + 'px';
 }
 
+createChannelNameField.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnCreateChannel.click();
+    }
+});
+
 btnImportContent.addEventListener('click', function () {
     var playlist = document.getElementById('importContentData').value;
     var index = playlist.indexOf('https');
@@ -55,7 +61,11 @@ btnSkip.addEventListener('click', function () {
 });
 
 btnCancelSwitchChannel.addEventListener('click', function () {
-    SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom('default-room', false);
+    document.location = document.location.protocol + '/player/rooms/default-room';
+});
+
+btnCancelCreateChannel.addEventListener('click', function () {
+    document.location = document.location.protocol + '/player/rooms/default-room';
 });
 
 btnCreateChannel.addEventListener('click', function () {
