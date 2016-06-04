@@ -40,7 +40,7 @@ module.exports.listen = function (server) {
                 io.to(socket.id).emit('showOwnerControls', (socket.user == roomdata.get(socket, 'owner') && (room != defaultRoom)));
                 //Update Channel list and sent it to the user
                 channelList = roomdata.channels;
-                io.to(socket.id).emit('getChannelList', socket.room, channelList);
+                io.emit('getChannelList', socket.room, channelList);
                 io.to(socket.id).emit('roomJoined', socket.room);
                 io.to(socket.id).emit('roomSwitched', socket.room);
                 //Update the skip label of the room that we joined
@@ -79,9 +79,8 @@ module.exports.listen = function (server) {
                     var connectedUsers = roomdata.get(socket, 'users').length;
                     io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
                     io.to(socket.id).emit('showOwnerControls', (socket.user == roomdata.get(socket, 'owner') && (room != defaultRoom)));
-                    //Update Channel list and sent it to the user
                     channelList = roomdata.channels;
-                    io.to(socket.id).emit('getChannelList', socket.room, channelList);
+                    io.emit('getChannelList', socket.room, channelList);
                     io.to(socket.id).emit('roomJoined', socket.room);
                     io.to(socket.id).emit('roomSwitched', socket.room);
                     //Update the skip label of the room that we joined
@@ -170,18 +169,19 @@ module.exports.listen = function (server) {
         });
         
         socket.on('voteSkip', function (room) {
+            var contentList = roomdata.get(socket, 'contentList');
             var votes = roomdata.get(socket, 'voteSkip');
             var userConnected = roomdata.get(socket, 'users').length
             var votesRequired = Math.ceil(userConnected * 0.66)//two thirds of the people must agree to skip the song.
             roomdata.incrementVoteSkip(room);
-            if (votes + 1 >= votesRequired)
+            if (votes + 1 >= votesRequired && contentList.getRemaining() > 0)
                 io.to(socket.room).emit('skipSong');
             else
                 io.to(socket.room).emit('updateSkipLabel', userConnected, votes + 1);
         });
         
         socket.on('controlPlayer', function (func) {
-            if (socket.user == roomdata.get(socket, 'owner')) {
+            if (socket.user == roomdata.get(socket, 'owner')) { 
                 if (func == 'mute')
                     io.to(socket.room).emit('mutePlayer');
                 else if (func == 'pause') {
@@ -198,10 +198,11 @@ module.exports.listen = function (server) {
         socket.on('switchOrCreateIfNotExists', function (room) {
 
             var exists = roomdata.roomExists(socket, room);
-
-            if (room != 'default-room') {
+            var pwProtected = roomdata.roomIsProtected(socket, room);
+            if (exists && !pwProtected || room == 'default-room') 
+                io.to(socket.id).emit('joinUnprotectedChannel', room);             
+            else 
                 io.to(socket.id).emit('showProperChannelModal', room, exists);
-            }
         });
 
         socket.on('getContentList', function () {

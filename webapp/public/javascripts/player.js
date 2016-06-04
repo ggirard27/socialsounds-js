@@ -16,6 +16,21 @@ var currentContent = null;
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
+if (document.documentElement.clientWidth < 992) {
+    var bottom = document.getElementById('playingContentSection').clientHeight 
+                + document.getElementById('channelTitle').clientHeight 
+                + document.getElementById('navbarSocialsounds').clientHeight 
+                + 5;
+    document.getElementById('playlistSection').style.top = bottom + 'px';
+    document.getElementById('chatSection').style.top = bottom + 'px';
+}
+
+createChannelNameField.addEventListener('keyup', function (e) {
+    if (e.keyCode == 13) {
+        btnCreateChannel.click();
+    }
+});
+
 btnImportContent.addEventListener('click', function () {
     var playlist = document.getElementById('importContentData').value;
     var index = playlist.indexOf('https');
@@ -48,6 +63,14 @@ btnDashPause.addEventListener('click', function () {
 btnSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.voteSkip();
     document.getElementById('btnSkip').disabled = true;
+});
+
+btnCancelSwitchChannel.addEventListener('click', function () {
+    document.location = document.location.protocol + '/player/rooms/default-room';
+});
+
+btnCancelCreateChannel.addEventListener('click', function () {
+    document.location = document.location.protocol + '/player/rooms/default-room';
 });
 
 btnCreateChannel.addEventListener('click', function () {
@@ -138,18 +161,14 @@ inputChat.addEventListener('keyup', function (e) {
 
 smallDisplayChatButton.addEventListener('click', function () {
     document.getElementById('playlistSection').style.display = "none";
-    smallDisplayChatButton.style.display = "none";
     
     document.getElementById('chatSection').style.display = "block";
-    smallDisplayPlaylistButton.style.display = "inline-block";
 });
 
 smallDisplayPlaylistButton.addEventListener('click', function () {
     document.getElementById('chatSection').style.display = "none";
-    smallDisplayPlaylistButton.style.display = "none";
     
     document.getElementById('playlistSection').style.display = "block";
-    smallDisplayChatButton.style.display = "inline-block";
 });
 
 startBroadcastButton.addEventListener('click', function () {
