@@ -67,19 +67,26 @@ exports.ContentList = function ContentList(owner) {
     var queue = [];
     var users = [];
     var currentIndex = 0;
+    var removedContent = 0;
     
     this.removeContent = function (index, user) {
-        if (users[index] == user || user == queueOwner) {
-            queue[index] = null;
+        console.log('Array lengths: ' + queue.length + '/' + users.length);
+        console.log("Queue content removal method params: " + user + " " + users[index-1] + ' index ' + index);
+
+        if (users[index-1] == user || user == queueOwner) {
+            console.log("Queue actually removing content");
+            queue[index-1] = null;
+            users[index - 1] = null;
+            removedContent++;
         }
     }
     
     this.getLength = function () {
-        return (queue.length);
+        return (queue.length - removedContent);
     }
     
     this.getRemaining = function () {
-        return (queue.length - currentIndex);
+        return (queue.length - currentIndex - removedContent);
     }
     
     this.getCurrentIndex = function () {
@@ -91,8 +98,10 @@ exports.ContentList = function ContentList(owner) {
     }
     
     this.enqueue = function (item, user) {
+        console.log('Queueing ' + item.title + ' and user ' + user);
         queue.push(item);
         users.push(user);
+        console.log('Array lengths: ' + queue.length + '/' + users.length);
         return queue.length;
     }
     
@@ -103,7 +112,7 @@ exports.ContentList = function ContentList(owner) {
         while (queue[currentIndex] == null) currentIndex++;
         
         var item = queue[currentIndex];
-
+        console.log('dequeuing ' + item.title);
         currentIndex++;
 
         return item;

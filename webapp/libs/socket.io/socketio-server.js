@@ -131,17 +131,33 @@ module.exports.listen = function (server) {
             }
         });
         
-        socket.on('addContent', function (content, user, room) {
+        socket.on('addContent', function (content, room, user) {
             var contentList = roomdata.get(socket, 'contentList');
             console.log('Request to add ' + content.url + ' to queue of room ' + room);
             if (content) {
                 console.log('Request accepted');
-                index = contentList.enqueue(content, user, socket);
-                io.to(socket.room).emit('contentAdded', content, index);
+                index = contentList.enqueue(content, user);
+                io.to(socket.room).emit('contentAdded', content, index, user);
             }
             else {
                 console.log('Request denied');
                 io.to(socket.room).emit('contentRejected', content);
+            }
+        });
+        
+        socket.on('removeContent', function (content, room, index, user) {
+            var contentList = roomdata.get(socket, 'contentList');
+            console.log('Request to remove ' + content.url + ' from queue of room ' + room + ' at index ' + index);
+            if (content) {
+                console.log('Removal accepted');
+                contentList.removeContent(index, user);
+                io.to(socket.room).emit('contentRemoved', content, user);
+                var listerini = contentList.getQueue()
+                io.to(socket.room).emit('displayContentList', listerini);
+            }
+            else {
+                console.log('Removal denied');
+                io.to(socket.room).emit('contentRemovalRejected', content);
             }
         });
         

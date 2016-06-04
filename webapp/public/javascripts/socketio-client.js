@@ -44,9 +44,12 @@ socket.on('playNextContent', function (content, timestamp) {
     document.getElementById('btnSkip').disabled = false;
 });
 
-socket.on('contentAdded', function (content, index) {
-    console.log('Added ' + content.title + ' to the content queue, at index: ' + index);
+socket.on('contentAdded', function (content, index, user) {
+    console.log('Added ' + content.title + ' to the content queue, at index: ' + index + ' by user ' + user);
     SOCIALSOUNDSCLIENT.BASEPLAYER.appendToContentList(content);
+    if (usernameChat == user) {
+        displayUndoAddContentLink(content, index);
+    }
     if (socket.room == 'default-room' && currentContent === null) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
     }
@@ -150,6 +153,10 @@ socket.on('joinUnprotectedChannel', function (room) {
     SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(room, false);
 });
 
+socket.on('contentRemoved', function (content, index, user) {
+    console.log('Removed ' + content.title + ' at index ' + index + ' by user ' + user);
+});
+
 function setSwitchRoomModalChannelNameValue(channelName){
     $('#switchChannelNameField').val(channelName);
 };
@@ -162,6 +169,15 @@ function writeChannelUrlRequest(channelName) {
     document.location = document.location.protocol + '/player/rooms/' + channelName;
 };
 
+function displayUndoAddContentLink(content, index) {
+
+    $('#undoLink').off();
+    $('#undoLink').on('click', function () {
+        SOCIALSOUNDSCLIENT.SOCKETIO.removeContentFromServer(content, index, usernameChat);
+        console.log("Just sent removal request to server with " + content.title + " at index " + index);
+    });
+};
+
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 
 SOCIALSOUNDSCLIENT.SOCKETIO = {
@@ -172,7 +188,12 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
     
     addContentToServer: function (content, user) {
         console.log('Telling server to add ' + content.title + ' to the content queue');
-        socket.emit('addContent', content, socket.room);
+        socket.emit('addContent', content, socket.room, user);
+    },
+    
+    removeContentFromServer: function (content, index, user) {
+        console.log('User ' + user + ' telling server to remove ' + content.title + ' at index ' + index + ' from the content queue');
+        socket.emit('removeContent', content, socket.room, index, user);
     },
     
     switchRoom: function (room, password) {
