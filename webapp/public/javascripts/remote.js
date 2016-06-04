@@ -207,7 +207,6 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                     console.log("Oops, something went wrong while trying to launch: " + content.provider);
                     break;
             };
-            self.updateSocialMediaShareButtonsUrl();
         } 
         else {
             console.log("Invalid content provider passed to player: " + content.provider);

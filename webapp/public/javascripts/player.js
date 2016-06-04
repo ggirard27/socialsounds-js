@@ -30,6 +30,11 @@ btnImportContent.addEventListener('click', function () {
     
 });
 
+searchResultsDropdownBtn.addEventListener('click', function () {
+    $('#contentReadyToBeAddedMessage').hide();
+    $('#contentReadyToBeAddedMessage').html("");
+});
+
 btnDashSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
 });
@@ -181,8 +186,10 @@ searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);
     var selectedContentUrl = target.getAttribute('data-link');
     var selectedContentTitle = target.innerHTML;
-    $('#contentReadyToBeAddedMessage').text('Added : ' + selectedContentTitle + ' to playlist.');
+
+    $('#contentReadyToBeAddedMessage').html('<p>Added : ' + selectedContentTitle + ' to playlist.</p> <a id="undoLink"> Undo </a>');
     $('#contentReadyToBeAddedMessage').show();
+    $('#contentReadyToBeAddedMessage').delay(4000).fadeOut(500);
     searchResultsDropdownSelectedItem = selectedContentUrl;
     if (searchResultsDropdownSelectedItem) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
@@ -349,7 +356,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
         else {
             //this.displayContentInformation(content);
-            SOCIALSOUNDSCLIENT.SOCKETIO.addContentToServer(content);
+            SOCIALSOUNDSCLIENT.SOCKETIO.addContentToServer(content, usernameChat);
         }
     },
     
@@ -480,10 +487,15 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     displayContentList: function (contentList) {
         var self = this;
         $('#contentQueueListGroup').html('');
-        console.log('Content list length: ' + contentList.length);
+        console.log('Trying to display a content list with content list length: ' + contentList.length);
         if (contentList.length > 0) {
             for (var i = 0; i < contentList.length; i++) {
-                self.appendToContentList(contentList[i]);
+                if (contentList[i] !== null) {
+                    self.appendToContentList(contentList[i]);
+                }
+                else {
+                    console.log("content was null, not printing");
+                }
             }
         }
         else {
