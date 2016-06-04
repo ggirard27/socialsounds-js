@@ -45,6 +45,10 @@ btnSkip.addEventListener('click', function () {
     document.getElementById('btnSkip').disabled = true;
 });
 
+btnCancelSwitchChannel.addEventListener('click', function () {
+    SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom('default-room', false);
+});
+
 btnCreateChannel.addEventListener('click', function () {
     var channelName = document.getElementById('createChannelNameField').value;
     var channelPassword = document.getElementById('createChannelPasswordField').value;
