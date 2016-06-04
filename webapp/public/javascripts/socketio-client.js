@@ -147,6 +147,10 @@ socket.on('showProperChannelModal', function (room, exists) {
     }
 });
 
+socket.on('joinUnprotectedChannel', function (room) {
+    SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom(room, false);
+});
+
 function setSwitchRoomModalChannelNameValue(channelName){
     $('#switchChannelNameField').val(channelName);
 };
