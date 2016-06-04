@@ -69,7 +69,7 @@ block content
                     .progress
                         .progess-bar.progress-bar-info#progessBar(role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%")
                             label 
-                    .hidden-xs.hidden-sm
+                    .hidden-xs.hidden-sm.btn-group
                         button.btn#exportBtn Export
                         button.btn#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
             .center-div#playingContentSection
@@ -103,14 +103,15 @@ block content
                                 a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
                     .col-xs-4.col-sm-4.col-md-4.col-lg-4.no-padding-style
                         .pull-right
-                            .user-number
+                            .user-number.hidden-xs
                                 i.fa.fa-user 
                                 label.text#nbUsers
-                            button.btn#btnOpenInBrowser(title="Open this content in new window")
-                                i.fa.fa-external-link
-                            button.btn#btnMuteContent
-                                i.glyphicon.glyphicon-volume-up#volumeOn(title="Mute")
-                                i.glyphicon.glyphicon-volume-off#volumeOff(title="Unmute", style="display: none")
+                            .btn-group
+                                button.btn#btnOpenInBrowser(title="Open this content in new window")
+                                    i.fa.fa-external-link
+                                button.btn#btnMuteContent
+                                    i.glyphicon.glyphicon-volume-up#volumeOn(title="Mute")
+                                    i.glyphicon.glyphicon-volume-off#volumeOff(title="Unmute", style="display: none")
                 #ownerDashboard
                     div
                         span.h3 Owner controls
