@@ -40,7 +40,7 @@ module.exports.listen = function (server) {
                 io.to(socket.id).emit('showOwnerControls', (socket.user == roomdata.get(socket, 'owner') && (room != defaultRoom)));
                 //Update Channel list and sent it to the user
                 channelList = roomdata.channels;
-                io.to(socket.id).emit('getChannelList', socket.room, channelList);
+                io.emit('getChannelList', socket.room, channelList);
                 io.to(socket.id).emit('roomJoined', socket.room);
                 io.to(socket.id).emit('roomSwitched', socket.room);
                 //Update the skip label of the room that we joined
@@ -79,9 +79,8 @@ module.exports.listen = function (server) {
                     var connectedUsers = roomdata.get(socket, 'users').length;
                     io.to(socket.room).emit('logging', 'user connected, new user count: ' + connectedUsers);
                     io.to(socket.id).emit('showOwnerControls', (socket.user == roomdata.get(socket, 'owner') && (room != defaultRoom)));
-                    //Update Channel list and sent it to the user
                     channelList = roomdata.channels;
-                    io.to(socket.id).emit('getChannelList', socket.room, channelList);
+                    io.emit('getChannelList', socket.room, channelList);
                     io.to(socket.id).emit('roomJoined', socket.room);
                     io.to(socket.id).emit('roomSwitched', socket.room);
                     //Update the skip label of the room that we joined
@@ -183,10 +182,11 @@ module.exports.listen = function (server) {
         socket.on('switchOrCreateIfNotExists', function (room) {
 
             var exists = roomdata.roomExists(socket, room);
-
-            if (room != 'default-room') {
+            var pwProtected = roomdata.roomIsProtected(socket, room);
+            if (exists && !pwProtected || room == 'default-room') 
+                io.to(socket.id).emit('joinUnprotectedChannel', room);             
+            else 
                 io.to(socket.id).emit('showProperChannelModal', room, exists);
-            }
         });
 
         socket.on('getContentList', function () {

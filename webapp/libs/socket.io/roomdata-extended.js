@@ -9,6 +9,11 @@ exports.roomExists = function (socket, room) {
     return true;
 };
 
+exports.roomIsProtected = function (socket, room) {
+    if (this.rooms[room])
+        return this.rooms[room].passwordProtected;
+}
+
 exports.dataExists = function (socket, variable) {
     var res = (this.rooms[socket.roomdata_room].variables[variable] == 'undefined') ? "false" : "true";
     if (exports.Debug) console.log(socket.id + ": Testing variable: " + variable + ". Result: " + res);
