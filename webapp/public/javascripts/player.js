@@ -25,6 +25,8 @@ if (document.documentElement.clientWidth < 992) {
     document.getElementById('chatSection').style.top = bottom + 'px';
 }
 
+document.getElementById('searchResultsDropdown').style.width = document.getElementById('searchBar').clientWidth + 'px';
+
 btnImportContent.addEventListener('click', function () {
     var playlist = document.getElementById('importContentData').value;
     var index = playlist.indexOf('https');
@@ -190,12 +192,12 @@ searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);
     var selectedContentUrl = target.getAttribute('data-link');
     var selectedContentTitle = target.innerHTML;
-    $('#contentReadyToBeAddedMessage').text('Added : ' + selectedContentTitle + ' to playlist.');
-    $('#contentReadyToBeAddedMessage').show();
     searchResultsDropdownSelectedItem = selectedContentUrl;
     if (searchResultsDropdownSelectedItem) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
         searchResultsDropdownSelectedItem = "";
+        $('#contentReadyToBeAddedMessage').text('Added : ' + selectedContentTitle + ' to playlist.');
+        $('#contentReadyToBeAddedMessage').show();
     }
 
 });
@@ -467,7 +469,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             li.appendChild(a);
             searchResultsDropdown.appendChild(li);
         }
-        document.getElementById('searchBar').className += " open";
+        document.getElementById('searchResultGroup').className += " open";
     },
     
     appendToContentList: function (content) {

@@ -6,6 +6,9 @@ html, #wrapper, #contentSection, .container-fluid
 body
     height: 100%
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+@media (max-width: 338px)
+    .hidden-xxs
+        display: none
 
 /**************************/
 /*         Navbar         */
@@ -188,9 +191,6 @@ body
 /*        Player           */
 /***************************/
 @media (max-width: 992px)
-    .container-fluid-main-section
-        height: calc(100% - 39px)
-
     .left-div
         left: 0
         right: 0
@@ -270,7 +270,7 @@ body
         padding-right: 15px
 
     .chat-messages
-        padding-bottom: 30px
+        padding-bottom: 35px
         width: 100%
         height: 100%
 
@@ -278,7 +278,6 @@ body
         left: 0
         right: 0
         bottom: 0
-        height: 30px
         width: 100%
         position: absolute
         padding-bottom: 5px
@@ -351,7 +350,7 @@ body
 
     .chat-messages
         top: 0
-        bottom: 35px
+        bottom: 42px
         position: absolute
         width: 100%
 
@@ -359,16 +358,20 @@ body
         left: 0
         right: 0
         bottom: 0
-        height: 30px
         width: 100%
         position: absolute
         padding-left: 5px
         padding-right: 5px
+        padding-bottom: 5px
 /* end @media (min-width: 992px) */
 
 #searchResultsDropdown
     margin-top: -1px
-    border-radius: 0
+    overflow-x: hidden
+    white-space: normal
+
+#searchResultsDropdown li a
+    white-space: normal
 
 .embed-responsive
     background-color: black
@@ -421,8 +424,6 @@ body
     
 .input-chat
     outline: none
-    padding-left: 10px
-    width: 100%
 
 /***************************/
 /*        Remote           */

@@ -427,7 +427,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             searchResultsDropdown.appendChild(li);
         }
         document.getElementById('searchResultsDropdownBtn').style.display = "inline-block";
-        document.getElementById('searchBar').className += " open";
+        document.getElementById('searchResultGroup').className += " open";
     },
     
     appendToContentList: function (content) {

@@ -58,7 +58,7 @@ block content
     .container-fluid
         div
             span.h1#channelTitle #{room}
-        .container-fluid-main-section
+        div
             .left-div#playlistSection
                 .playlist-section-title
                     span.h3 Playlist
@@ -78,14 +78,14 @@ block content
                         button.btn#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
             .center-div#playingContentSection
                 div
-                    .input-group
-                        .input-group-btn#searchBar
+                    .input-group#searchBar
+                        .input-group-btn#searchResultGroup
                             button.btn.dropdown-toggle#searchResultsDropdownBtn(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                 span.caret
                             ul.dropdown-menu#searchResultsDropdown
                                 li 
-                                    span There's nothing to see here
-                        input.form-control#searchBarInput(type='search' placeholder='Search or enter url')
+                                    a(data-link="") There's nothing to see here
+                        input.form-control#searchBarInput(type='search' placeholder='Search')
                         .input-group-btn
                             button.btn#searchButton(title="Search")
                                 i.fa.fa-search
@@ -107,7 +107,7 @@ block content
                                 a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
                     .col-xs-4.col-sm-4.col-md-4.col-lg-4.no-padding-style
                         .pull-right
-                            .user-number.hidden-xs
+                            .user-number.hidden-xxs
                                 i.fa.fa-user 
                                 label.text#nbUsers
                             .btn-group
@@ -139,7 +139,7 @@ block content
                     .chat-messages
                         .chat-box.ul#chatBox
                     .chat-interface
-                        input.input-chat#inputChat(PlaceHolder="Send a message" type="text" maxlength="300")   
+                        input.input-chat.form-control#inputChat(PlaceHolder="Send a message" type="text" maxlength="300")   
 
 append bodyscripts
     script(type='text/javascript').
