@@ -13,50 +13,16 @@ body
 /**************************/
 /*         Navbar         */
 /**************************/
+#navigation-section
+    padding: 0px
+
+#contentSection
+    padding-top: 55px
+
+#profileLink
+    padding-right: 15px
+
 @css {
-    /* make sidebar nav vertical */ 
-    @media (min-width: 992px) {
-      #navbarSocialsounds{
-        width: 70px;
-      }
-      .sidebar-nav .navbar .navbar-collapse {
-        padding: 0;
-        max-height: none;
-      }
-      .sidebar-nav .navbar ul {
-        float: none;
-      }
-      .sidebar-nav .navbar ul:not {
-        display: block;
-      }
-      .sidebar-nav .navbar li {
-        float: none;
-        display: block;
-      }
-      .sidebar-nav .navbar li a {
-        padding-top: 12px;
-        padding-bottom: 12px;
-      }
-      #navigation-section {
-        padding: 0px;
-        width: 70px;
-        background-color: #002d56;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        position: fixed;
-      }
-      #contentSection {
-        margin-left: 70px;
-        padding-top: 12px;
-        padding-bottom: 12px;
-      }
-    }
-
-    #navigation-section {
-        padding: 0px;
-    }
-
     /*
     http://work.smarchal.com/twbscolor/css/e74c3cc0392becf0f1ffbbbc0
     */
@@ -118,9 +84,6 @@ body
     }
 
     @media (max-width: 992px) {
-      #contentSection {
-        padding-top: 55px;
-      }
       #navbarSocialsounds.navbar-default .navbar-nav .open .dropdown-menu > li > a {
         color: #ffffff;
       }
@@ -228,7 +191,7 @@ body
         top: 40px
         left: 0
         right: 0
-        bottom: 100px
+        bottom: 85px
         position: absolute
         padding-left: 15px
         padding-right: 15px
@@ -240,7 +203,6 @@ body
     .content-queue-list-group
         height: 100%
         overflow: auto
-        padding-right: 5px
 
     .skip-section
         bottom: 0
@@ -286,6 +248,9 @@ body
 /* end @media (max-width: 992px) */
 
 @media (min-width: 992px)
+    .page-title
+        padding-right: 300px
+
     .left-div
         display: initial
         float: left
@@ -300,7 +265,7 @@ body
     
     .right-div
         display: initial
-        top: 0
+        top: 50px
         right: 0
         bottom: 0
         position: absolute
@@ -318,7 +283,7 @@ body
 
     .playlist-section
         top: 90px
-        bottom: 140px
+        bottom: 125px
         position: absolute
         width: inherit
     
@@ -364,6 +329,18 @@ body
         padding-right: 5px
         padding-bottom: 5px
 /* end @media (min-width: 992px) */
+.skip-section-button
+    width: 100%
+    float: right
+
+#btnSkip
+    float: right
+
+.progress
+    margin-bottom: 5px !important
+
+.import-export-playlist
+    padding-bottom: 5px
 
 #searchResultsDropdown
     margin-top: -1px

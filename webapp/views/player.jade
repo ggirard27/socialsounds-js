@@ -52,42 +52,44 @@ block content
                     button.btn.btn-primary#btnSwitchChannel(type='button') Join
 
     .container-fluid
-        div
+        .page-title
             span.h1#channelTitle #{room}
+            .pull-right
+                a.btn.btn-default#goToRemoteBtn(href='/remote/rooms/default-room') Remote
         div
             .left-div#playlistSection
                 .playlist-section-title
                     span.h3 Playlist
                     .hidden-md.hidden-lg.pull-right
-                        button.btn.btn-title#smallDisplayChatBtn Chat
+                        button.btn.btn-default.btn-title#smallDisplayChatBtn Chat
                 .playlist-section
                     .list-group.content-queue-list-group#contentQueueListGroup
                 .skip-section
-                    div
-                        button.btn#btnSkip Skip
+                    .skip-section-button
+                        button.btn.btn-default#btnSkip Skip
                     label#labelSkip 0/0 user voted to skip
                     .progress
                         .progess-bar.progress-bar-info#progessBar(role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%")
                             label 
-                    .hidden-xs.hidden-sm.btn-group
-                        button.btn#exportBtn Export
-                        button.btn#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
+                    .hidden-xs.hidden-sm.btn-group.import-export-playlist
+                        button.btn.btn-default#exportBtn Export
+                        button.btn.btn-default#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
             .center-div#playingContentSection
                 div
                     .input-group#searchBar
                         .input-group-btn#searchResultGroup
-                            button.btn.dropdown-toggle#searchResultsDropdownBtn(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                            button.btn.btn-default.dropdown-toggle#searchResultsDropdownBtn(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                 span.caret
                             ul.dropdown-menu#searchResultsDropdown
                                 li 
                                     a(data-link="") There's nothing to see here
                         input.form-control#searchBarInput(type='search' placeholder='Search')
                         .input-group-btn
-                            button.btn#searchButton(title="Search")
+                            button.btn.btn-default#searchButton(title="Search")
                                 i.fa.fa-search
                 .content-added-notification
                     .alert.alert-info#contentReadyToBeAddedMessage(style='display: none; margin-bottom: 0px')
-                div
+                div#contentPlayer
                     .embed-responsive.embed-responsive-16by9
                         iframe.embed-responsive-item#soundcloudPlayer
                         .iframe.embed-responsive-item#vimeoPlayer
@@ -107,30 +109,24 @@ block content
                                 i.fa.fa-user 
                                 label.text#nbUsers
                             .btn-group
-                                button.btn#btnOpenInBrowser(title="Open this content in new window")
+                                button.btn.btn-default#btnOpenInBrowser(title="Open this content in new window")
                                     i.fa.fa-external-link
-                                button.btn#btnMuteContent
+                                button.btn.btn-default#btnMuteContent
                                     i.glyphicon.glyphicon-volume-up#volumeOn(title="Mute")
                                     i.glyphicon.glyphicon-volume-off#volumeOff(title="Unmute", style="display: none")
                 #ownerDashboard
                     div
                         span.h3 Owner controls
                     .btn-group
-                        button.btn#btnDashSkip Skip
-                        button.btn#btnDashMute Mute
-                        button.btn#btnDashPause Pause
-                        button.btn#startBroadcastButton Start Broadcast
-                div
-                    #channelListDiv
-                        span.h4 Channels
-                        ul#channelList
-                        div
-                            button.btn#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel 
+                        button.btn.btn-default#btnDashSkip Skip
+                        button.btn.btn-default#btnDashMute Mute
+                        button.btn.btn-default#btnDashPause Pause
+                        button.btn.btn-default#startBroadcastButton Start Broadcast
             .right-div#chatSection
                 .chat-section-title
                     span.h3 Chat
                     .hidden-md.hidden-lg.pull-right
-                        button.btn.btn-title#smallDisplayPlaylistBtn Playlist
+                        button.btn.btn-default.btn-title#smallDisplayPlaylistBtn Playlist
                 .chat-section
                     .chat-messages
                         .chat-box.ul#chatBox

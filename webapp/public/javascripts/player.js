@@ -19,8 +19,9 @@ var usernameChat = userCookie.general.username;
 if (document.documentElement.clientWidth < 992) {
     var bottom = document.getElementById('playingContentSection').clientHeight 
                 + document.getElementById('channelTitle').clientHeight 
-                + document.getElementById('navbarSocialsounds').clientHeight 
+                + document.getElementById('btnMuteContent').clientHeight 
                 + 5;
+
     document.getElementById('playlistSection').style.top = bottom + 'px';
     document.getElementById('chatSection').style.top = bottom + 'px';
 }
