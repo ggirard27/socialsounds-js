@@ -166,7 +166,7 @@ function setCreateRoomModalChannelNameValue(channelName) {
 };
 
 function writeChannelUrlRequest(channelName) {
-    document.location = document.location.protocol + '/player/rooms/' + channelName;
+    document.location = document.location.protocol + '/player/channels/' + channelName;
 };
 
 function displayUndoAddContentLink(content, index) {

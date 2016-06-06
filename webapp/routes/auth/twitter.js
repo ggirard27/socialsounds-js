@@ -10,7 +10,7 @@ var twitterRoutes = function (passport) {
         failureFlash : true
         }), 
         function (req, res) {
-            res.redirect('/player/rooms/' + req.session.returnRoom)
+            res.redirect('/player/channels/' + req.session.returnRoom)
         }
     );
     return router;

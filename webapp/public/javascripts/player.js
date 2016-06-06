@@ -69,11 +69,11 @@ btnSkip.addEventListener('click', function () {
 });
 
 btnCancelSwitchChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/player/rooms/default-room';
+    document.location = document.location.protocol + '/player/channels/default-room';
 });
 
 btnCancelCreateChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/player/rooms/default-room';
+    document.location = document.location.protocol + '/player/channels/default-room';
 });
 
 btnCreateChannel.addEventListener('click', function () {
@@ -96,7 +96,7 @@ btnCreateChannel.addEventListener('click', function () {
         $('#createChannelPasswordErrorMessage').show();
     }
     var title = 'ssPlayer - ' + channelName;
-    var url = '/player/rooms/' + channelName;
+    var url = '/player/channels/' + channelName;
     if (typeof (history.pushState) != "undefined") {
         var obj = { Title: title, Url: url };
         history.pushState(obj, obj.Title, obj.Url);
