@@ -182,6 +182,10 @@ function googleApiClientReady() {
     });
 };
 
+function scrollPlaylistToCurrentContent() {
+    document.getElementById("contentQueueListGroup").scrollTop = document.getElementsByClassName("highlightedElement")[0].offsetTop;
+}
+
 // IE does not know about the target attribute. It looks for srcElement
 // This function will get the event target in a browser-compatible way
 function getEventTarget(e) {
@@ -502,7 +506,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                 return false;
             }
         });
-        
+        scrollPlaylistToCurrentContent();
     },
 
     

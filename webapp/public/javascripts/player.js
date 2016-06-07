@@ -27,7 +27,6 @@ if (document.documentElement.clientWidth < 992) {
 }
 
 document.getElementById('searchResultsDropdown').style.width = document.getElementById('searchBar').clientWidth + 'px';
-document.getElementById('goToRemoteBtn').setAttribute('href', document.location.pathname.replace('player', 'remote'));
 
 createChannelNameField.addEventListener('keyup', function (e) {
     if (e.keyCode == 13) {
@@ -197,6 +196,10 @@ function googleApiClientReady() {
     gapi.client.load('youtube', 'v3', function () {
         SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.handleAPILoaded();
     });
+};
+
+function scrollPlaylistToCurrentContent() {
+    document.getElementById("contentQueueListGroup").scrollTop = document.getElementsByClassName("highlightedElement")[0].offsetTop;
 };
 
 // IE does not know about the target attribute. It looks for srcElement
@@ -553,7 +556,8 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                 return false;
             }
         });
-        
+
+        scrollPlaylistToCurrentContent();
     },
 
     
