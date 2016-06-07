@@ -17,6 +17,7 @@ var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
 document.getElementById('searchResultsDropdown').style.width = document.getElementById('searchBar').clientWidth + 'px';
+document.getElementById('goToPlayerBtn').setAttribute('href', document.location.pathname.replace('remote', 'player'));
 
 createChannelNameField.addEventListener('keyup', function (e) {
     if (e.keyCode == 13) {
@@ -92,6 +93,7 @@ btnCreateChannel.addEventListener('click', function () {
         history.pushState(obj, obj.Title, obj.Url);
     }
     document.getElementById('channelTitle').textContent = channelName;
+    document.getElementById('goToPlayerBtn').setAttribute('href', document.location.pathname.replace('remote', 'player'));
     document.getElementById('ownerDashboard').style.display = 'block';
 });
 
