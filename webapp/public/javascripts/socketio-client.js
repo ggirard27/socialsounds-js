@@ -50,7 +50,9 @@ socket.on('contentAdded', function (content, index, user) {
     if (usernameChat == user) {
         displayUndoAddContentLink(content, index);
     }
-    if (socket.room == 'default-room' && currentContent === null) {
+
+    var currentPage = document.location.pathname.split("/");
+    if (socket.room == 'default-room' && currentContent === null && currentPage[1] === 'player') {
         SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
     }
 });

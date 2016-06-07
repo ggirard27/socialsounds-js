@@ -173,13 +173,6 @@ btnOpenInBrowser.addEventListener('click', function () {
     win.focus();
 });
 
-btnMuteContent.addEventListener('click', function () {
-    var currentMuteState = SOCIALSOUNDSCLIENT.BASEPLAYER.getPlayerMuteState();
-    currentMuteState = !currentMuteState;
-    SOCIALSOUNDSCLIENT.BASEPLAYER.setPlayerMuteState(currentMuteState);
-    SOCIALSOUNDSCLIENT.BASEPLAYER.applyPlayerMuteState();
-});
-
 function googleApiClientReady() {
     gapi.client.setApiKey('AIzaSyCg16FmXMtMPUm86w6FT5prAJEqd8obOgU');
     gapi.client.load('youtube', 'v3', function () {
@@ -219,44 +212,10 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     
     playContent: function (content, timestamp) {
         console.log("Now Playing: " + content.title);
-        var self = this;
-        // The player stopping code below should be removed eventually. The playContent function should only be called to play content, 
-        // we should not verify if contentis already playing. The logic should be moved to the future "skipSong" function,
-        // which should take care of stopping the currently playing media before calling the playContent function. - GG
         console.log('Function playContent is requesting to stop content');
-        this.stopContent();
+
         currentContent = content;
-        self.toggleHighlightContentInList(currentContent);
-        
-        if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer === null) {
-            // nothing to do
-        } 
-        else if (SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.youtubePlayer.getPlayerState() == 1) {
-            SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.pauseYoutubeContent();
-        }
-        // until here
-        
-        if (contentProviderList.indexOf(content.provider) > -1) {
-            
-            self.showPlayer(content.provider);
-            switch (content.provider) {
-                case 'soundcloud':
-                    SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER.playSoundCloudContent(content, timestamp);
-                    break;
-                case 'vimeo':
-                    playVimeoContent(content);
-                    break;
-                case 'youtube':
-                    SOCIALSOUNDSCLIENT.YOUTUBEPLAYER.playYoutubeContent(content, timestamp);
-                    break;
-                default :
-                    console.log("Oops, something went wrong while trying to launch: " + content.provider);
-                    break;
-            };
-        } 
-        else {
-            console.log("Invalid content provider passed to player: " + content.provider);
-        };
+        this.toggleHighlightContentInList(currentContent);
     },
     
     getNextContent: function () {
