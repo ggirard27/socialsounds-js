@@ -125,10 +125,14 @@ socket.on('skipSong', function () {
 });
 
 socket.on('showOwnerControls', function (show) {
-    if (show)
+    if (show) {
         $('#ownerDashboard').show();
-    else
-        $('#ownerDashboard').hide();           
+        setRightAndLeftDivTop(true);
+    }
+    else {
+        $('#ownerDashboard').hide();
+        setRightAndLeftDivTop(false);
+    }         
 });
 
 //Will eventually be removed when we will be able to join in a song at any moment.

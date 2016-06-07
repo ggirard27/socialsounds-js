@@ -16,17 +16,22 @@ var currentContent = null;
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
-if (document.documentElement.clientWidth < 992) {
-    var bottom = document.getElementById('playingContentSection').clientHeight 
-                + document.getElementById('channelTitle').clientHeight 
-                + document.getElementById('btnMuteContent').clientHeight 
-                + 5;
-
-    document.getElementById('playlistSection').style.top = bottom + 'px';
-    document.getElementById('chatSection').style.top = bottom + 'px';
-}
-
 document.getElementById('searchResultsDropdown').style.width = document.getElementById('searchBar').clientWidth + 'px';
+
+function setRightAndLeftDivTop(isOwner) {
+    if (document.documentElement.clientWidth < 992) {
+        var bottom = document.getElementById('channelTitle').offsetHeight 
+                + document.getElementById('searchBar').offsetHeight 
+                + document.getElementById('contentPlayer').offsetHeight 
+                + document.getElementById('btnOpenInBrowser').offsetHeight 
+                + 55;
+        if (isOwner) {
+            bottom += document.getElementById('ownerDashboard').offsetHeight;
+        }
+        document.getElementById('playlistSection').style.top = bottom + 'px';
+        document.getElementById('chatSection').style.top = bottom + 'px';
+    }
+}
 
 createChannelNameField.addEventListener('keyup', function (e) {
     if (e.keyCode == 13) {

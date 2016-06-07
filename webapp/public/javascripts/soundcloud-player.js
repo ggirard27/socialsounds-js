@@ -100,7 +100,7 @@ SOCIALSOUNDSCLIENT.SOUNDCLOUDPLAYER = {
         SC.get('/tracks', {
             q: query
         }).then(function (tracks) {
-            var responseLength = tracks.length < 10 ? tracks.length : 10;
+            var responseLength = tracks.length < 5 ? tracks.length : 5;
             
             if (responseLength > 0) {
                 for (var i = 0; i < responseLength; i++) {

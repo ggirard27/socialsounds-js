@@ -19,6 +19,20 @@ var usernameChat = userCookie.general.username;
 document.getElementById('searchResultsDropdown').style.width = document.getElementById('searchBar').clientWidth + 'px';
 document.getElementById('goToPlayerBtn').setAttribute('href', document.location.pathname.replace('remote', 'player'));
 
+function setRightAndLeftDivTop(isOwner){
+    if (document.documentElement.clientWidth < 992) {
+        var bottom = document.getElementById('channelTitle').offsetHeight 
+                + document.getElementById('searchBar').offsetHeight 
+                + document.getElementById('btnOpenInBrowser').offsetHeight 
+                + 55;
+        if (isOwner) {
+            bottom += document.getElementById('ownerDashboard').offsetHeight;
+        }
+        document.getElementById('playlistSection').style.top = bottom + 'px';
+        document.getElementById('chatSection').style.top = bottom + 'px';
+    }
+}
+
 createChannelNameField.addEventListener('keyup', function (e) {
     if (e.keyCode == 13) {
         btnCreateChannel.click();
