@@ -1,5 +1,13 @@
 ﻿extends bodycontent
 
+block navbarcontent
+    li.dropdown
+        a.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Channels 
+            span.caret
+        ul.dropdown-menu#channelList
+    li
+        a#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel
+
 block content
     .modal.fade.active#createChannelModal(role='dialog', arial-labelled-by='createChannel', tabindex='-1', data-backdrop='static', data-keyboard='false')
         .modal-dialog.modal-sm(role='document')
@@ -16,12 +24,14 @@ block content
                     .alert.alert-danger#createChannelPasswordErrorMessage(style='display: none') Passwords don't match.
                     .alert.alert-danger#createChannelNameErrorMessage(style='display: none') Channel name already taken, please chose a new one.
                 .modal-footer
-                    button.btn.btn-default#btnCancelCreateChannel(type='button', data-dismiss='modal') Close
-                    button.btn.btn-primary#btnCreateChannel(type='button') Create
-                    input(type='checkbox')#cboxPrivate
-                    label.span Private channel
+                    .pull-left
+                        input(type='checkbox')#cboxPrivate 
+                        label(for="cboxPrivate") Private channel
+                    .pull-right
+                        button.btn.btn-default#btnCancelCreateChannel(type='button', data-dismiss='modal') Close
+                        button.btn.btn-primary#btnCreateChannel(type='button') Create
 
-      .modal.fade.active#importContentModal(role='dialog', arial-labelled-by='importContent', tabindex='-1')
+    .modal.fade.active#importContentModal(role='dialog', arial-labelled-by='importContent', tabindex='-1')
         .modal-dialog.modal-sm(role='document')
             .modal-content
                 .modal-header
@@ -89,13 +99,20 @@ block content
                             button.btn.btn-default#btnOpenInBrowser(title="Open this content in new window")
                                 i.fa.fa-external-link
                 #ownerDashboard
-                    div
-                        span.h3 Owner controls
-                    .btn-group
-                        button.btn.btn-default#btnDashSkip Skip
-                        button.btn.btn-default#btnDashMute Mute
-                        button.btn.btn-default#btnDashPause Pause
-                        button.btn.btn-default#startBroadcastButton Start Broadcast
+                    .owner-dashboard-section-title
+                        span.h4 Owner's controls
+                    .btn-group.pull-left
+                        button.btn.btn-default#btnDashPause
+                            i.glyphicon.glyphicon-play#btnDashPausePlay(title="Play")
+                            i.glyphicon.glyphicon-pause#btnDashPausePause(title="Pause", style="display: none")
+                        button.btn.btn-default#btnDashSkip
+                            i.glyphicon.glyphicon-step-forward(title="Skip")
+                        button.btn.btn-default#btnDashMute
+                            i.glyphicon.glyphicon-volume-up#btnDashMuteVolumeOn(title="Mute")
+                            i.glyphicon.glyphicon-volume-off#btnDashMuteVolumeOff(title="Unmute", style="display: none")
+                    .hidden-xs.hidden-sm.btn-group.pull-right
+                        button.btn.btn-default#exportBtn Export
+                        button.btn.btn-default#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
             .sub-center-div-remote#playlistSection
                 .playlist-section-title-remote
                     span.h3 Playlist
@@ -110,9 +127,6 @@ block content
                     .progress
                         .progess-bar.progress-bar-info#progessBar(role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%")
                             label 
-                    .hidden-xs.hidden-sm.btn-group.pull-right.import-export-playlist
-                        button.btn.btn-default#exportBtn Export
-                        button.btn.btn-default#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
             .right-div-remote#chatSection
                 .chat-section-title-remote
                     span.h3 Chat

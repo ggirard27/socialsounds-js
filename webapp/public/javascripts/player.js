@@ -1,7 +1,6 @@
 ﻿var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 var contentProviderList = ['soundcloud', 'vimeo', 'youtube']; // This needs to go server side when we have time. - GG
 
-var startBroadcastButton = document.getElementById('startBroadcastButton');
 var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
 var btnMuteContent = document.getElementById('btnMuteContent');
 var fbShareButton = document.getElementById('fbShareButton');
@@ -26,7 +25,7 @@ function setRightAndLeftDivTop(isOwner) {
                 + document.getElementById('btnOpenInBrowser').offsetHeight 
                 + 55;
         if (isOwner) {
-            bottom += document.getElementById('ownerDashboard').offsetHeight;
+            bottom += document.getElementById('ownerDashboard').offsetHeight + 3;
         }
         document.getElementById('playlistSection').style.top = bottom + 'px';
         document.getElementById('chatSection').style.top = bottom + 'px';
@@ -63,9 +62,41 @@ btnDashSkip.addEventListener('click', function () {
 });
 btnDashMute.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('mute');
+    setTimeout(function () {
+        if (SOCIALSOUNDSCLIENT.BASEPLAYER.getPlayerMuteState()) {
+            document.getElementById('btnDashMuteVolumeOn').style.display = 'none';
+            document.getElementById('btnDashMuteVolumeOff').style.display = 'inline-block';
+        }
+        else {
+            document.getElementById('btnDashMuteVolumeOn').style.display = 'inline-block';
+            document.getElementById('btnDashMuteVolumeOff').style.display = 'none';
+        }
+    }, 10);
 });
 btnDashPause.addEventListener('click', function () {
-    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('pause');
+    if (currentContent === null) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
+
+        setTimeout(function () {
+            if (SOCIALSOUNDSCLIENT.BASEPLAYER.isPaused === false) {
+                document.getElementById('btnDashPausePlay').style.display = 'none';
+                document.getElementById('btnDashPausePause').style.display = 'inline-block';
+            }
+        }, 10);
+    }
+    else {
+        SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('pause');
+        setTimeout(function () {
+            if (SOCIALSOUNDSCLIENT.BASEPLAYER.isPaused) {
+                document.getElementById('btnDashPausePlay').style.display = 'inline-block';
+                document.getElementById('btnDashPausePause').style.display = 'none';
+            }
+            else {
+                document.getElementById('btnDashPausePlay').style.display = 'none';
+                document.getElementById('btnDashPausePause').style.display = 'inline-block';
+            }
+        }, 10);
+    }
 });
 
 btnSkip.addEventListener('click', function () {
@@ -180,10 +211,6 @@ smallDisplayPlaylistButton.addEventListener('click', function () {
     document.getElementById('playlistSection').style.display = "block";
 });
 
-startBroadcastButton.addEventListener('click', function () {
-    SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
-});
-
 btnOpenInBrowser.addEventListener('click', function () {
     var win = window.open(currentContent.url, '_blank');
     win.focus();
@@ -212,7 +239,7 @@ function scrollPlaylistToCurrentContent() {
 function getEventTarget(e) {
     e = e || window.event;
     return e.target || e.srcElement;
-}
+};
 
 searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);

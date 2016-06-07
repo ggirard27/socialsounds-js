@@ -13,17 +13,11 @@ block wrapperContent
                     a.visible-xs.navbar-brand socialsounds
                 .navbar-collapse.collapse.sidebar-navbar-collapse
                     ul.nav.navbar-nav
+                        li#playerLink
+                            a(href='/player/channels/default-room') Player
+                        li#remoteLink
+                            a(href='/remote/channels/default-room') Remote
                         block navbarcontent
-                            li#playerLink
-                                a(href='/player/channels/default-room') Player
-                            li#remoteLink
-                                a(href='/remote/channels/default-room') Remote
-                            li.dropdown
-                                a.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Channels 
-                                    span.caret
-                                ul.dropdown-menu#channelList
-                            li
-                                a#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel
                     ul.nav.navbar-nav.navbar-right
                         li#profileLink
                             a(href='/profile') Profile
