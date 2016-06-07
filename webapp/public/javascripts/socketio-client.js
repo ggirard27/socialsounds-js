@@ -110,6 +110,8 @@ socket.on('displayContentList', function (contentList) {
 });
 
 socket.on('updateSkipLabel', function (users, votes) {
+    if (votes == 0) //So new song now
+        document.getElementById('btnSkip').disabled = false;
     $('#nbUsers').text(users);
     $('#labelSkip').text(votes + "/" + users + " users voted to skip");
 
@@ -120,7 +122,6 @@ socket.on('updateSkipLabel', function (users, votes) {
 
 socket.on('skipSong', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.getNextContentFromServer();
-    document.getElementById('btnSkip').disabled = false;
 });
 
 socket.on('showOwnerControls', function (show) {
