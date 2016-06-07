@@ -1,12 +1,10 @@
 ﻿extends bodycontent
 
 block content
-    .modal.fade.active#createChannelModal(role='dialog', arial-labelled-by='createChannel', tabindex='-1')
+    .modal.fade.active#createChannelModal(role='dialog', arial-labelled-by='createChannel', tabindex='-1', data-backdrop='static', data-keyboard='false')
         .modal-dialog.modal-sm(role='document')
             .modal-content
                 .modal-header
-                    button.close(type='button', data-dismiss='modal', aria-label='Close')
-                        span(aria-hidden='true') &times;
                     h4.modal-title#createChannel Create a channel
                 .modal-body
                     label Channel name 
@@ -18,17 +16,30 @@ block content
                     .alert.alert-danger#createChannelPasswordErrorMessage(style='display: none') Passwords don't match.
                     .alert.alert-danger#createChannelNameErrorMessage(style='display: none') Channel name already taken, please chose a new one.
                 .modal-footer
-                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-default#btnCancelCreateChannel(type='button', data-dismiss='modal') Close
                     button.btn.btn-primary#btnCreateChannel(type='button') Create
                     input(type='checkbox')#cboxPrivate
                     label.span Private channel
 
-    .modal.fade.active#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1')
+      .modal.fade.active#importContentModal(role='dialog', arial-labelled-by='importContent', tabindex='-1')
         .modal-dialog.modal-sm(role='document')
             .modal-content
                 .modal-header
                     button.close(type='button', data-dismiss='modal', aria-label='Close')
                         span(aria-hidden='true') &times;
+                    h4.modal-title#importContent Import playlist
+                .modal-body
+                    label Import content 
+                    input.form-control#importContentData(type='text', name='content')
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-primary#btnImportContent(type='button') Import
+
+
+    .modal.fade.active#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1', data-backdrop='static', data-keyboard='false')
+        .modal-dialog.modal-sm(role='document')
+            .modal-content
+                .modal-header
                     h4.modal-title#switchChannel Switch channel
                 .modal-body
                     label Channel name 
@@ -37,29 +48,49 @@ block content
                     input.form-control#switchChannelPasswordField(type='password', name='channelPassword')
                     .alert.alert-danger#switchChannelPasswordErrorMessage(style='display: none') Invalid password, try again.
                 .modal-footer
-                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    button.btn.btn-default#btnCancelSwitchChannel(type='button', data-dismiss='modal') Close
                     button.btn.btn-primary#btnSwitchChannel(type='button') Join
 
     .container-fluid
-        .row.search-section-remote
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                .row
-                    .input-group
-                        .input-group-btn#searchBar
-                            button.btn#addContentButton(title="Add to the playlist")
-                                i.fa.fa-plus
-                            button.btn.dropdown-toggle#searchResultsDropdownBtn(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+        .page-title
+            span.h1#channelTitle #{room}
+            .pull-right
+                a.btn.btn-default#goToRemoteBtn(href='/remote/channels/default-room') Remote
+        div
+            .left-div#playlistSection
+                .playlist-section-title
+                    span.h3 Playlist
+                    .hidden-md.hidden-lg.pull-right
+                        button.btn.btn-default.btn-title#smallDisplayChatBtn Chat
+                .playlist-section
+                    .list-group.content-queue-list-group#contentQueueListGroup
+                .skip-section
+                    .skip-section-button
+                        button.btn.btn-default#btnSkip Skip
+                    label#labelSkip 0/0 user voted to skip
+                    .progress
+                        .progess-bar.progress-bar-info#progessBar(role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%")
+                            label 
+                    .hidden-xs.hidden-sm.btn-group.pull-right.import-export-playlist
+                        button.btn.btn-default#exportBtn Export
+                        button.btn.btn-default#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
+            .center-div#playingContentSection
+                div
+                    .input-group#searchBar
+                        .input-group-btn#searchResultGroup
+                            button.btn.btn-default.dropdown-toggle#searchResultsDropdownBtn(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                 span.caret
                             ul.dropdown-menu#searchResultsDropdown
-                        input.form-control#searchBarInput(type='search' placeholder='Search or enter url')
+                                li 
+                                    a(data-link="") There's nothing to see here
+                        input.form-control#searchBarInput(type='search' placeholder='Search')
                         .input-group-btn
-                            button.btn#searchButton(title="Search")
+                            button.btn.btn-default#searchButton(title="Search")
                                 i.fa.fa-search
-                            button.btn#startBroadcastButton Start Broadcast
-                .row.selected-content-row-remote
+                .content-added-notification
                     .alert.alert-info#contentReadyToBeAddedMessage(style='display: none; margin-bottom: 0px')
-                .row.share-buttons-remote
-                    .col-xs-10.col-sm-10.col-md-10.col-lg-10.no-padding-style
+                div
+                    .col-xs-8.col-sm-8.col-md-8.col-lg-8.no-padding-style
                         .pull-left
                             #fb-root
                                 a.fb-share-button#fbShareButton(data-href='http://socialsounds.azurewebsites.net', data-layout='button')
@@ -67,40 +98,40 @@ block content
                                 a.g-plus(data-action='share', data-annotation='none', data-height='24', data-href='http://socialsounds.azurewebsites.net')
                             #twitterShareButton
                                 a.twitter-share-button(href='https://twitter.com/intent/tweet', data-text=' ', data-url='http://socialsounds.azurewebsites.net', data-hashtags='socialsounds') Tweet
-                    .col-xs-2.col-sm-2.col-md-2.col-lg-2.no-padding-style
+                    .col-xs-4.col-sm-4.col-md-4.col-lg-4.no-padding-style
                         .pull-right
-                            button.btn(title="Number of users")
-                                i.fa.fa-user
-                                label#nbUsers
-                            button.btn#btnOpenInBrowser(title="Open this content in new window")
-                                i.fa.fa-external-link
-        .row.content-section-remote
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12(style="height: 100%;")
-                .row.playlist-content-section-remote
-                    .row
-                        label.h4#channelLabel Playlist
-                    .list-group.playlist-list#contentQueueListGroup
-                    .row
-                        button.btn.pull-right#btnSkip Skip
-                    .row
-                        .progress
-                            .progess-bar(role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100")
-                                span#labelSkip 0/0 voted person voted to skip
-                .row.channel-list-content-section-remote
-                    .row
-                        span.h4 Channels
-                    .row.channel-list
-                        ol#channelList
-                    .row
-                        button.btn.pull-right#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel
-        .row.chat-section-remote
-            .chat-area-remote.no-padding-style#chatSection
-                .chat-box-remote.ul#chatBox
-                input.input-chat-remote#inputChat(PlaceHolder="Send a message" type="text")
+                            .user-number.hidden-xxs
+                                i.fa.fa-user 
+                                label.text#nbUsers
+                            .btn-group
+                                button.btn.btn-default#btnOpenInBrowser(title="Open this content in new window")
+                                    i.fa.fa-external-link
+                                button.btn.btn-default#btnMuteContent
+                                    i.glyphicon.glyphicon-volume-up#volumeOn(title="Mute")
+                                    i.glyphicon.glyphicon-volume-off#volumeOff(title="Unmute", style="display: none")
+                #ownerDashboard
+                    div
+                        span.h3 Owner controls
+                    .btn-group
+                        button.btn.btn-default#btnDashSkip Skip
+                        button.btn.btn-default#btnDashMute Mute
+                        button.btn.btn-default#btnDashPause Pause
+                        button.btn.btn-default#startBroadcastButton Start Broadcast
+            .right-div#chatSection
+                .chat-section-title
+                    span.h3 Chat
+                    .hidden-md.hidden-lg.pull-right
+                        button.btn.btn-default.btn-title#smallDisplayPlaylistBtn Playlist
+                .chat-section
+                    .chat-messages
+                        .chat-box.ul#chatBox
+                    .chat-interface
+                        input.input-chat.form-control#inputChat(PlaceHolder="Send a message" type="text" maxlength="300")   
 
 append bodyscripts
     script(type='text/javascript').
         var userCookie = !{JSON.stringify(user)}
+        var roomId = !{JSON.stringify(room)}
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/javascripts/socketio-client.js')
     script(src='/javascripts/remote.js')

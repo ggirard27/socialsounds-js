@@ -1,7 +1,7 @@
 ﻿var express = require('express');
 var router = express.Router();
 
-router.get('/player/rooms/:roomid', isLoggedIn, function (req, res) {
+router.get('/player/channels/:roomid', isLoggedIn, function (req, res) {
     res.render('player.jade', {
         title: 'Player',
         user : req.user,

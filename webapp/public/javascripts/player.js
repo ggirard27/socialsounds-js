@@ -19,11 +19,14 @@ var usernameChat = userCookie.general.username;
 if (document.documentElement.clientWidth < 992) {
     var bottom = document.getElementById('playingContentSection').clientHeight 
                 + document.getElementById('channelTitle').clientHeight 
-                + document.getElementById('navbarSocialsounds').clientHeight 
+                + document.getElementById('btnMuteContent').clientHeight 
                 + 5;
+
     document.getElementById('playlistSection').style.top = bottom + 'px';
     document.getElementById('chatSection').style.top = bottom + 'px';
 }
+
+document.getElementById('searchResultsDropdown').style.width = document.getElementById('searchBar').clientWidth + 'px';
 
 createChannelNameField.addEventListener('keyup', function (e) {
     if (e.keyCode == 13) {
@@ -45,6 +48,11 @@ btnImportContent.addEventListener('click', function () {
     
 });
 
+searchResultsDropdownBtn.addEventListener('click', function () {
+    $('#contentReadyToBeAddedMessage').hide();
+    $('#contentReadyToBeAddedMessage').html("");
+});
+
 btnDashSkip.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
 });
@@ -61,11 +69,11 @@ btnSkip.addEventListener('click', function () {
 });
 
 btnCancelSwitchChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/player/rooms/default-room';
+    document.location = document.location.protocol + '/player/channels/default-room';
 });
 
 btnCancelCreateChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/player/rooms/default-room';
+    document.location = document.location.protocol + '/player/channels/default-room';
 });
 
 btnCreateChannel.addEventListener('click', function () {
@@ -88,7 +96,7 @@ btnCreateChannel.addEventListener('click', function () {
         $('#createChannelPasswordErrorMessage').show();
     }
     var title = 'ssPlayer - ' + channelName;
-    var url = '/player/rooms/' + channelName;
+    var url = '/player/channels/' + channelName;
     if (typeof (history.pushState) != "undefined") {
         var obj = { Title: title, Url: url };
         history.pushState(obj, obj.Title, obj.Url);
@@ -200,12 +208,15 @@ searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);
     var selectedContentUrl = target.getAttribute('data-link');
     var selectedContentTitle = target.innerHTML;
-    $('#contentReadyToBeAddedMessage').text('Added : ' + selectedContentTitle + ' to playlist.');
-    $('#contentReadyToBeAddedMessage').show();
+
     searchResultsDropdownSelectedItem = selectedContentUrl;
     if (searchResultsDropdownSelectedItem) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
         searchResultsDropdownSelectedItem = "";
+
+        $('#contentReadyToBeAddedMessage').html('<p>Added : ' + selectedContentTitle + ' to playlist.</p> <a id="undoLink"> Undo </a>');
+        $('#contentReadyToBeAddedMessage').show();
+        $('#contentReadyToBeAddedMessage').delay(4000).fadeOut(500);
     }
 
 });
@@ -368,7 +379,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
         else {
             //this.displayContentInformation(content);
-            SOCIALSOUNDSCLIENT.SOCKETIO.addContentToServer(content);
+            SOCIALSOUNDSCLIENT.SOCKETIO.addContentToServer(content, usernameChat);
         }
     },
     
@@ -477,7 +488,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             li.appendChild(a);
             searchResultsDropdown.appendChild(li);
         }
-        document.getElementById('searchBar').className += " open";
+        document.getElementById('searchResultGroup').className += " open";
     },
     
     appendToContentList: function (content) {
@@ -499,10 +510,15 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     displayContentList: function (contentList) {
         var self = this;
         $('#contentQueueListGroup').html('');
-        console.log('Content list length: ' + contentList.length);
+        console.log('Trying to display a content list with content list length: ' + contentList.length);
         if (contentList.length > 0) {
             for (var i = 0; i < contentList.length; i++) {
-                self.appendToContentList(contentList[i]);
+                if (contentList[i] !== null) {
+                    self.appendToContentList(contentList[i]);
+                }
+                else {
+                    console.log("content was null, not printing");
+                }
             }
         }
         else {
