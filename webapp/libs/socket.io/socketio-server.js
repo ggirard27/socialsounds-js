@@ -159,7 +159,7 @@ module.exports.listen = function (server) {
             var votesRequired = Math.ceil(userConnected * 0.66)//two thirds of the people must agree to skip the song.
             roomdata.incrementVoteSkip(room);
             if (votes + 1 >= votesRequired && contentList.getRemaining() > 0)
-                io.to(socket.room).emit('skipSong');
+                io.to(socket.id).emit('skipSong');
             else
                 io.to(socket.room).emit('updateSkipLabel', userConnected, votes + 1);
         });
