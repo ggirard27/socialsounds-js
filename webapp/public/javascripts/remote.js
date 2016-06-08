@@ -30,6 +30,14 @@ function setRightAndLeftDivTop(isOwner){
         document.getElementById('playlistSection').style.top = bottom + 'px';
         document.getElementById('chatSection').style.top = bottom + 'px';
     }
+    else if (isOwner) {
+        var bottom = document.getElementById('channelTitle').offsetHeight 
+                + document.getElementById('searchBar').offsetHeight 
+                + document.getElementById('btnOpenInBrowser').offsetHeight 
+                + document.getElementById('ownerDashboard').offsetHeight 
+                + 58;
+        document.getElementById('playlistSection').style.top = bottom + 'px';
+    }
 }
 
 createChannelNameField.addEventListener('keyup', function (e) {

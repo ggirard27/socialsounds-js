@@ -66,7 +66,7 @@ block content
         .page-title-remote
             span.h1#channelTitle #{room}
             .pull-right
-                a.btn.btn-default#goToPlayerBtn(href='/player/channels/default-room') Player
+                a.btn.btn-default#goToPlayerBtn(title="Open this page in player", href='/player/channels/default-room') Player
         div
             .center-div-remote#playingContentSection
                 div
@@ -111,18 +111,18 @@ block content
                         button.btn.btn-default#btnDashMute
                             i.glyphicon.glyphicon-volume-up#btnDashMuteVolumeOn(title="Mute")
                             i.glyphicon.glyphicon-volume-off#btnDashMuteVolumeOff(title="Unmute", style="display: none")
-                    .hidden-xs.hidden-sm.btn-group.pull-right
-                        button.btn.btn-default#exportBtn Export
-                        button.btn.btn-default#btnImportModal(data-toggle='modal', data-target='#importContentModal') Import content
+                    .hidden-xs.hidden-sm.pull-right
+                        button.btn.btn-default#btnImportModal(title='Import a playlist', data-toggle='modal', data-target='#importContentModal') Import
             .sub-center-div-remote#playlistSection
                 .playlist-section-title-remote
                     span.h3 Playlist
                     .hidden-md.hidden-lg.pull-right
                         button.btn.btn-default.btn-title#smallDisplayChatBtn Chat
                 .playlist-section-remote
-                    .list-group.content-queue-list-group#contentQueueListGroup
+                    .list-group.content-queue-list-group-remote#contentQueueListGroup
                 .skip-section-remote
                     .skip-section-button
+                        button.hidden-xs.hidden-sm.btn.btn-default#exportBtn(title='Export the current playlist') Export
                         button.btn.btn-default#btnSkip Skip
                     label#labelSkip 0/0 user voted to skip
                     .progress
