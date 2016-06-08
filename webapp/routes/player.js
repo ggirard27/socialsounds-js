@@ -11,7 +11,7 @@ router.get('/player/channels/:roomid', isLoggedIn, function (req, res) {
 
 function isLoggedIn(req, res, next) {
     if (typeof req.params.roomid === "undefined") {
-        req.session.returnRoom = 'default-room';
+        req.session.returnRoom = 'Home-channel';
     } else {
         req.session.returnRoom = req.params.roomid;
     }

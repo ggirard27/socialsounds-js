@@ -105,11 +105,11 @@ btnSkip.addEventListener('click', function () {
 });
 
 btnCancelSwitchChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/player/channels/default-room';
+    document.location = document.location.protocol + '/player/channels/Home-channel';
 });
 
 btnCancelCreateChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/player/channels/default-room';
+    document.location = document.location.protocol + '/player/channels/Home-channel';
 });
 
 btnCreateChannel.addEventListener('click', function () {

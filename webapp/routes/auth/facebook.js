@@ -19,7 +19,7 @@ var facebookRoutes = function (passport) {
     
     function getRoomid(req, res, next) {
         if (typeof (req.session.returnRoom) === "undefined") {
-            req.session.returnRoom = 'default-room';
+            req.session.returnRoom = 'Home-channel';
         }
         console.log('Set the req.session.returnRoom at ' + req.session.returnRoom);
         return next();

@@ -6,7 +6,7 @@ module.exports.listen = function (server) {
         'transports': ['websockets'],
     }).listen(server);
     
-    var defaultRoom = 'default-room';
+    var defaultRoom = 'Home-channel';
     
     io.sockets.on('connection', function (socket) {
         
@@ -199,7 +199,7 @@ module.exports.listen = function (server) {
 
             var exists = roomdata.roomExists(socket, room);
             var pwProtected = roomdata.roomIsProtected(socket, room);
-            if (exists && !pwProtected || room == 'default-room') 
+            if (exists && !pwProtected || room == 'Home-channel') 
                 io.to(socket.id).emit('joinUnprotectedChannel', room);             
             else 
                 io.to(socket.id).emit('showProperChannelModal', room, exists);

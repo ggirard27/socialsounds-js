@@ -8,8 +8,8 @@ socket.on("connect", function () {
     //Try and access the room mentionned, if it doesn't work then it creates it.
     SOCIALSOUNDSCLIENT.SOCKETIO.setUsername(socket.user);
     if (typeof (roomId) !== 'undefined') {
-        if (roomId == 'default-room') {
-            SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom('default-room', false);
+        if (roomId == 'Home-channel') {
+            SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom('Home-channel', false);
         }
         else {
             console.log("Testing room: " + roomId);
@@ -52,7 +52,7 @@ socket.on('contentAdded', function (content, index, user) {
     }
 
     var currentPage = document.location.pathname.split("/");
-    if (socket.room == 'default-room' && currentContent === null && currentPage[1] === 'player') {
+    if (socket.room == 'Home-channel' && currentContent === null && currentPage[1] === 'player') {
         SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
     }
 });
@@ -150,7 +150,7 @@ socket.on('mutePlayer', function () {
 
 socket.on('showProperChannelModal', function (room, exists) {
     console.log("showing proper modal for room " + room)
-    if (room != 'default-room') {
+    if (room != 'Home-channel') {
         exists ? $('#switchChannelModal').modal('show') : $('#createChannelModal').modal('show');
         exists ? setSwitchRoomModalChannelNameValue(room) : setCreateRoomModalChannelNameValue(room);
     }

@@ -113,11 +113,11 @@ btnSkip.addEventListener('click', function () {
 });
 
 btnCancelSwitchChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/remote/channels/default-room';
+    document.location = document.location.protocol + '/remote/channels/Home-channel';
 });
 
 btnCancelCreateChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/remote/channels/default-room';
+    document.location = document.location.protocol + '/remote/channels/Home-channel';
 });
 
 btnCreateChannel.addEventListener('click', function () {
