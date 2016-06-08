@@ -7,7 +7,7 @@ block navbarcontent
             span.caret
         ul.dropdown-menu#channelList
     li
-        a#btnCreateChannelModal(data-toggle='modal', data-target='#createChannelModal') Create channel
+        a#btnCreateChannelModal(title='Create a new channel', data-toggle='modal', data-target='#createChannelModal') Create channel
 
 block content
     .modal.fade.active#createChannelModal(role='dialog', arial-labelled-by='createChannel', tabindex='-1', data-backdrop='static', data-keyboard='false')
@@ -27,7 +27,7 @@ block content
                 .modal-footer
                     .pull-left
                         input(type='checkbox')#cboxPrivate 
-                        label(for="cboxPrivate") Private channel
+                        label(for="cboxPrivate", title='No name or password are required. You can share your private channel with the URL.') Private channel
                     .pull-right
                         button.btn.btn-default#btnCancelCreateChannel(type='button', data-dismiss='modal') Close
                         button.btn.btn-primary#btnCreateChannel(type='button') Create
@@ -38,20 +38,19 @@ block content
                 .modal-header
                     button.close(type='button', data-dismiss='modal', aria-label='Close')
                         span(aria-hidden='true') &times;
-                    h4.modal-title#importContent Import playlist
+                    h4.modal-title#importContent Import a playlist
                 .modal-body
-                    label Import content 
-                    input.form-control#importContentData(type='text', name='content')
+                    span To do so, copy and paste the URLs in the text field from Youtube or SoundCloud (with a space in-between different URL).
+                    input.form-control#importContentData(type='text', name='content', placeholder='URL URL URL ...')
                 .modal-footer
                     button.btn.btn-default(type='button', data-dismiss='modal') Close
                     button.btn.btn-primary#btnImportContent(type='button') Import
-
 
     .modal.fade.active#switchChannelModal(role='dialog', arial-labelled-by='switchChannel', tabindex='-1', data-backdrop='static', data-keyboard='false')
         .modal-dialog.modal-sm(role='document')
             .modal-content
                 .modal-header
-                    h4.modal-title#switchChannel Switch channel
+                    h4.modal-title#switchChannel Join channel
                 .modal-body
                     label Channel name 
                     input.form-control#switchChannelNameField(type='text', name='channelName')
@@ -78,7 +77,7 @@ block content
                 .skip-section
                     .skip-section-button
                         button.hidden-xs.hidden-sm.btn.btn-default#exportBtn(title='Export the current playlist') Export
-                        button.btn.btn-default#btnSkip Skip
+                        button.btn.btn-default#btnSkip(title="Vote to skip content playing") Skip
                     label#labelSkip 0/0 user voted to skip
                     .progress
                         .progess-bar.progress-bar-info#progessBar(role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%")
@@ -92,7 +91,7 @@ block content
                             ul.dropdown-menu#searchResultsDropdown
                                 li 
                                     a(data-link="") There's nothing to see here
-                        input.form-control#searchBarInput(type='search' placeholder='Search')
+                        input.form-control#searchBarInput(type='search', placeholder='Search')
                         .input-group-btn
                             button.btn.btn-default#searchButton(title="Search")
                                 i.fa.fa-search
@@ -133,8 +132,8 @@ block content
                         button.btn.btn-default#btnDashSkip
                             i.glyphicon.glyphicon-step-forward(title="Skip")
                         button.btn.btn-default#btnDashMute
-                            i.glyphicon.glyphicon-volume-up#btnDashMuteVolumeOn(title="Mute")
-                            i.glyphicon.glyphicon-volume-off#btnDashMuteVolumeOff(title="Unmute", style="display: none")
+                            i.glyphicon.glyphicon-volume-up#btnDashMuteVolumeOn(title="Mute the channel")
+                            i.glyphicon.glyphicon-volume-off#btnDashMuteVolumeOff(title="Unmute the channel", style="display: none")
                     .hidden-xs.hidden-sm.pull-right
                         button.btn.btn-default#btnImportModal(title='Import a playlist', data-toggle='modal', data-target='#importContentModal') Import
             .right-div#chatSection
