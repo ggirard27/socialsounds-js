@@ -16,6 +16,7 @@ var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
 document.getElementById('searchResultsDropdown').style.width = document.getElementById('searchBar').clientWidth + 'px';
+document.getElementById('goToRemoteBtn').setAttribute('href', document.location.pathname.replace('player', 'remote'));
 
 function setRightAndLeftDivTop(isOwner) {
     if (document.documentElement.clientWidth < 992) {
