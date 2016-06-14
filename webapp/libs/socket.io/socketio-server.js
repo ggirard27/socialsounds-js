@@ -134,10 +134,13 @@ module.exports.listen = function (server) {
         socket.on('addContent', function (content, room, user) {
             var contentList = roomdata.get(socket, 'contentList');
             console.log('Request to add ' + content.url + ' to queue of room ' + room);
+            var ownerId = roomdata.get(socket, 'ownerId');
             if (content) {
                 console.log('Request accepted');
                 index = contentList.enqueue(content, user);
+                content.index = index;
                 io.to(socket.room).emit('contentAdded', content, index, user);
+                io.to(ownerId).emit('contentDeleteable', content);
             }
             else {
                 console.log('Request denied');
@@ -148,12 +151,17 @@ module.exports.listen = function (server) {
         socket.on('removeContent', function (content, room, index, user) {
             var contentList = roomdata.get(socket, 'contentList');
             console.log('Request to remove ' + content.url + ' from queue of room ' + room + ' at index ' + index);
+            var ownerId = roomdata.get(socket, 'ownerId');
             if (content) {
+                var _contentList = contentList.getQueue();
+                var listLength = _contentList.length;
                 console.log('Removal accepted');
                 contentList.removeContent(index, user);
                 io.to(socket.room).emit('contentRemoved', content, user);
-                var listerini = contentList.getQueue()
-                io.to(socket.room).emit('displayContentList', listerini);
+                io.to(socket.room).emit('displayContentList', _contentList);
+                for (i = 0; i < listLength; i++) {
+                    io.to(ownerId).emit('contentDeleteable', _contentList[i]);
+                }
             }
             else {
                 console.log('Removal denied');
@@ -199,7 +207,7 @@ module.exports.listen = function (server) {
 
             var exists = roomdata.roomExists(socket, room);
             var pwProtected = roomdata.roomIsProtected(socket, room);
-            if (exists && !pwProtected || room == 'default-room') 
+            if (exists && !pwProtected || room == 'default-room')  
                 io.to(socket.id).emit('joinUnprotectedChannel', room);             
             else 
                 io.to(socket.id).emit('showProperChannelModal', room, exists);

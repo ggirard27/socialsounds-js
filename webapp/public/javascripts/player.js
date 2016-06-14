@@ -499,8 +499,9 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
 
         var htmlContent = '';
-        htmlContent += '<a href="' + content.url + '" target="_blank" class="' + id + ' list-group-item"> <img src="/images/' + content.provider + '-playlist.png"/> ' + content.title + '</a></li>';
+        htmlContent += '<button class="btn" id="delBtn' + content.index + '">x</button><a href="' + content.url + '" target="_blank" class="' + id + ' list-group-item"> <img src="/images/' + content.provider + '-playlist.png"/> ' + content.title + '</a></li>';
         $('#contentQueueListGroup').append(htmlContent);
+        $('#delBtn' + content.index).hide();
     },
     
     displayContentList: function (contentList) {

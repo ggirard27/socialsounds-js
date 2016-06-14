@@ -101,6 +101,7 @@ exports.ContentList = function ContentList(owner) {
         console.log('Queueing ' + item.title + ' and user ' + user);
         queue.push(item);
         users.push(user);
+        item.index = queue.length;
         console.log('Array lengths: ' + queue.length + '/' + users.length);
         return queue.length;
     }

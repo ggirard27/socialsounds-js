@@ -14,6 +14,7 @@ socket.on("connect", function () {
         else {
             console.log("Testing room: " + roomId);
             SOCIALSOUNDSCLIENT.SOCKETIO.switchOrCreateIfNotExists(roomId);
+            roomId = null;
         }
     }
 });
@@ -54,6 +55,11 @@ socket.on('contentAdded', function (content, index, user) {
     if (socket.room == 'default-room' && currentContent === null) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
     }
+});
+
+socket.on('contentDeleteable', function (content) {
+    console.log('Received Content deleteable with ' + content.title + content.index);
+    displayOwnerDeleteContentLink(content, content.index);
 });
 
 socket.on('contentRejected', function (content) {
@@ -179,6 +185,17 @@ function displayUndoAddContentLink(content, index) {
     });
 };
 
+function displayOwnerDeleteContentLink(content) {
+
+    $('#delBtn' + content.index).show();
+    $('#delBtn' + content.index).on('click', function () {
+        SOCIALSOUNDSCLIENT.SOCKETIO.removeContentFromServer(content, content.index, usernameChat);
+        console.log("Just sent removal request to server with " + content.title + " at index " + content.index);
+    });
+    console.log("Just added removal button with " + content.title + " at index " + content.index);
+};
+
+
 var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 
 SOCIALSOUNDSCLIENT.SOCKETIO = {
@@ -239,6 +256,10 @@ SOCIALSOUNDSCLIENT.SOCKETIO = {
     exportContent: function () {
         socket.emit('getContentList');
     },
+
+    testIsChannelOwner: function (user) {
+        socket.emit('testIsChannelOwner', user);
+    }
 }
 
 
