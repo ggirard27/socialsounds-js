@@ -4,26 +4,30 @@ block wrapperContent
     .container.indexContainer
         .jumbotron.text-center
             h1
+                span socialsounds
+            p
                 span.fa.fa-lock.indexTitle
-                span socialsounds login
-
-            p 
-                span login or register using: 
-
+                span login or register using:
             a.btn.btn-default(href='/login').indexStyle
                 span.fa.fa-user.indexStyle
-                span Local Login 
+                span Local Login
             a.btn.btn-default(href='/signup').indexStyle
                 span.fa.fa-user.indexStyle
-                span Local Signup 
+                span Local Signup
             a.btn.btn-primary(href='/auth/facebook').indexStyle
                 span.fa.fa-facebook.indexStyle
-                span Facebook 
+                span Facebook
             a.btn.btn-info(href='/auth/twitter').indexStyle
                 span.fa.fa-twitter.indexStyle
-                span Twitter 
+                span Twitter
             a.btn.btn-danger(href='/auth/google').indexStyle
                 span.fa.fa-google-plus.indexStyle
-                span Google 
+                span Google
+            div
+                span &nbsp;
+                p socialsounds is a social music platform.
+                span(style="font-size: 15px;") You and your friend can listen and participate on a playlist at the same time.
+                br
+                span(style="font-size: 15px;") The contents come from the best sources on the web: Youtube, SoundCloud and more to come.
 
 block bodyscripts
