@@ -31,7 +31,7 @@ exports.createRoom = function (socket, room, password, privateChannel) {
     }
     var isPasswordProtected = (password == false ? false : true);
     var _owner = (room == 'Home-channel' ? 'gtfo' : socket.id);
-    this.rooms[room] = { owner: socket.user, users: [], variables: {}, contentList: new q.ContentList(socket.id), voteSkip: 0, passwordProtected: isPasswordProtected, passwordValue: password, ownerId: _owner };
+    this.rooms[room] = { owner: socket.user, users: [], variables: {}, contentList: new q.ContentList(socket.user), voteSkip: 0, passwordProtected: isPasswordProtected, passwordValue: password, ownerId: _owner };
 }
 
 exports.set = function (socket, variable, content) {

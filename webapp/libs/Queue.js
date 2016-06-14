@@ -67,26 +67,23 @@ exports.ContentList = function ContentList(owner) {
     var queue = [];
     var users = [];
     var currentIndex = 0;
-    var removedContent = 0;
     
     this.removeContent = function (index, user) {
         console.log('Array lengths: ' + queue.length + '/' + users.length);
-        console.log("Queue content removal method params: " + user + " " + users[index-1] + ' index ' + index);
+        console.log("Queue content removal method params: " + user + " " + users[index-1] + ' index ' + index - 1);
 
         if (users[index-1] == user || user == queueOwner) {
             console.log("Queue actually removing content");
-            queue[index-1] = null;
-            users[index - 1] = null;
-            removedContent++;
+            queue.splice(index - 1, 1);
         }
     }
     
     this.getLength = function () {
-        return (queue.length - removedContent);
+        return (queue.length);
     }
     
     this.getRemaining = function () {
-        return (queue.length - currentIndex - removedContent);
+        return (queue.length - currentIndex);
     }
     
     this.getCurrentIndex = function () {

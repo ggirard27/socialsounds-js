@@ -232,7 +232,15 @@ function googleApiClientReady() {
 };
 
 function scrollPlaylistToCurrentContent() {
-    document.getElementById("contentQueueListGroup").scrollTop = document.getElementsByClassName("highlightedElement")[0].offsetTop;
+    var contentQueueListGroup = document.getElementById("contentQueueListGroup");
+    var activeElement = contentQueueListGroup.getElementsByClassName('active');
+    if (activeElement.length != 0) {
+        contentQueueListGroup.scrollTop = activeElement[0].offsetTop;
+    }
+};
+
+function writeChannelUrlRequest(channelName) {
+    document.location = document.location.protocol + '/player/channels/' + channelName;
 };
 
 // IE does not know about the target attribute. It looks for srcElement
@@ -541,7 +549,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         }
 
         var htmlContent = '';
-        htmlContent += '<button class="btn" id="delBtn' + content.index + '">x</button><a href="' + content.url + '" target="_blank" class="' + id + ' list-group-item"> <img src="/images/' + content.provider + '-playlist.png"/> ' + content.title + '</a></li>';
+        htmlContent += '<li class="' + id + '-' + content.index + ' list-group-item"><a href="' + content.url + '" target="_blank"> <img src="/images/' + content.provider + '-playlist.png"/> ' + content.title + '</a><span class="badge" id="delBtn' + content.index + '">X</span></li>';
         $('#contentQueueListGroup').append(htmlContent);
         $('#delBtn' + content.index).hide();
     },
@@ -563,6 +571,10 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
         else {
             console.log('No content to display');
         }
+        
+        if (currentContent !== null) {
+            this.toggleHighlightContentInList(currentContent);
+        }
     },
     
     switchChannel: function (channel, password) {
@@ -571,26 +583,28 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
     },
     
     toggleHighlightContentInList: function (content) {
-        
         var id;
         if (content.provider == 'youtube') {
             id = content.apiId
         }
         else if (content.provider == 'soundcloud') {
             var arrayOfStrings = content.apiId.split('/');
-            if (arrayOfStrings.length > 0) id = arrayOfStrings[arrayOfStrings.length - 1];
-        }
-        
-        $('.highlightedElement').removeClass('highlightedElement')
- 
-        $('.' + id).each(function(index, element) {
-
-            if (this.className != id + ' alreadyPlayed list-group-item') {
-                this.className = id + ' alreadyPlayed highlightedElement list-group-item';
-                return false;
+            if (arrayOfStrings.length > 0) {
+                id = arrayOfStrings[arrayOfStrings.length - 1];
             }
-        });
+        }
+        var contentQueueListGroup = document.getElementById("contentQueueListGroup");
+        var activeElement = contentQueueListGroup.getElementsByClassName('active');
 
+        if (activeElement.length != 0) {
+            activeElement[0].className = activeElement[0].className.replace(' active', '');
+        }
+
+        activeElement = contentQueueListGroup.getElementsByClassName(id + '-' + content.index);
+        if (activeElement.length != 0) {
+            activeElement[0].className = id + '-' + content.index + " list-group-item active"
+        }
+            
         scrollPlaylistToCurrentContent();
     },
 

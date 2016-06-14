@@ -181,10 +181,6 @@ function setCreateRoomModalChannelNameValue(channelName) {
     $('#createChannelNameField').val(channelName);
 };
 
-function writeChannelUrlRequest(channelName) {
-    document.location = document.location.protocol + '/player/channels/' + channelName;
-};
-
 function displayUndoAddContentLink(content, index) {
 
     $('#undoLink').off();
@@ -195,16 +191,22 @@ function displayUndoAddContentLink(content, index) {
 };
 
 function displayOwnerDeleteContentLink(content) {
+    var currentIndex = 0;
+    if (currentContent !== null) {
+        currentIndex = currentContent.index;
+    }
 
-    $('#delBtn' + content.index).show();
-    $('#delBtn' + content.index).on('click', function () {
-    debugger
-        if (content.index == currentContent.index)  //If  we delete the content being played at the moment, skip it too
-            SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
-        SOCIALSOUNDSCLIENT.SOCKETIO.removeContentFromServer(content, content.index, usernameChat);
-        console.log("Just sent removal request to server with " + content.title + " at index " + content.index);
-    });
-    console.log("Just added removal button with " + content.title + " at index " + content.index);
+    if (content.index >= currentIndex) {
+        $('#delBtn' + content.index).show();
+        $('#delBtn' + content.index).on('click', function () {
+            if (currentContent !== null && content.index == currentContent.index) {  //If  we delete the content being played at the moment, skip it too
+                SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
+            }
+            SOCIALSOUNDSCLIENT.SOCKETIO.removeContentFromServer(content, content.index, usernameChat);
+            console.log("Just sent removal request to server with " + content.title + " at index " + content.index);
+        });
+        console.log("Just added removal button with " + content.title + " at index " + content.index);
+    }
 };
 
 

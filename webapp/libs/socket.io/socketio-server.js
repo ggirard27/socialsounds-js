@@ -88,6 +88,7 @@ module.exports.listen = function (server) {
                     //Get Content list and send it to the user
                     contentList = roomdata.get(socket, 'contentList');
                     io.to(socket.id).emit('displayContentList', contentList.getQueue());
+                    var ownerId = roomdata.get(socket, 'ownerId');
                     var content = roomdata.get(socket, 'currentContent');
                     if (content) {
                         var time = new Date().getTime();
@@ -96,6 +97,9 @@ module.exports.listen = function (server) {
                         console.log("timestamp: " + roomdata.get(socket, 'currentContentTimestamp'));
                         console.log('Elapsed time: ', elapsedTime);
                         io.to(socket.id).emit('playNextContent', content, elapsedTime);
+                        contentList.getQueue().forEach(function (current) {
+                            io.to(ownerId).emit('contentDeleteable', current);
+                        });
                     }
                 } else {
                     io.to(socket.id).emit('joinRoomFailed', room);
@@ -115,6 +119,7 @@ module.exports.listen = function (server) {
         
         socket.on('getNextContent', function (room) {
             var contentList = roomdata.get(socket, 'contentList');
+            var ownerId = roomdata.get(socket, 'ownerId');
             if (contentList.getRemaining() > 0) {
                 var nextContent = contentList.dequeue();
                 roomdata.set(socket, 'currentContent', nextContent);
@@ -125,6 +130,9 @@ module.exports.listen = function (server) {
                 var timestamp = 0;
                 console.log('Emitting play next content')
                 io.to(socket.room).emit('playNextContent', nextContent, timestamp);
+                contentList.getQueue().forEach(function (current) {
+                    io.to(ownerId).emit('contentDeleteable', current);
+                });
             }
             else {
                 io.to(socket.room).emit('noContent');
@@ -199,7 +207,7 @@ module.exports.listen = function (server) {
                     io.to(socket.room).emit('pausePlayer', elapsedTime);
                 }
                 else if (func == 'skip')
-                    io.to(socket.room).emit('skipSong')
+                    io.to(socket.id).emit('skipSong')
             }
         });
         
