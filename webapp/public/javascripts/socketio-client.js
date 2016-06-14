@@ -198,6 +198,9 @@ function displayOwnerDeleteContentLink(content) {
 
     $('#delBtn' + content.index).show();
     $('#delBtn' + content.index).on('click', function () {
+    debugger
+        if (content.index == currentContent.index)  //If  we delete the content being played at the moment, skip it too
+            SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
         SOCIALSOUNDSCLIENT.SOCKETIO.removeContentFromServer(content, content.index, usernameChat);
         console.log("Just sent removal request to server with " + content.title + " at index " + content.index);
     });
