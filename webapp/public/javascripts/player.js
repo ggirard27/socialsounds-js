@@ -1,7 +1,6 @@
 ﻿var SOCIALSOUNDSCLIENT = SOCIALSOUNDSCLIENT || {};
 var contentProviderList = ['soundcloud', 'vimeo', 'youtube']; // This needs to go server side when we have time. - GG
 
-var startBroadcastButton = document.getElementById('startBroadcastButton');
 var btnOpenInBrowser = document.getElementById('btnOpenInBrowser');
 var btnMuteContent = document.getElementById('btnMuteContent');
 var fbShareButton = document.getElementById('fbShareButton');
@@ -16,13 +15,22 @@ var currentContent = null;
 var searchResultsDropdownSelectedItem;
 var usernameChat = userCookie.general.username;
 
-if (document.documentElement.clientWidth < 992) {
-    var bottom = document.getElementById('playingContentSection').clientHeight 
-                + document.getElementById('channelTitle').clientHeight 
-                + document.getElementById('navbarSocialsounds').clientHeight 
-                + 5;
-    document.getElementById('playlistSection').style.top = bottom + 'px';
-    document.getElementById('chatSection').style.top = bottom + 'px';
+document.getElementById('searchResultsDropdown').style.width = document.getElementById('searchBar').clientWidth + 'px';
+document.getElementById('goToRemoteBtn').setAttribute('href', document.location.pathname.replace('player', 'remote'));
+
+function setRightAndLeftDivTop(isOwner) {
+    if (document.documentElement.clientWidth < 992) {
+        var bottom = document.getElementById('channelTitle').offsetHeight 
+                + document.getElementById('searchBar').offsetHeight 
+                + document.getElementById('contentPlayer').offsetHeight 
+                + document.getElementById('btnOpenInBrowser').offsetHeight 
+                + 55;
+        if (isOwner) {
+            bottom += document.getElementById('ownerDashboard').offsetHeight + 3;
+        }
+        document.getElementById('playlistSection').style.top = bottom + 'px';
+        document.getElementById('chatSection').style.top = bottom + 'px';
+    }
 }
 
 createChannelNameField.addEventListener('keyup', function (e) {
@@ -55,9 +63,41 @@ btnDashSkip.addEventListener('click', function () {
 });
 btnDashMute.addEventListener('click', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('mute');
+    setTimeout(function () {
+        if (SOCIALSOUNDSCLIENT.BASEPLAYER.getPlayerMuteState()) {
+            document.getElementById('btnDashMuteVolumeOn').style.display = 'none';
+            document.getElementById('btnDashMuteVolumeOff').style.display = 'inline-block';
+        }
+        else {
+            document.getElementById('btnDashMuteVolumeOn').style.display = 'inline-block';
+            document.getElementById('btnDashMuteVolumeOff').style.display = 'none';
+        }
+    }, 10);
 });
 btnDashPause.addEventListener('click', function () {
-    SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('pause');
+    if (currentContent === null) {
+        SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
+
+        setTimeout(function () {
+            if (SOCIALSOUNDSCLIENT.BASEPLAYER.isPaused === false) {
+                document.getElementById('btnDashPausePlay').style.display = 'none';
+                document.getElementById('btnDashPausePause').style.display = 'inline-block';
+            }
+        }, 10);
+    }
+    else {
+        SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('pause');
+        setTimeout(function () {
+            if (SOCIALSOUNDSCLIENT.BASEPLAYER.isPaused) {
+                document.getElementById('btnDashPausePlay').style.display = 'inline-block';
+                document.getElementById('btnDashPausePause').style.display = 'none';
+            }
+            else {
+                document.getElementById('btnDashPausePlay').style.display = 'none';
+                document.getElementById('btnDashPausePause').style.display = 'inline-block';
+            }
+        }, 10);
+    }
 });
 
 btnSkip.addEventListener('click', function () {
@@ -66,11 +106,11 @@ btnSkip.addEventListener('click', function () {
 });
 
 btnCancelSwitchChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/player/rooms/default-room';
+    document.location = document.location.protocol + '/player/channels/Home-channel';
 });
 
 btnCancelCreateChannel.addEventListener('click', function () {
-    document.location = document.location.protocol + '/player/rooms/default-room';
+    document.location = document.location.protocol + '/player/channels/Home-channel';
 });
 
 btnCreateChannel.addEventListener('click', function () {
@@ -93,12 +133,13 @@ btnCreateChannel.addEventListener('click', function () {
         $('#createChannelPasswordErrorMessage').show();
     }
     var title = 'ssPlayer - ' + channelName;
-    var url = '/player/rooms/' + channelName;
+    var url = '/player/channels/' + channelName;
     if (typeof (history.pushState) != "undefined") {
         var obj = { Title: title, Url: url };
         history.pushState(obj, obj.Title, obj.Url);
     }
     document.getElementById('channelTitle').textContent = channelName;
+    document.getElementById('goToRemoteBtn').setAttribute('href', document.location.pathname.replace('player', 'remote'));
     document.getElementById('ownerDashboard').style.display = 'block';
 });
 
@@ -171,10 +212,6 @@ smallDisplayPlaylistButton.addEventListener('click', function () {
     document.getElementById('playlistSection').style.display = "block";
 });
 
-startBroadcastButton.addEventListener('click', function () {
-    SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
-});
-
 btnOpenInBrowser.addEventListener('click', function () {
     var win = window.open(currentContent.url, '_blank');
     win.focus();
@@ -194,25 +231,30 @@ function googleApiClientReady() {
     });
 };
 
+function scrollPlaylistToCurrentContent() {
+    document.getElementById("contentQueueListGroup").scrollTop = document.getElementsByClassName("highlightedElement")[0].offsetTop;
+};
+
 // IE does not know about the target attribute. It looks for srcElement
 // This function will get the event target in a browser-compatible way
 function getEventTarget(e) {
     e = e || window.event;
     return e.target || e.srcElement;
-}
+};
 
 searchResultsDropdown.addEventListener('click', function (event) {
     var target = getEventTarget(event);
     var selectedContentUrl = target.getAttribute('data-link');
     var selectedContentTitle = target.innerHTML;
 
-    $('#contentReadyToBeAddedMessage').html('<p>Added : ' + selectedContentTitle + ' to playlist.</p> <a id="undoLink"> Undo </a>');
-    $('#contentReadyToBeAddedMessage').show();
-    $('#contentReadyToBeAddedMessage').delay(4000).fadeOut(500);
     searchResultsDropdownSelectedItem = selectedContentUrl;
     if (searchResultsDropdownSelectedItem) {
         SOCIALSOUNDSCLIENT.BASEPLAYER.addContentFromSearch(searchResultsDropdownSelectedItem);
         searchResultsDropdownSelectedItem = "";
+
+        $('#contentReadyToBeAddedMessage').html('<p>Added : ' + selectedContentTitle + ' to playlist.</p> <a id="undoLink"> Undo </a>');
+        $('#contentReadyToBeAddedMessage').show();
+        $('#contentReadyToBeAddedMessage').delay(4000).fadeOut(500);
     }
 
 });
@@ -484,7 +526,7 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             li.appendChild(a);
             searchResultsDropdown.appendChild(li);
         }
-        document.getElementById('searchBar').className += " open";
+        document.getElementById('searchResultGroup').className += " open";
     },
     
     appendToContentList: function (content) {
@@ -548,7 +590,8 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
                 return false;
             }
         });
-        
+
+        scrollPlaylistToCurrentContent();
     },
 
     

@@ -8,8 +8,8 @@ socket.on("connect", function () {
     //Try and access the room mentionned, if it doesn't work then it creates it.
     SOCIALSOUNDSCLIENT.SOCKETIO.setUsername(socket.user);
     if (typeof (roomId) !== 'undefined') {
-        if (roomId == 'default-room') {
-            SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom('default-room', false);
+        if (roomId == 'Home-channel') {
+            SOCIALSOUNDSCLIENT.SOCKETIO.switchRoom('Home-channel', false);
         }
         else {
             console.log("Testing room: " + roomId);
@@ -22,7 +22,6 @@ socket.on("connect", function () {
 socket.on('roomJoined', function (room) {
     console.log('Joined room: ' + room);
     socket.room = room;
-    $('#chatBox').append('<li><span> --- You have joined the channel ' + room + '</span></li>');
     var chat = document.getElementById('chatBox');
     chat.scrollTop = chat.scrollHeight;
     SOCIALSOUNDSCLIENT.SOCKETIO.setUsername(socket.user);
@@ -52,7 +51,9 @@ socket.on('contentAdded', function (content, index, user) {
     if (usernameChat == user) {
         displayUndoAddContentLink(content, index);
     }
-    if (socket.room == 'default-room' && currentContent === null) {
+
+    var currentPage = document.location.pathname.split("/");
+    if (socket.room == 'Home-channel' && currentContent === null && currentPage[1] === 'player') {
         SOCIALSOUNDSCLIENT.BASEPLAYER.getNextContent();
     }
 });
@@ -115,6 +116,8 @@ socket.on('displayContentList', function (contentList) {
 });
 
 socket.on('updateSkipLabel', function (users, votes) {
+    if (votes == 0) //So new song now
+        document.getElementById('btnSkip').disabled = false;
     $('#nbUsers').text(users);
     $('#labelSkip').text(votes + "/" + users + " users voted to skip");
 
@@ -125,14 +128,17 @@ socket.on('updateSkipLabel', function (users, votes) {
 
 socket.on('skipSong', function () {
     SOCIALSOUNDSCLIENT.SOCKETIO.getNextContentFromServer();
-    document.getElementById('btnSkip').disabled = false;
 });
 
 socket.on('showOwnerControls', function (show) {
-    if (show)
+    if (show) {
         $('#ownerDashboard').show();
-    else
-        $('#ownerDashboard').hide();           
+        setRightAndLeftDivTop(true);
+    }
+    else {
+        $('#ownerDashboard').hide();
+        setRightAndLeftDivTop(false);
+    }         
 });
 
 //Will eventually be removed when we will be able to join in a song at any moment.
@@ -150,7 +156,7 @@ socket.on('mutePlayer', function () {
 
 socket.on('showProperChannelModal', function (room, exists) {
     console.log("showing proper modal for room " + room)
-    if (room != 'default-room') {
+    if (room != 'Home-channel') {
         exists ? $('#switchChannelModal').modal('show') : $('#createChannelModal').modal('show');
         exists ? setSwitchRoomModalChannelNameValue(room) : setCreateRoomModalChannelNameValue(room);
     }
@@ -173,7 +179,7 @@ function setCreateRoomModalChannelNameValue(channelName) {
 };
 
 function writeChannelUrlRequest(channelName) {
-    document.location = document.location.protocol + '/player/rooms/' + channelName;
+    document.location = document.location.protocol + '/player/channels/' + channelName;
 };
 
 function displayUndoAddContentLink(content, index) {

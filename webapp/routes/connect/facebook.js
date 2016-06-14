@@ -8,7 +8,7 @@ var facebookConnectRoutes = function (passport) {
     }));
     
     router.get('/connect/facebook/callback', passport.authorize('facebook', {
-            successRedirect : '/profile',
+            successRedirect : '/player/channels/',
             failureRedirect : '/'
     }));
     return router;

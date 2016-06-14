@@ -8,7 +8,7 @@ var googleConnectRoutes = function (passport) {
     }));
     
     router.get('/connect/google/callback', passport.authorize('google', {
-        successRedirect : '/profile',
+        successRedirect : '/player/channels/',
         failureRedirect : '/'
     }));
     return router;

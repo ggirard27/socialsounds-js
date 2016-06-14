@@ -2,7 +2,7 @@
 exports.Debug = true;
 
 exports.rooms = {};
-exports.channels = ['default-room'];
+exports.channels = ['Home-channel'];
 
 exports.roomExists = function (socket, room) {
     if (!this.rooms[room]) return false;
@@ -99,8 +99,8 @@ exports.joinRoom = function (socket, room, password, privateChannel) {
 
 exports.clearRoom = function (room) {
     delete this.rooms[room];
-    //We don't want to remove the default-room shortcut.
-    if (room != 'default-room' && this.channels.indexOf(room) > -1) {
+    //We don't want to remove the Home-channel shortcut.
+    if (room != 'Home-channel' && this.channels.indexOf(room) > -1) {
         this.channels.splice(this.channels.indexOf(room), 1);
     }
 };

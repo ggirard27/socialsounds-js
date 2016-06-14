@@ -6,7 +6,7 @@ module.exports.listen = function (server) {
         'transports': ['websockets'],
     }).listen(server);
     
-    var defaultRoom = 'default-room';
+    var defaultRoom = 'Home-channel';
     
     io.sockets.on('connection', function (socket) {
         
@@ -183,7 +183,7 @@ module.exports.listen = function (server) {
             var votesRequired = Math.ceil(userConnected * 0.66)//two thirds of the people must agree to skip the song.
             roomdata.incrementVoteSkip(room);
             if (votes + 1 >= votesRequired && contentList.getRemaining() > 0)
-                io.to(socket.room).emit('skipSong');
+                io.to(socket.id).emit('skipSong');
             else
                 io.to(socket.room).emit('updateSkipLabel', userConnected, votes + 1);
         });
@@ -207,7 +207,7 @@ module.exports.listen = function (server) {
 
             var exists = roomdata.roomExists(socket, room);
             var pwProtected = roomdata.roomIsProtected(socket, room);
-            if (exists && !pwProtected || room == 'default-room')  
+            if (exists && !pwProtected || room == 'Home-channel') 
                 io.to(socket.id).emit('joinUnprotectedChannel', room);             
             else 
                 io.to(socket.id).emit('showProperChannelModal', room, exists);

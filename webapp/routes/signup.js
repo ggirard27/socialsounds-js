@@ -10,7 +10,7 @@ var signupRoutes = function (passport) {
     });
     
     router.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/player',
+        successRedirect : '/player/channels/',
         failureRedirect : '/signup',
         failureFlash : true
     }));

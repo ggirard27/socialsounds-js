@@ -12,14 +12,15 @@ block wrapperContent
                         span.icon-bar
                     a.visible-xs.navbar-brand socialsounds
                 .navbar-collapse.collapse.sidebar-navbar-collapse
-                    ul.nav.navbar-nav#navigationMenu
-                        block sidebarcontent
-                            li#playerLink
-                                a(href='/player/rooms/default-room') Player
-                            li#remoteLink
-                                a(href='/remote') Remote
-                            li#profileLink
-                                a(href='/profile') Profile
+                    ul.nav.navbar-nav
+                        li#playerLink
+                            a(href='/player/channels/Home-channel') Player
+                        li#remoteLink
+                            a(href='/remote/channels/Home-channel') Remote
+                        block navbarcontent
+                    ul.nav.navbar-nav.navbar-right
+                        li#profileLink
+                            a(href='/profile') Profile
     #contentSection
         block content
 block bodyscripts
