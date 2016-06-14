@@ -517,10 +517,15 @@ SOCIALSOUNDSCLIENT.BASEPLAYER = {
             for (var i = 0; i < results.length; i++) {
                 var li = document.createElement("LI");
                 var a = document.createElement("A");
-                
-                a.text = provider + " - " + results[i].title;
+                var img = document.createElement("IMG");
+
+                img.src = "/images/" + this.getHostName(results[i].url) + "-playlist.png";
+
+                var textnode = document.createTextNode(" " + results[i].title);
                 a.setAttribute('data-link', results[i].url);
-                
+
+                a.appendChild(img);
+                a.appendChild(textnode);
                 li.appendChild(a);
                 searchResultsDropdown.appendChild(li);
             }
