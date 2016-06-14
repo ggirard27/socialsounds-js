@@ -75,6 +75,9 @@ exports.ContentList = function ContentList(owner) {
         if (users[index-1] == user || user == queueOwner) {
             console.log("Queue actually removing content");
             queue.splice(index - 1, 1);
+            for (var i = queue.length; i >= index; i--) {
+                queue[i - 1].index = i;
+            }
         }
     }
     
@@ -106,9 +109,7 @@ exports.ContentList = function ContentList(owner) {
     this.dequeue = function () {
 
         if (queue.length == 0) return undefined;
-        
-        while (queue[currentIndex] == null) currentIndex++;
-        
+              
         var item = queue[currentIndex];
         console.log('dequeuing ' + item.title);
         currentIndex++;

@@ -195,17 +195,19 @@ function displayOwnerDeleteContentLink(content) {
     if (currentContent !== null) {
         currentIndex = currentContent.index;
     }
-
-    if (content.index >= currentIndex) {
+    if (content.index > currentIndex) {
+        $('#delBtn' + content.index).unbind('click'); //Unbing previous function.
         $('#delBtn' + content.index).show();
         $('#delBtn' + content.index).on('click', function () {
-            if (currentContent !== null && content.index == currentContent.index) {  //If  we delete the content being played at the moment, skip it too
-                SOCIALSOUNDSCLIENT.SOCKETIO.controlPlayer('skip');
-            }
             SOCIALSOUNDSCLIENT.SOCKETIO.removeContentFromServer(content, content.index, usernameChat);
             console.log("Just sent removal request to server with " + content.title + " at index " + content.index);
         });
         console.log("Just added removal button with " + content.title + " at index " + content.index);
+    }
+    else {
+        console.log("No remove for content: " + content);
+        $('#delBtn' + content.index).unbind('click'); //Unbing previous function.
+        $('#delBtn' + content.index).hide();
     }
 };
 
