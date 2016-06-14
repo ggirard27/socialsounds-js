@@ -30,7 +30,7 @@ exports.createRoom = function (socket, room, password, privateChannel) {
         this.channels.push(room);
     }
     var isPasswordProtected = (password == false ? false : true);
-    var _owner = (room == 'default-room' ? 'gtfo' : socket.id);
+    var _owner = (room == 'Home-channel' ? 'gtfo' : socket.id);
     this.rooms[room] = { owner: socket.user, users: [], variables: {}, contentList: new q.ContentList(socket.id), voteSkip: 0, passwordProtected: isPasswordProtected, passwordValue: password, ownerId: _owner };
 }
 
@@ -92,7 +92,7 @@ exports.joinRoom = function (socket, room, password, privateChannel) {
             console.log("no password, automatically authorized request");
         }
     }
-    if ((room != 'default-room') && socket.user == this.rooms[room].owner) {
+    if ((room != 'Home-channel') && socket.user == this.rooms[room].owner) {
         this.rooms[room].ownerId = socket.id;
     }
 };
