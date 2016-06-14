@@ -59,8 +59,10 @@ socket.on('contentAdded', function (content, index, user) {
 });
 
 socket.on('contentDeleteable', function (content) {
-    console.log('Received Content deleteable with ' + content.title + content.index);
-    displayOwnerDeleteContentLink(content, content.index);
+    if (content) {
+        console.log('Received Content deleteable with ' + content.title + content.index);
+        displayOwnerDeleteContentLink(content, content.index);
+    }
 });
 
 socket.on('contentRejected', function (content) {
@@ -88,9 +90,10 @@ socket.on('createRoomFailed', function (room) {
 });
 
 socket.on('exportContentList', function(contentList) {
-    var list = socket.user + ' playlist \r\n ';
+    var list = socket.user + ' playlist \r\n';
     for (var i = 0; i < contentList.length; i++) {
-        list += contentList[i].title + ' ' + contentList[i].url + ' \r\n';
+        if (contentList[i])
+            list += contentList[i].title + ' ' + contentList[i].url + ' \r\n';
     }
     var link = document.createElement('a');
     mimeType = 'text/plain';
